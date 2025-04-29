@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+	<title>GeneFIX Formulario</title>
+	<!-- HTML5 Shim and Respond.js IE11 support of HTML5 elements and media queries -->
+	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+	<!--[if lt IE 11]>
+		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+		<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+		<![endif]-->
+	<!-- Meta -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="description" content="" />
+	<meta name="keywords" content="">
+	<meta name="author" content="Phoenixcoded" />
+
+	<!-- Favicon icon -->
+	<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
+	<meta name="msapplication-TileColor" content="#ffffff">
+	<meta name="theme-color" content="#ffffff">
+
+	<!-- font css -->
+	<link rel="stylesheet" href="assets/fonts/font-awsome-pro/css/pro.min.css">
+	<link rel="stylesheet" href="assets/fonts/feather.css">
+	<link rel="stylesheet" href="assets/fonts/fontawesome.css">
+
+	<!-- vendor css -->
+	<link rel="stylesheet" href="assets/css/style.css">
+	<link rel="stylesheet" href="assets/css/customizer.css">
+	<link rel="stylesheet" href="assets/css/change_loggin.css">
+
+
+</head>
+
+<!-- [ auth-signin ] start -->
+<div class="auth-wrapper">
+	<div class="auth-content">
+		<div class="card">
+			<div class="row align-items-center text-center">
+				<div class="col-md-12">
+					<div class="card-body">
+						<img src="assets/images/logo.png" alt="" class="img-fluid mb-4">
+						<h4 class="mb-3 f-w-400">Verificación Inicial de Documento</h4>
+						<div class="input-group mb-4">
+							<div class="input-group-prepend">
+								<span class="input-group-text"><i data-feather="lock"></i></span>
+							</div>
+							<input id="documento" type="text" class="form-control" placeholder="Documento">
+							<br>
+							<div id="respuesta"></div>
+							
+						</div>
+
+						<button id="btn_enviar" class="btn btn-block btn-primary mb-4">Verificar</button>
+						<p class="mb-0 text-muted">Ya cuenta con un usuario? <a href="auth-signup.html"
+								class="f-w-400">Contactarnos</a></p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- [ auth-signin ] end -->
+
+<!-- Required Js -->
+<script src="assets/js/vendor-all.min.js"></script>
+<script src="assets/js/plugins/bootstrap.min.js"></script>
+<script src="assets/js/plugins/feather.min.js"></script>
+<script src="assets/js/pcoded.min.js"></script>
+
+
+<script>
+	document.getElementById('btn_enviar').addEventListener('click', () => {
+    const documento = document.getElementById('documento').value;
+		
+    if (!documento) {
+        alert('Debes ingresar un documento');
+        return;
+    }
+
+    // Simulamos el JSON donde validamos
+    const jsonDocumentos = [
+		{ documento: '14297510', rol: 'admin', pass: '1234', name: "Yusef" },
+		{ documento: '12345678', rol: 'user', pass: 'admin', name: "Pepito" }
+	];
+
+    const encontrado = jsonDocumentos.find(item => item.documento === documento);
+	
+    if (!encontrado) {
+        document.getElementById('respuesta').innerHTML = 'Documento no encontrado';
+        return;
+    }
+	location.href ="./auth-signin.html";
+    // Si existe hacemos un fetch (envío de datos)
+    // fetch('./info.json', {
+    //     method: 'GET',
+    //     headers: {
+    //         'Content-Type': 'application/json',
+    //     },
+    //     body: JSON.stringify(encontrado)
+    // })
+    // .then(response => response.json())
+    // .then(data => {
+    //     document.getElementById('respuesta').innerHTML = 'Enviado correctamente';
+    //     console.log(data);
+    // })
+    // .catch(error => {
+    //     console.error('Error:', error);
+    //     document.getElementById('respuesta').innerHTML = 'Error en el envío';
+    // });
+});
+
+</script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,84 @@
+:root {
+  --rojogenefix: #0a0204;
+  --azulgenefix: #0f505a;
+  --azulgenefix_dark: #061c1f;
+}
+
+.auth-wrapper {
+  background-color: var(--rojogenefix);
+}
+
+.btn-primary {
+  background-color: var(--azulgenefix);
+}
+
+.btn-primary:active {
+  background-color: var(--rojogenefix);
+}
+
+.btn-primary {
+  color: #fff;
+  background-color: var(--azulgenefix);
+  border-color: var(--azulgenefix);
+}
+
+.btn-primary:hover {
+  color: #fff;
+  background-color: var(--azulgenefix_dark);
+  border-color: var(--azulgenefix_dark);
+}
+
+.btn-primary:focus,
+.btn-primary.focus {
+  color: #fff;
+  background-color: var(--azulgenefix_dark);
+  border-color: var(--azulgenefix_dark);
+  box-shadow: 0 0 0 0.2rem var(--azulgenefix_dark);
+}
+
+.btn-primary.disabled,
+.btn-primary:disabled {
+  color: #fff;
+  background-color: var(--azulgenefix_dark);
+  border-color: var(--azulgenefix_dark);
+}
+
+.btn-primary:not(:disabled):not(.disabled):active,
+.btn-primary:not(:disabled):not(.disabled).active,
+.show > .btn-primary.dropdown-toggle {
+  color: #fff;
+  background-color: var(--azulgenefix_dark);
+  border-color: var(--azulgenefix_dark);
+}
+
+.logo {
+  width: 210px;
+}
+
+.pc-sidebar {
+  background: #420f1e;
+}
+
+.pc-sidebar .pc-caption {
+  color: #79cee1;
+}
+
+.pc-sidebar .pc-micon > svg {
+  width: 18px;
+  height: 18px;
+  color: #ffffff;
+}
+
+.pc-sidebar .m-header {
+  background: #130b0d;
+}
+
+.btn_acciones {
+  background: var(--rojogenefix) !important;
+  color: #ffffff !important;
+}
+
+.btn_acciones:hover {
+  background: #10090b !important;
+  color: #ffffff !important;
+}

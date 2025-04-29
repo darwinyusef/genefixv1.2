@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Genefix Formulario</title>
+    <!-- HTML5 Shim and Respond.js IE11 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 11]>
+    	<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    	<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    	<![endif]-->
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="">
+    <meta name="author" content="Phoenixcoded" />
+
+    <!-- Favicon icon -->
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="theme-color" content="#ffffff">
+
+    <!-- font css -->
+    <link rel="stylesheet" href="assets/fonts/font-awsome-pro/css/pro.min.css">
+    <link rel="stylesheet" href="assets/fonts/feather.css">
+    <link rel="stylesheet" href="assets/fonts/fontawesome.css">
+
+    <!-- vendor css -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/customizer.css">
+    <link id="rol_user" rel="stylesheet" href="assets/css/change_loggin.css">
+    <link id="rol_admin" rel="stylesheet" href="assets/css/typeadmin.css">
+
+</head>
+
+<body class="">
+
+    <div class="loader-wrapper">
+        <span class="loader"></span>
+    </div>
+
+    <div id="alerta" class="alert animate__animated" role="alert" style="display: none;">
+        A simple primary alert—check it out!
+    </div>
+
+    <!-- [ Pre-loader ] start -->
+    <div class="loader-bg">
+        <div class="loader-track">
+            <div class="loader-fill"></div>
+        </div>
+    </div>
+    <!-- [ Pre-loader ] End -->
+    <!-- [ Mobile header ] start -->
+    <div class="pc-mob-header pc-header">
+        <div class="pcm-logo">
+            <img src="assets/images/logo.png" alt="" class="logo logo-lg">
+        </div>
+        <div class="pcm-toolbar">
+            <a href="#!" class="pc-head-link" id="mobile-collapse">
+                <div class="hamburger hamburger--arrowturn">
+                    <div class="hamburger-box">
+                        <div class="hamburger-inner"></div>
+                    </div>
+                </div>
+                <!-- <i data-feather="menu"></i> -->
+            </a>
+            <a href="#!" class="pc-head-link" id="headerdrp-collapse">
+                <i data-feather="align-right"></i>
+            </a>
+            <a href="#!" class="pc-head-link" id="header-collapse">
+                <i data-feather="more-vertical"></i>
+            </a>
+        </div>
+    </div>
+    <!-- [ Mobile header ] End -->
+
+    <!-- [ navigation menu ] start -->
+    <nav class="pc-sidebar ">
+        <div class="navbar-wrapper">
+            <div class="m-header">
+                <a href="index.html" class="b-brand">
+                    <!-- ========   change your logo hear   ============ -->
+                    <img src="assets/images/logo.png" alt="" class="logo logo-lg">
+                    <img src="assets/images/logo-sm.png" alt="" class="logo logo-sm">
+                </a>
+            </div>
+            <div class="navbar-content">
+                <ul class="pc-navbar">
+                    <li class="pc-item pc-caption">
+                        <label>Principal</label>
+                    </li>
+                    <li class="pc-item">
+                        <a href="./profile-update.html" class="pc-link "><span class="pc-micon"><i
+                                    data-feather="user-check"></i></span><span class="pc-mtext">Perfil</span></a>
+                    </li>
+
+                    <!-- Enlace de Registro -->
+                    <li class="pc-item">
+                        <a href="./causacioncontable.html" class="pc-link" target="_blank"><span class="pc-micon"><i
+                                    data-feather="user-plus"></i></span><span class="pc-mtext">Causación
+                                Contable</span></a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+    </nav>
+    <!-- [ navigation menu ] end -->
+    <!-- [ Header ] start -->
+    <header class="pc-header ">
+        <div class="header-wrapper">
+            <div class="mr-auto pc-mob-drp">
+                <ul class="list-unstyled">
+                    <li class="dropdown pc-h-item">
+                        <a class="btn_acciones pc-head-link active dropdown-toggle arrow-none mr-0"
+                            data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
+                            Acciones
+                        </a>
+                        <div class="dropdown-menu pc-h-dropdown">
+                            <a href="#!" class="dropdown-item">
+                                <i data-feather="user"></i>
+                                <span>Perfil</span>
+                            </a>
+                            <a href="#!" class="dropdown-item">
+                                <i data-feather="life-buoy"></i>
+                                <span>Support</span>
+                            </a>
+                            <button onclick="logout()" class="dropdown-item">
+                                <i data-feather="power"></i>
+                                <span>Logout</span>
+                            </button>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="ml-auto">
+                <ul class="list-unstyled">
+                    <li class="dropdown pc-h-item">
+                        <a class="pc-head-link dropdown-toggle arrow-none mr-0" data-toggle="dropdown" href="#"
+                            role="button" aria-haspopup="false" aria-expanded="false">
+                            <i data-feather="search"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right pc-h-dropdown drp-search">
+                            <form class="px-3">
+                                <div class="form-group mb-0 d-flex align-items-center">
+                                    <i data-feather="search"></i>
+                                    <input type="search" class="form-control border-0 shadow-none"
+                                        placeholder="Search here. . .">
+                                </div>
+                            </form>
+                        </div>
+                    </li>
+                    <li class="dropdown pc-h-item">
+                        <a class="pc-head-link dropdown-toggle arrow-none mr-0" data-toggle="dropdown" href="#"
+                            role="button" aria-haspopup="false" aria-expanded="false">
+                            <img src="assets/images/user/avatar-5.jpg" alt="user-image" class="user-avtar">
+                            <span>
+                                <span class="user-name">Yusef</span>
+                                <span class="user-desc">Administrator</span>
+                            </span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right pc-h-dropdown">
+                            <div class=" dropdown-header">
+                                <h6 class="text-overflow m-0">Welcome !</h6>
+                            </div>
+                            <a href="#!" class="dropdown-item">
+                                <i data-feather="user"></i>
+                                <span>My Account</span>
+                            </a>
+
+                            <a href="#!" class="dropdown-item">
+                                <i data-feather="life-buoy"></i>
+                                <span>Support</span>
+                            </a>
+
+                            <button onclick="logout()" class="dropdown-item">
+                                <i data-feather="power"></i>
+                                <span>Logout</span>
+                            </button>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+    </header>
+    <!-- [ Header ] end -->
+
+    <!-- [ Main Content ] start -->
+    <div class="pc-container">
+        <div class="pcoded-content">
+            <!-- [ breadcrumb ] start -->
+            <div class="page-header">
+                <div class="page-block">
+                    <div class="row align-items-center">
+                        <div class="col-md-12">
+                            <div class="page-header-title">
+                                <h5 class="m-b-10">Formulario</h5>
+                            </div>
+                            <ul class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="index.html">Contabilidad</a></li>
+                                <!--li class="breadcrumb-item">Sample Page</li-->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- [ breadcrumb ] end -->
+            <!-- [ Main Content ] start -->
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>Habilitar causaciones </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="col-sm-12 col-md-8" style="margin: 0 auto;">
+
+                                <hr>
+                                <div class="card text-center">
+                                    <div class="card-body homecausation">
+                                        <h3 class="card-title">Generación de nuevas causaciones contables.</h3>
+                                        <p class="card-text">Esta funcionalidad te permite crear causaciones (registros
+                                            de obligaciones de pago por caja menor) si
+                                            deseas incluir y adjuntar a todos los registros al final podrá adjuntar un
+                                            solo documento de soporte.
+                                            y agrupar varias causaciones en un único documento, permitiendo se
+                                            simplifique
+                                            el proceso de subida y se mantenga la documentación
+                                            relacionada de manera más organizada dentro del sistema. Por ejemplo, si
+                                            tienes varias facturas de un mismo proveedor correspondientes a diferentes
+                                            causaciones, puedes agruparlas en un solo documento PDF para subirlo con
+                                            unico ID de registro de
+                                            soporte.
+
+                                        </p>
+
+
+                                        <!-- <button type="button" class="btn btn-primary">Crear una nueva causación
+                                            contable</button> -->
+
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>Habilitar Listado de causaciones <button type="button"
+                                    class="btn btn-primary clearbadge">
+                                    Usted ha creado <span id="total" class="badge badge-light">0</span>
+                                </button> <button type="button" class="btn btn-danger clearbadge"> Crear Nuevo Registro
+                                </button>
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row" id="contenedor-cards"></div>
+                            <!-- 
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="card rcontale clean">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Registro contable Finalizado</h5>
+                                            <button class="btn  btn-primary clearbadge">Ver más</button>
+                                            <button class="btn  btn-danger clearbadge">Borrarlo</button>
+                                        </div>
+                                    </div>
+
+                                </div>
+                              
+                            </div> -->
+
+
+                            <div class="row">
+                                <div class="col-md-12 homecausation">
+                                    <button type="button" class="btn btn-primary text-center" data-toggle="modal"
+                                        data-target="#adjuntarArchivoModal">
+                                        Enviar al sistema contable <span id="total2" class="badge badge-light">0</span>
+                                    </button>
+                                </div>
+                            </div>
+
+
+                            <!-- Modal de adjuntar archivo -->
+                            <div class="modal fade" id="adjuntarArchivoModal" tabindex="-1" role="dialog"
+                                aria-labelledby="adjuntarArchivoLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-sm" role="document">
+                                    <div class="modal-content p-3">
+                                        <h5 class="modal-title mb-3" id="adjuntarArchivoLabel">Adjuntar archivo</h5>
+                                        <p>Seleccione un archivo para adjuntar al sistema contable.</p>
+
+                                        <!-- Input de archivo -->
+                                        <!-- <input type="file" id="archivoInput" class="form-control mb-2"
+                                            onchange="mostrarVistaPrevia()"> -->
+
+                                        <input type="file" class="custom-file-input" id="archivoInput"
+                                            onchange="mostrarVistaPrevia()" hidden>
+                                        <button type="button" class="btn btn-outline-primary btn-sm"
+                                            onclick="document.getElementById('archivoInput').click()">
+                                            <i class="fas fa-paperclip"></i> Seleccionar archivo
+                                        </button>
+                                        <span id="nombreArchivo" class="ml-2 text-muted small"></span>
+
+                                        <!-- Vista previa -->
+                                        <div id="vistaPreviaArchivo" class="border p-2 small text-muted"
+                                            style="display: none;"></div>
+
+                                        <div class="text-right mt-3">
+                                            <button type="button" class="btn btn-secondary btn-sm"
+                                                data-dismiss="modal">Cancelar</button>
+                                            <button type="button" class="btn btn-success btn-sm"
+                                                onclick="enviarArchivo()">Enviar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+            </div>
+            <!-- [ Main Content ] end -->
+        </div>
+    </div>
+    <!-- [ Main Content ] end -->
+    </div>
+    <!-- Warning Section start -->
+    <!-- Older IE warning message -->
+    <!--[if lt IE 11]>
+        <div class="ie-warning">
+            <h1>Warning!!</h1>
+            <p>You are using an outdated version of Internet Explorer, please upgrade
+               <br/>to any of the following web browsers to access this website.
+            </p>
+            <div class="iew-container">
+                <ul class="iew-download">
+                    <li>
+                        <a href="http://www.google.com/chrome/">
+                            <img src="assets/images/browser/chrome.png" alt="Chrome">
+                            <div>Chrome</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.mozilla.org/en-US/firefox/new/">
+                            <img src="assets/images/browser/firefox.png" alt="Firefox">
+                            <div>Firefox</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="http://www.opera.com">
+                            <img src="assets/images/browser/opera.png" alt="Opera">
+                            <div>Opera</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.apple.com/safari/">
+                            <img src="assets/images/browser/safari.png" alt="Safari">
+                            <div>Safari</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="http://windows.microsoft.com/en-us/internet-explorer/download-ie">
+                            <img src="assets/images/browser/ie.png" alt="">
+                            <div>IE (11 & above)</div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <p>Sorry for the inconvenience!</p>
+        </div>
+    <![endif]-->
+    <!-- Warning Section Ends -->
+    <!-- Required Js -->
+    <script src="assets/js/vendor-all.min.js"></script>
+    <script src="assets/js/plugins/bootstrap.min.js"></script>
+    <script src="assets/js/plugins/feather.min.js"></script>
+    <script src="assets/js/pcoded.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+    <script src="assets/js/plugins/clipboard.min.js"></script>
+    <script src="assets/js/uikit.min.js"></script>
+
+    <script src="assets/js/plugins/apexcharts.min.js"></script>
+    <script src="assets/js/datoscausacion.js"></script>
+    <script src="assets/js/logout.js"></script>
+
+    <script>
+        const table = document.getElementById('dataTable');
+        const filterInput = document.getElementById('filterInput');
+        const filterColumnSelect = document.getElementById('filterColumn');
+        const paginationDiv = document.getElementById('pagination');
+        const rowsPerPage = 5;
+        let currentPage = 1;
+        let data = []; // Almacenaremos los datos de la tabla aquí
+
+        // Función para obtener todos los datos de la tabla
+        function loadTableData() {
+            data = [];
+            const rows = table.getElementsByTagName('tr');
+            for (let i = 0; i < rows.length; i++) {
+                const rowData = {};
+                const cells = rows[i].getElementsByTagName('td');
+                if (cells.length > 0) {
+                    rowData['nombre'] = cells[0].textContent.toLowerCase();
+                    rowData['edad'] = cells[1].textContent.toLowerCase();
+                    rowData['ciudad'] = cells[2].textContent.toLowerCase();
+                    data.push(rowData);
+                }
+            }
+        }
+
+        // Función para mostrar la página actual de la tabla
+        function displayTablePage(page) {
+            const startIndex = (page - 1) * rowsPerPage;
+            const endIndex = startIndex + rowsPerPage;
+            const rows = table.getElementsByTagName('tr');
+            let visibleRowCount = 0;
+
+            for (let i = 0; i < rows.length; i++) {
+                if (i === 0) { // Saltar la fila de encabezado
+                    continue;
+                }
+                if (visibleRowCount >= startIndex && visibleRowCount < endIndex) {
+                    rows[i].style.display = '';
+                } else {
+                    rows[i].style.display = 'none';
+                }
+                visibleRowCount++;
+            }
+        }
+
+        // Función para generar los botones de paginación
+        function setupPagination(totalRows) {
+            const pageCount = Math.ceil(totalRows / rowsPerPage);
+            paginationDiv.innerHTML = '';
+
+            for (let i = 1; i <= pageCount; i++) {
+                const li = document.createElement('li');
+                li.classList.add('page-item');
+                if (i === currentPage) {
+                    li.classList.add('active');
+                }
+                const a = document.createElement('a');
+                a.classList.add('page-link');
+                a.href = '#';
+                a.textContent = i;
+                a.addEventListener('click', () => {
+                    currentPage = i;
+                    displayTablePage(currentPage);
+                    updatePaginationButtons();
+                });
+                li.appendChild(a);
+                paginationDiv.appendChild(li);
+            }
+        }
+
+        // Función para actualizar la clase 'active' de los botones de paginación
+        function updatePaginationButtons() {
+            const pageLinks = paginationDiv.querySelectorAll('.page-item');
+            pageLinks.forEach((link, index) => {
+                if (index + 1 === currentPage) {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
+                }
+            });
+        }
+
+        // Función para filtrar la tabla
+        function filterTable() {
+            const filterValue = filterInput.value.toLowerCase();
+            const filterColumn = filterColumnSelect.value;
+            const rows = table.getElementsByTagName('tr');
+            let filteredData = [];
+
+            for (let i = 0; i < rows.length; i++) {
+                if (i === 0) { // Saltar la fila de encabezado
+                    continue;
+                }
+                const cells = rows[i].getElementsByTagName('td');
+                let rowMatch = false;
+                if (filterColumn === 'all') {
+                    for (let j = 0; j < cells.length; j++) {
+                        if (cells[j].textContent.toLowerCase().includes(filterValue)) {
+                            rowMatch = true;
+                            break;
+                        }
+                    }
+                } else {
+                    const columnIndex = Array.from(document.querySelectorAll('thead th')).findIndex(th => th.dataset.column === filterColumn);
+                    if (columnIndex >= 0 && cells[columnIndex] && cells[columnIndex].textContent.toLowerCase().includes(filterValue)) {
+                        rowMatch = true;
+                    }
+                }
+
+                if (rowMatch) {
+                    const rowData = {};
+                    rowData['nombre'] = cells[0].textContent.toLowerCase();
+                    rowData['edad'] = cells[1].textContent.toLowerCase();
+                    rowData['ciudad'] = cells[2].textContent.toLowerCase();
+                    filteredData.push(rowData);
+                }
+                rows[i].style.display = 'none'; // Ocultar todas las filas inicialmente
+            }
+
+            // Mostrar solo las filas filtradas para la página actual
+            const startIndex = (currentPage - 1) * rowsPerPage;
+            const endIndex = startIndex + rowsPerPage;
+            const displayedRows = table.getElementsByTagName('tr');
+            let displayedCounter = 0;
+
+            for (let i = 1; i < displayedRows.length; i++) {
+                const cells = displayedRows[i].getElementsByTagName('td');
+                let shouldDisplay = false;
+                if (cells.length > 0) {
+                    const rowObject = {
+                        'nombre': cells[0].textContent.toLowerCase(),
+                        'edad': cells[1].textContent.toLowerCase(),
+                        'ciudad': cells[2].textContent.toLowerCase()
+                    };
+                    const indexInFiltered = filteredData.findIndex(item =>
+                        item.nombre === rowObject.nombre &&
+                        item.edad === rowObject.edad &&
+                        item.ciudad === rowObject.ciudad
+                    );
+                    if (indexInFiltered >= startIndex && indexInFiltered < endIndex) {
+                        shouldDisplay = true;
+                    }
+                }
+
+                if (shouldDisplay) {
+                    displayedRows[i].style.display = '';
+                    displayedCounter++;
+                } else {
+                    displayedRows[i].style.display = 'none';
+                }
+            }
+
+            setupPagination(filteredData.length);
+            updatePaginationButtons();
+        }
+
+        // Event listeners para el filtro
+        filterInput.addEventListener('input', () => {
+            currentPage = 1; // Resetear la página al filtrar
+            filterTable();
+        });
+        filterColumnSelect.addEventListener('change', () => {
+            currentPage = 1; // Resetear la página al cambiar la columna de filtro
+            filterTable();
+        });
+
+        // Inicialización
+        loadTableData();
+        filterTable(); // Mostrar la primera página con todos los datos inicialmente
+    </script>
+
+</body>
+
+</html>

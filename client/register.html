@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+	<title>GeneFIX Ingreso</title>
+	<!-- HTML5 Shim and Respond.js IE11 support of HTML5 elements and media queries -->
+	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+	<!--[if lt IE 11]>
+		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+		<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+		<![endif]-->
+	<!-- Meta -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="description" content="" />
+	<meta name="keywords" content="">
+	<meta name="author" content="Phoenixcoded" />
+
+	<!-- Favicon icon -->
+	<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
+	<meta name="msapplication-TileColor" content="#ffffff">
+	<meta name="theme-color" content="#ffffff">
+
+	<!-- font css -->
+	<link rel="stylesheet" href="assets/fonts/font-awsome-pro/css/pro.min.css">
+	<link rel="stylesheet" href="assets/fonts/feather.css">
+	<link rel="stylesheet" href="assets/fonts/fontawesome.css">
+
+	<!-- vendor css -->
+	<link rel="stylesheet" href="assets/css/style.css">
+	<link rel="stylesheet" href="assets/css/customizer.css">
+	<link rel="stylesheet" href="assets/css/change_loggin.css">
+
+
+</head>
+
+<!-- [ auth-signin ] start -->
+<div class="auth-wrapper">
+	<div class="auth-content">
+		<div class="card">
+			<div class="row align-items-center text-center">
+				<div class="col-md-12">
+					<form>
+
+
+						<div class="card-body">
+							<img src="assets/images/logo.png" alt="" class="img-fluid mb-4">
+							<h4 class="mb-3 f-w-400">Bienvenido a nuestra app</h4>
+							<p id="final"></p>
+							<div class="input-group mb-3">
+								<div class="input-group-prepend">
+									<span class="input-group-text">👦🏻</span>
+								</div>
+								<input type="number" id="documento" name="username" class="form-control"
+									placeholder="Documento">
+							</div>
+							<div class="input-group mb-3">
+								<div class="input-group-prepend">
+									<span class="input-group-text">🧒🏻</span>
+								</div>
+								<input type="text" id="name" name="name" class="form-control"
+									placeholder="Nombre completo">
+							</div>
+							<div class="input-group mb-4">
+								<div class="input-group-prepend">
+									<span class="input-group-text">📩</span>
+								</div>
+								<input type="email" id="email" name="email" class="form-control"
+									placeholder="Correo electrónico">
+							</div>
+						
+							<div class="input-group mb-4">
+								<div class="input-group-prepend">
+									<span class="input-group-text">🙈</span>
+								</div>
+								<input type="password" id="pass" class="form-control" placeholder="Contraseña">
+								<p id="passwordErrors" class="error-message"></p>
+							</div>
+
+							<div class="input-group mb-4">
+								<div class="input-group-prepend">
+									<span class="input-group-text">🙊</span>
+								</div>
+								<input type="password" id="password_confirm" class="form-control"
+									placeholder="Confirmar contraseña">
+								<p id="confirmErrors" class="error-message">Las contraseñas no coinciden</p>
+							</div>
+
+
+							<button id="enviarFormulario" class="btn btn-block btn-primary mb-4">Entrar</button>
+							<p class="mb-0 text-muted">Volver al <a href="index.html" class="f-w-400">Inicio</a></p>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+<!-- [ auth-signin ] end -->
+
+<!-- Required Js -->
+<script src="assets/js/vendor-all.min.js"></script>
+<script src="assets/js/plugins/bootstrap.min.js"></script>
+<script src="assets/js/plugins/feather.min.js"></script>
+<script src="assets/js/pcoded.min.js"></script>
+
+<!-- GENEFIX -->
+<script src="/assets/js/constantes.js" type="text/javascript"></script>
+<script src="/assets/js/register.js" type="text/javascript"></script>
+
+</body>
+
+</html>
