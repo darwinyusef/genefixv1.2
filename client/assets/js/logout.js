@@ -4,7 +4,9 @@ const user = localStorage.getItem('user');
 
 if (!user) {
     // No existe usuario -> Redireccionar al login
-    location.href = 'index.html';
+    localStorage.removeItem('registrado')
+    localStorage.removeItem('user')
+    localStorage.removeItem('access_token')
 }
 
 const userjson = JSON.parse(user);
@@ -19,6 +21,8 @@ document.querySelector('.user-name').textContent = userjson['user'];
 
 
 function logout() {
-    localStorage.removeItem('user'); // Eliminar el usuario del localStorage
+    localStorage.removeItem('registrado')
+    localStorage.removeItem('user')
+    localStorage.removeItem('access_token') // Eliminar el usuario del localStorage
     location.href = 'index.html';    // Redireccionar al login
 }

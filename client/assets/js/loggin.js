@@ -1,6 +1,8 @@
 url = "/login"
 
-localStorage.getItem('registrado') == "ok" ? mostrarAlerta("Se ha registrado correctamente el usuario ", "success") : ""
+if(localStorage.getItem('registrado') != null){
+    //localStorage.getItem('registrado') == "ok" ? mostrarAlerta("Se ha registrado correctamente el usuario ", "success") : ""
+}
 
 document.getElementById('btn_login').addEventListener('click', async () => {
     const documento = document.getElementById('documento').value;
@@ -18,8 +20,8 @@ document.getElementById('btn_login').addEventListener('click', async () => {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    "username": "14297510",
-                    "password": "12345678"
+                    "username": documento.trim(),
+                    "password": pass.trim()
                 })
             });
 

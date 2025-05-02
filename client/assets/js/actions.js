@@ -1,15 +1,14 @@
 function mostrarAlerta(mensaje, tipo) {
     const alerta = document.getElementById('alerta');
     alerta.textContent = mensaje;
-    alerta.addClassList.remove('alert-success', 'alert-danger', 'alert-warning', 'alert-info', 'alert-primary', 'alert-secondary', 'alert-light', 'alert-dark');
+    alerta.style.display = "block";
     alerta.classList.add(`alert-${tipo}`); // Agregar la clase de tipo de alerta
-    alerta.style.display = 'block';
     alerta.classList.add('fade-in');
-
+    
     setTimeout(() => {
         alerta.classList.remove('fade-in');
         alerta.classList.add('fade-out');
-
+        alerta.addClassList.remove('alert-success', 'alert-danger', 'alert-warning', 'alert-info', 'alert-primary', 'alert-secondary', 'alert-light', 'alert-dark');
         alerta.addEventListener('animationend', () => {
             alerta.style.display = 'none';
             alerta.classList.remove('fade-out');
@@ -17,9 +16,6 @@ function mostrarAlerta(mensaje, tipo) {
 
     }, 7000); // 7 segundos
 }
-
-
-// Puedes llamarlo cuando lo necesites
 
 
 function obtenerFechaActual() {
@@ -37,5 +33,20 @@ function obtenerFechaActual() {
 
 
 document.addEventListener('DOMContentLoaded', function () {
-    document.querySelector('.loader-wrapper').classList.add('d-none');
+    const loadWrapper = document.querySelector('.loader-wrapper')
+    if (loadWrapper) {
+        loadWrapper.classList.add('d-none');
+    }
 });
+
+function mejorarFormatoFecha(fechaISO) {
+    const fecha = new Date(fechaISO);
+
+    const dia = fecha.getDate().toString().padStart(2, '0');
+    const mes = (fecha.getMonth() + 1).toString().padStart(2, '0'); // Los meses en JavaScript van de 0 a 11
+    const anio = fecha.getFullYear();
+    const horas = fecha.getHours().toString().padStart(2, '0');
+    const minutos = fecha.getMinutes().toString().padStart(2, '0');
+
+    return `${dia}/${mes}/${anio}`;
+}

@@ -36,7 +36,7 @@
         <span class="loader"></span>
     </div>
 
-    <div id="alerta" class="alert animate__animated" role="alert" style="display: none;">
+    <div id="alerta" class="alert animate__animated" role="alert">
         A simple primary alert—check it out!
     </div>
 
@@ -75,7 +75,7 @@
     <nav class="pc-sidebar">
         <div class="navbar-wrapper">
             <div class="m-header">
-                <a href="index.html" class="b-brand">
+                <a href="causacioncontable_new.html" class="b-brand">
                     <!-- ========   change your logo hear   ============ -->
                     <img src="assets/images/logo.png" alt="" class="logo logo-lg">
                     <img src="assets/images/logo-sm.png" alt="" class="logo logo-sm">
@@ -97,7 +97,7 @@
 
                     <!-- Enlace de Registro -->
                     <li class="pc-item">
-                        <a href="./causacioncontable.html" class="pc-link" target="_blank"><span class="pc-micon"><i
+                        <a href="./causacioncontable_new.html" class="pc-link" target="_blank"><span class="pc-micon"><i
                                     data-feather="user-plus"></i></span><span class="pc-mtext">Causación Contable</span></a>
                     </li>
                 </ul>
@@ -217,7 +217,6 @@
                         </div>
                         <div class="card-body">
                             <div class="container mt-5">
-                                <form>
                                     <div class="row">
                                                                               <!-- ID NIT -->
                                         <div class="form-group col-12">
@@ -250,13 +249,14 @@
                                             <label for="concepto">Concepto</label>
                                             <textarea class="form-control" name="concepto" rows="4"
                                                 id="concepto"></textarea>
+                                            <p id="conceptoError"></p>
                                         </div>
                                        
 
                                         <div class="col-md-6 form-group">
                                             <label  for="extra"><strong>Centro de costos:</strong></label>
                                             <select id="extra" class="form-control">
-                                            <option value="" disabled selected>Seleccione un centro de costos</option>
+                                                <option value="" disabled selected>Seleccione un centro de costos</option>
                                             </select>
                                         </div>
                                         <div class="col-md-6">
@@ -269,13 +269,17 @@
 
                                         <!-- Submit Button -->
                                         <div class="col-12" style="margin-top: 40px;">
-                                            <button type="submit" id="btn_guardar"
+                                            <button type="button" id="btn_guardar"
                                                 class="btn_acciones btn btn-primary btn-block">Guardar esta causación contable</button>
+                                        </div>
+
+                                        <div class="col-12" style="margin-top: 40px;">
+                                            <button type="button" id="btn_editar"
+                                                class="btn_acciones btn btn-primary btn-block">Editar esta causación contable</button>
                                         </div>
 
                                         
                                     </div>
-                                </form>
                             </div>
                         </div>
                     </div>
@@ -327,22 +331,25 @@
 
     <script src="assets/js/plugins/apexcharts.min.js"></script>
 
-    <script src="assets/js/causacioncontable.js"></script>
     <script>
         // https://webhook.site/d98cac13-dd5d-4b2e-b2d5-905ac9e7390f
         // https://pipedream.com/
         // https://pepito.free.beeceptor.com
-  
-
+        
+        
         // 
-    </script>
+        </script>
     <link rel="stylesheet" href="assets/fonts/font-awsome-pro/css/pro.min.css">
     <link rel="stylesheet" href="assets/fonts/feather.css">
     <link rel="stylesheet" href="assets/fonts/fontawesome.css">
     <link rel="stylesheet" href="assets/css/customizer.css">
-    <script src="assets/js/logout.js"></script>
+    <script type="text/javascript" src="assets/js/causacionescontables/causacioncontable.js"></script>
+    <script src="assets/js/actions.js"></script>
+    <script src="assets/js/constantes.js"></script>
+    <script src="assets/js/causacionescontables/inicio.js"></script>
 
     <script>
+        
         const inputFecha = document.getElementById('fecha_manual');
         const today = new Date();
 
@@ -352,9 +359,67 @@
         const ultimoDia = new Date(today.getFullYear(), today.getMonth() + 1, 0);
 
         const formato = (date) => date.toISOString().split('T')[0];
+        inputFecha.min = formato(primerDia);
+        inputFecha.max = formato(ultimoDia);
 
-        inputFecha.min = formato(primerDia);   // Ej: "2025-04-01"
-        inputFecha.max = formato(ultimoDia);   // Ej: "2025-04-30"
+        async function cargarCausacionContable(id, view) {
+   
+            try {
+                const response = await fetch(`${host}/causacionContable/${id}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json' // Opcional, pero recomendable indicar el tipo de contenido
+                    }
+                });
+                if (!response.ok) {
+                    throw new Error("Error al obtener la causación contable");
+                }
+
+                const data = await response.json();
+
+                // Asignar datos al formulario
+                document.getElementById("id_nit").value = data.id_nit || "";
+                document.getElementById("fecha_manual").value = data.fecha_manual || "";
+                document.getElementById("valor").value = data.valor || "";
+                document.getElementById("concepto").value = data.concepto || "";
+
+                // Opcional: si "extra" y descripción vienen en la respuesta
+                if (data.extra) {
+                    document.getElementById("extra").value = data.extra;
+                    const resultado = allExtra.find(item => item.codigo === data.extra);
+
+                    if (resultado) {
+                        document.getElementById("descripcionText").textContent = resultado.descripcion;
+                    }
+                }
+
+                if(view == 'true') {
+                    document.querySelectorAll("input, select, textarea").forEach(el => {
+                        el.disabled = true;
+                    });
+                    document.getElementById("btn_guardar").hidden = true;
+                }
+
+            } catch (error) {
+                console.error("Error:", error);
+                alert("No se pudo cargar la información de causación contable.");
+            }
+        }
+
+    // Ejemplo de uso automático al cargar la página
+    document.addEventListener("DOMContentLoaded", function () {
+        const queryParams = new URLSearchParams(window.location.search);
+        const view = queryParams.get("view")
+        if(view != "create") {
+            const id = queryParams.get("id");
+            cargarCausacionContable(id, view)
+            if(id == null) {
+                history.back();
+            }
+        } else {
+            document.getElementById("btn_editar").hidden = true; 
+        }
+    });
     </script>
 </body>
 

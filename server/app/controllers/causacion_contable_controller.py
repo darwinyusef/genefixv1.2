@@ -1,7 +1,8 @@
-from typing import List
-from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
+from typing import List, Optional
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, status, Query
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
+from sqlalchemy import extract
 from app.config.database import get_db
 from app.models import CausacionContable as CausacionContableModel
 from app.shemas.shema_causacion_contable import CausacionContableCreate, CausacionContableUpdate, CausacionContable
@@ -23,6 +24,77 @@ def dateNow():
     fecha_actual = datetime.now()
     return fecha_actual.strftime("%Y/%m/%d")
 
+def convertir_mes_a_numero(nombre_mes: str) -> int:
+    meses = {
+        "enero": 1, "febrero": 2, "marzo": 3, "abril": 4,
+        "mayo": 5, "junio": 6, "julio": 7, "agosto": 8,
+        "septiembre": 9, "octubre": 10, "noviembre": 11, "diciembre": 12
+    }
+    return meses.get(nombre_mes.lower(), 0)
+                     
+                     
+# 🤓 ♦♣♠
+@router.get("/causacionContable")
+def read_causacion(type: str = Query("entregado"), db: Session = Depends(get_db), token: dict = Depends(get_current_user)):
+    tockendecode = decode_token(token)
+    causaciones = db.query(CausacionContableModel).filter(
+        CausacionContableModel.estado == type,
+        CausacionContableModel.user_id == tockendecode["sub"]
+    ).all()
+    
+    causacionescount = db.query(CausacionContableModel).filter(
+        CausacionContableModel.estado == type,
+        CausacionContableModel.user_id == tockendecode["sub"]
+    ).count()
+    
+    if causacionescount == 0:
+        return { "status_code": status.HTTP_204_NO_CONTENT, "content":0 }
+    return causaciones
+
+
+# 🤓 ♦♣♠
+@router.get("/causacionesFinalContables")
+def read_causacion(
+    type: str = Query("finalizado"),  
+    skip: int = Query(0, ge=0),
+    limit: int = Query(10, ge=1), 
+    nit: Optional[int] = Query(None),
+    anio: Optional[str] = Query(None),
+    mes: Optional[str] = Query(None),
+    db: Session = Depends(get_db), 
+    token: dict = Depends(get_current_user)
+    ):
+    tockendecode = decode_token(token)
+    query = db.query(CausacionContableModel).filter(
+        CausacionContableModel.estado == type,
+        CausacionContableModel.user_id == tockendecode["sub"]
+    )
+    
+    if anio and mes:
+        query = query.filter(
+                        extract('year', CausacionContableModel.fecha) == int(anio),
+                        extract('month', CausacionContableModel.fecha) == int(convertir_mes_a_numero(mes))
+                        )
+    
+    if nit: 
+        query = query.filter(
+                        CausacionContableModel.id_nit == nit
+                        )
+        
+    total = query.count()
+    resultados = query.offset(skip).limit(limit).all()
+    
+    if total == 0:
+        return { "status_code": status.HTTP_204_NO_CONTENT, "content":0 }
+    return {
+        "total": total,
+        "data": resultados,
+        "skip": skip,
+        "limit": limit
+    }
+
+
+# 🤓 ♦♣♠
 @router.post("/causacionContable", response_model=CausacionContable)
 def create_causacion(causacion: CausacionContableCreate, db: Session = Depends(get_db), token: dict = Depends(get_current_user)):
     tockendecode = decode_token(token)
@@ -39,7 +111,7 @@ def create_causacion(causacion: CausacionContableCreate, db: Session = Depends(g
         concepto=causacion.concepto,
         documento_referencia=None,
         token=None,
-        extra=None,
+        extra=causacion.extra,
         user_id=tockendecode["sub"],
         estado="entregado",
     )
@@ -49,23 +121,13 @@ def create_causacion(causacion: CausacionContableCreate, db: Session = Depends(g
     print(db_causacion.id)
     return db_causacion
 
+# 🤓 ♦♣♠
 @router.get("/causacionContable/{id}", response_model=CausacionContable)
 def read_causacion(id: int, db: Session = Depends(get_db), token: dict = Depends(get_current_user)):
     db_causacion = db.query(CausacionContableModel).filter(CausacionContableModel.id == id).first()
     if db_causacion is None:
         raise HTTPException(status_code=404, detail="Causación no encontrada")
     return db_causacion
-
-@router.get("/causacionContable", response_model=List[CausacionContable])
-def read_causacion(db: Session = Depends(get_db), token: dict = Depends(get_current_user)):
-    tockendecode = decode_token(token)
-    causaciones = db.query(CausacionContableModel).filter(
-        CausacionContableModel.estado != "entregado",
-        CausacionContableModel.user_id == tockendecode["sub"]
-    ).all()
-    if not causaciones:
-        raise HTTPException(status_code=404, detail="Causación no encontrada")
-    return causaciones
 
 
 def increment_counter(db):
@@ -94,7 +156,6 @@ async def upload_file_helper(file: UploadFile):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error al subir el archivo: {str(e)}")
 
- 
 @router.post("/activarCausacion")
 async def read_causacion_and_update(db: Session = Depends(get_db), token: dict = Depends(get_current_user), file: UploadFile = File(...)):
     tockendecode = decode_token(token)
@@ -102,9 +163,8 @@ async def read_causacion_and_update(db: Session = Depends(get_db), token: dict =
         CausacionContableModel.estado == "entregado",
         CausacionContableModel.user_id == tockendecode["sub"]
     ).all()
-
-    if not causaciones:
-        raise HTTPException(status_code=404, detail="Causación no encontrada con estado 'entregado'")
+    if causaciones == 0:
+        return { "status_code": status.HTTP_204_NO_CONTENT, "content":0 }
 
     # Cambiamos el estado a "finalizado" y actualizamos los campos del documento
     _, codigo_documento = increment_counter(db)
@@ -116,27 +176,27 @@ async def read_causacion_and_update(db: Session = Depends(get_db), token: dict =
         causacion.documento_referencia = public_url
         
     db.commit()
-    
+    print(causaciones)
     return { "ms": "ok", "description": "Desea enviar más causaciones o desea cerrar las actividades de este mes" }
       
 
 @router.post("/finalizarCausacion")
-async def finalizarCausaciones(db: Session = Depends(get_db), token: dict = Depends(get_current_user), file: UploadFile = File(...)):
+async def finalizarCausaciones(db: Session = Depends(get_db), token: dict = Depends(get_current_user)):
     tockendecode = decode_token(token)
     causaciones = db.query(CausacionContableModel).filter(
-        CausacionContableModel.estado == "entregado",
+        CausacionContableModel.estado == "activado",
         CausacionContableModel.user_id == tockendecode["sub"]
     ).all()
 
-    if not causaciones:
-        raise HTTPException(status_code=404, detail="Causación no encontrada con estado 'entregado'")
-
+    if causaciones == 0:
+        return { "status_code": status.HTTP_204_NO_CONTENT, "content":0 }
+    
     for causacion in causaciones:
         causacion.estado = "finalizado"
         causacion.fecha = dateNow()
     db.commit()
     
-    return { "ms": "ok", "description": f"Se han cerrado las causaciones del mes {dateNow().month}" }
+    return { "ms": "ok", "description": f"Se han cerrado las causaciones del mes {dateNow()}" }
       
       
         

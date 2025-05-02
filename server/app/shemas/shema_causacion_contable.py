@@ -3,7 +3,7 @@ from typing import Optional
 from datetime import datetime, date
 
 class CausacionContableBase(BaseModel):
-    id_documento: Optional[str] = None
+    id_documento: Optional[int] = None
     id_comprobante: int
     id_nit: int
     fecha: datetime
@@ -12,9 +12,9 @@ class CausacionContableBase(BaseModel):
     valor: float
     tipo: int
     concepto: str
+    extra: str
     documento_referencia: Optional[str] = None
     token: Optional[str] = None
-    extra: Optional[str] = None
 
 class CausacionContableCreate(CausacionContableBase):
     pass
@@ -25,6 +25,7 @@ class CausacionContableUpdate(CausacionContableBase):
 class CausacionContable(CausacionContableBase):
     id: int
     estado: str
+    ok: bool = True 
     created_at: datetime
     updated_at: datetime
 

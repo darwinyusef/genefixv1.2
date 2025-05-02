@@ -2043,6 +2043,17 @@ pre code {
     border: 0;
 }
 
+#alerta {
+    font-size: 20px;
+    border-radius: 10px;
+    display: none;
+    position: fixed;
+    z-index: 200;
+    bottom: 20px;
+    right: 20px;
+  }
+  
+
 .form-control:-moz-focusring {
     color: transparent;
     text-shadow: 0 0 0 #495057;

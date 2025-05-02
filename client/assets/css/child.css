@@ -52,6 +52,10 @@
   border-color: #bb214b;
 }
 
+#conceptoError {
+  color: #bb214b;
+}
+
 @keyframes rotate {
   0% {
     transform: rotate(0deg);
@@ -106,6 +110,7 @@
 
 #alerta {
   font-size: 20px;
+  border-radius: 10px;
   display: none;
   position: fixed;
   z-index: 200;

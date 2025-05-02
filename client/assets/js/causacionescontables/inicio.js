@@ -1,11 +1,13 @@
 // Validar el NIT al escribir 
 const inputNit = document.getElementById('id_nit');
+const API_KEY = "ybb0jhtlcug4Dhbpi6CEP7Up68LriYcPc4209786b008c6327dbe47644f133aadVlJUB0iK5VXzg0CIM8JNNHfU7EoHzU2X"
+
 
 inputNit.addEventListener('input', async function () {
     const valor = this.value;
 
     // Validar solo si tiene 6 caracteres
-    if (valor.length > 3) {
+    if (valor.length > 2) {
         try {
             const response = await fetch(`http://begranda.com/equilibrium2/public/api/nits?key=${API_KEY}&f-nit_1=123&eq-nit_1=${valor}`);
             const result = await response.json();
@@ -70,12 +72,19 @@ valorInput.addEventListener('focus', () => {
 // Función genérica para validar campos
 function validarCampo(id, mensaje, tipo = 'text') {
     const campo = document.getElementById(id);
-    const valor = campo.value.trim();
+    let valor = campo.value.trim();
 
+    console.log(id)
+    let numeroEntero = 0
     // Eliminar comentario previo si existe
     const errorPrevio = document.querySelector(`#${id} + .invalid-feedback`);
     if (errorPrevio) errorPrevio.remove();
+    if (id == 'valor') {
+        numeroEntero = parseInt(valor.replace(/[^\d]/g, ""), 10);
+        valor = parseFloat(numeroEntero).toFixed(2)
+    }
 
+    console.log(valor);
     if (valor === "" || (tipo === 'num' && isNaN(valor))) {
         campo.classList.add('is-invalid');
 
@@ -122,22 +131,22 @@ function validarConcepto() {
     }
 }
 
-
+allExtra = null;
 function centroCostos() {
     const select = document.getElementById('extra');
     const descripcion = document.getElementById('descripcionText');
 
-    fetch('/assets/js/centroCostos.json')
+    fetch('assets/js/causacionescontables/centroCostos.json')
         .then((res) => res.json())
         .then((res) => {
-            console.log(res);
+            // console.log(res);
             res.forEach(item => {
                 const option = document.createElement('option');
                 option.value = item.codigo;
                 option.textContent = `${item.codigo} - ${item.nombre}`;
                 select.appendChild(option);
             });
-
+            allExtra = res;
             select.addEventListener('change', function () {
                 const seleccionado = res.find(item => item.codigo === this.value);
                 descripcion.textContent = seleccionado ? seleccionado.descripcion : 'Descripción no disponible.';
@@ -149,12 +158,8 @@ function centroCostos() {
 } centroCostos();
 
 
-document.getElementById("btn_guardar").addEventListener("submit", async (e) => {
+document.getElementById("btn_guardar").addEventListener("click", async (e) => {
     e.preventDefault();
-
-    if (!validarConcepto()) {
-        e.preventDefault(); // Evita que se envíe el formulario
-    }
 
     const camposValidos =
         validarCampo('id_nit', 'El NIT es obligatorio', 'num') &
@@ -167,47 +172,65 @@ document.getElementById("btn_guardar").addEventListener("submit", async (e) => {
         console.log("Hay errores en el formulario.");
         return;
     }
+    
+    datos = levantarData()
+    console.log("Datos listos para enviar:", datos);
+    enviarDatos(datos, 'create');
+
+})
+
+function levantarData() {
+    let valor = document.getElementById("valor").value.trim()
+    numeroEntero = parseInt(valor.replace(/[^\d]/g, ""), 10);
+    valor = parseFloat(numeroEntero).toFixed(2)
 
     // Capturar valores solo si pasó la validación //6068094 110510	CAJAS MENORES
     const datos = {
-        documents: [
-            {
-                id_documento: null,
-                id_comprobante: 2,
-                id_nit: document.getElementById("id_nit").value.trim(),
-                fecha: obtenerFechaActual().trim(),
-                fecha_manual: document.getElementById("fecha_manual").value.trim(),
-                id_cuenta: 6068094,
-                valor: document.getElementById("valor").value.trim(),
-                tipo: 1,
-                concepto: document.getElementById("concepto").value.trim(),
-                documento_referencia: null, // aqui va la url del archivo
-                token: null,
-                extra: document.getElementById("extra").value.trim() // aqui van los centros de costos
-            }
-        ]
+        id_documento: null,
+        id_comprobante: 2,
+        id_nit: document.getElementById("id_nit").value.trim(),
+        fecha: obtenerFechaActual().trim(),
+        fecha_manual: document.getElementById("fecha_manual").value.trim(),
+        id_cuenta: 6068094,
+        valor: valor,
+        tipo: 1,
+        concepto: document.getElementById("concepto").value.trim(),
+        documento_referencia: null, // aqui va la url del archivo
+        token: null,
+        extra: document.getElementById("extra").value.trim() // aqui van los centros de costos
     };
+    return datos
+}
 
-    console.log("Datos listos para enviar:", datos);
-    /*
-                "id_documento": "00000004",
-                "id_comprobante": 65,
-                "id_nit": 1,
-                "fecha": "2024-03-19 08:00:00",
-                "fecha_manual": "2024-03-19",
-                "id_cuenta": 6068094,
-                "valor": "100",
-                "tipo": 1,
-                "concepto": "ABONO CUENTA TEST VENTAS MOSTRADOR",
-                "documento_referencia": "000001-3",
-                "token": "f55932f7d912352222457841asasas",
-                "extra": "RECIBO_GENERADO_VIA_API"
-                */
-    mensaje = "Este es un mensaje de alerta de ejemplo.";
-    mostrarAlerta(mensaje, "success");
-    // await enviarDatos(datos);
+function enviarDatos(datos, type) {
+    if (type == "create") {
+        fetch(`${host}/causacionContable`, {
+            method: "POST",
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(datos)
+        })
+            .then((res) => res.json())
+            .then((res) => {
+                if (!res.ok) {
+                    mostrarAlerta("Error en la petición id: response.false", "danger");
+                    throw new Error("Error en la petición");
+                }
+                mensaje = "La causación se ha registrado correctamente.";
+                mostrarAlerta(mensaje, "success");
+                setTimeout(() => {
+                    window.location.href = "/client/causacioncontable_new.html"
+                }, 7000)
+            })
+            .catch((e) => {
+                mostrarAlerta("Error en la petición id: " + e, "danger");
+                console.log(e)
+            });
+    }
 
-})
+}
 
 
 
