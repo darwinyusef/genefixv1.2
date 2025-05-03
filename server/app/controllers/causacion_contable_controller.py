@@ -206,7 +206,7 @@ def update_causacion(id: int, causacion: CausacionContableUpdate, db: Session = 
     if db_causacion is None:
         raise HTTPException(status_code=404, detail="Causación no encontrada")
     
-    for key, value in causacion.__dict__(exclude_unset=True).items():
+    for key, value in causacion.dict(exclude_unset=True).items():
         setattr(db_causacion, key, value)
     
     db.commit()

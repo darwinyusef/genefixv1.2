@@ -82,25 +82,7 @@
                 </a>
             </div>
             <div class="navbar-content">
-                <ul class="pc-navbar">
-                    <li class="pc-item pc-caption">
-                        <label>Principal</label>
-                    </li>
-                    <!-- Enlace de Usuarios -->
-
-
-                    <!-- Enlace de Perfil -->
-                    <li class="pc-item">
-                        <a href="./profile-update.html" class="pc-link "><span class="pc-micon"><i
-                                    data-feather="user-check"></i></span><span class="pc-mtext">Perfil</span></a>
-                    </li>
-
-                    <!-- Enlace de Registro -->
-                    <li class="pc-item">
-                        <a href="./causacioncontable_new.html" class="pc-link" target="_blank"><span class="pc-micon"><i
-                                    data-feather="user-plus"></i></span><span class="pc-mtext">Causación Contable</span></a>
-                    </li>
-                </ul>
+                <ul id="pc-navbar" class="pc-navbar"></ul>
             </div>
 
         </div>
@@ -212,7 +194,7 @@
                 <div class="col-sm-12">
                     <div class="card">
                         <div class="card-header">
-                            <h5>Registrar: Causacion Contable # 1</h5>
+                            <h5>Registrar: Causacion Contable # <span id="id_unico_top">1</span></h5>
                             
                         </div>
                         <div class="card-body">
@@ -263,7 +245,9 @@
                                             <label><strong>Descripción:</strong></label>
                                             <p id="descripcionText" class="border p-3 bg-light centrocostos_description">Selecciona un código para ver la descripción.</p>
                                         </div>
+
                                         
+                                        <input type="hidden" id="id_unico"> 
 
                                         
 
@@ -382,7 +366,7 @@
                 document.getElementById("fecha_manual").value = data.fecha_manual || "";
                 document.getElementById("valor").value = data.valor || "";
                 document.getElementById("concepto").value = data.concepto || "";
-
+                document.getElementById("id_unico").value = data.id || "";
                 // Opcional: si "extra" y descripción vienen en la respuesta
                 if (data.extra) {
                     document.getElementById("extra").value = data.extra;
@@ -398,6 +382,12 @@
                         el.disabled = true;
                     });
                     document.getElementById("btn_guardar").hidden = true;
+                    document.getElementById("id_unico_top").textContent = data.id
+                }
+
+                if(view == "edit") {
+
+                    document.getElementById("id_unico_top").textContent = data.id
                 }
 
             } catch (error) {
@@ -410,15 +400,34 @@
     document.addEventListener("DOMContentLoaded", function () {
         const queryParams = new URLSearchParams(window.location.search);
         const view = queryParams.get("view")
-        if(view != "create") {
+        if(view == "crear") {
+            document.getElementById("btn_editar").hidden = true; 
+            document.getElementById("btn_guardar").hidden = false;
+        } 
+
+        if(view == "true") {
             const id = queryParams.get("id");
             cargarCausacionContable(id, view)
             if(id == null) {
                 history.back();
             }
-        } else {
             document.getElementById("btn_editar").hidden = true; 
+            document.getElementById("btn_guardar").hidden = true; 
         }
+        
+        if(view == "edit") {
+            const id = queryParams.get("id");
+            cargarCausacionContable(id, view)
+            if(id == null) {
+                history.back();
+            }
+
+
+            document.getElementById("btn_guardar").hidden = true; 
+            document.getElementById("btn_editar").hidden = false;
+        }
+
+
     });
     </script>
 </body>

@@ -19,8 +19,12 @@ class CausacionContableBase(BaseModel):
 class CausacionContableCreate(CausacionContableBase):
     pass
 
-class CausacionContableUpdate(CausacionContableBase):
-    pass
+class CausacionContableUpdate(BaseModel):
+    id_nit: int
+    fecha_manual: date = None
+    valor: float
+    concepto: str
+    extra: str
 
 class CausacionContable(CausacionContableBase):
     id: int

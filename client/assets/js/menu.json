@@ -1,0 +1,36 @@
+{
+  "menu": [
+    {
+      "type": "caption",
+      "label": "Principal"
+    },
+    {
+        "type": "item",
+        "text": "Home",
+        "href": "./home.html",
+        "iconUrl": "🏠"
+      },
+    {
+      "type": "item",
+      "text": "Perfil",
+      "href": "./profile-update.html",
+      "iconUrl": "🧒🏻"
+    },
+    {
+      "type": "item",
+      "text": "Causación Contable",
+      "href": "./causacioncontable_new.html",
+      "iconUrl": "📄"
+    },
+    {
+        "type": "caption",
+        "label": "Reportes"
+      },
+    {
+      "type": "item",
+      "text": "Reporte final",
+      "href": "./causacioncontable_report.html",
+      "iconUrl": "💼"
+    }
+  ]
+}

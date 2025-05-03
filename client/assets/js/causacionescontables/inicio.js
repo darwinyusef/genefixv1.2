@@ -175,7 +175,30 @@ document.getElementById("btn_guardar").addEventListener("click", async (e) => {
     
     datos = levantarData()
     console.log("Datos listos para enviar:", datos);
-    enviarDatos(datos, 'create');
+    enviarDatos(datos);
+
+})
+
+
+document.getElementById("btn_editar").addEventListener("click", async (e) => {
+    e.preventDefault();
+
+    id_unico = document.getElementById('id_unico').value
+    const camposValidos =
+        validarCampo('id_nit', 'El NIT es obligatorio', 'num') &
+        validarCampo('fecha_manual', 'La fecha manual es obligatoria') &
+        validarCampo('valor', 'El valor es obligatorio', 'num') &
+        validarCampo('concepto', 'El concepto es obligatorio') &
+        validarCampo('extra', 'El extra es obligatorio');
+
+    if (!camposValidos) {
+        console.log("Hay errores en el formulario.");
+        return;
+    }
+    
+    datos = levantarData()
+    console.log("Datos listos para enviar:", datos);
+    actualizarDatos(datos, id_unico);
 
 })
 
@@ -202,8 +225,7 @@ function levantarData() {
     return datos
 }
 
-function enviarDatos(datos, type) {
-    if (type == "create") {
+function enviarDatos(datos) {
         fetch(`${host}/causacionContable`, {
             method: "POST",
             headers: {
@@ -221,15 +243,41 @@ function enviarDatos(datos, type) {
                 mensaje = "La causación se ha registrado correctamente.";
                 mostrarAlerta(mensaje, "success");
                 setTimeout(() => {
-                    window.location.href = "/client/causacioncontable_new.html"
+                    history.back();
                 }, 7000)
             })
             .catch((e) => {
                 mostrarAlerta("Error en la petición id: " + e, "danger");
                 console.log(e)
             });
-    }
+}
 
+
+function actualizarDatos(datos, id) {
+        fetch(`${host}/causacionContable/${id}`, {
+            method: "PUT",
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(datos)
+        })
+            .then((res) => res.json())
+            .then((res) => {
+                if (!res.ok) {
+                    mostrarAlerta("Error en la petición id: response.false", "danger");
+                    throw new Error("Error en la petición");
+                }
+                mensaje = "La causación se ha editado correctamente.";
+                mostrarAlerta(mensaje, "success");
+                setTimeout(() => {
+                    history.back();
+                }, 7000)
+            })
+            .catch((e) => {
+                mostrarAlerta("Error en la petición id: " + e, "danger");
+                console.log(e)
+            });
 }
 
 

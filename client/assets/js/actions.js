@@ -4,7 +4,7 @@ function mostrarAlerta(mensaje, tipo) {
     alerta.style.display = "block";
     alerta.classList.add(`alert-${tipo}`); // Agregar la clase de tipo de alerta
     alerta.classList.add('fade-in');
-    
+
     setTimeout(() => {
         alerta.classList.remove('fade-in');
         alerta.classList.add('fade-out');
@@ -50,3 +50,47 @@ function mejorarFormatoFecha(fechaISO) {
 
     return `${dia}/${mes}/${anio}`;
 }
+
+fetch('assets/js/menu.json') // Cambiá la ruta si es diferente
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+        const navbar = document.getElementById('pc-navbar');
+
+        data.menu.forEach(item => {
+            if (item.type === 'caption') {
+                const li = document.createElement('li');
+                li.classList.add('pc-item', 'pc-caption');
+                const label = document.createElement('label');
+                label.textContent = item.label;
+                li.appendChild(label);
+                navbar.appendChild(li);
+            }
+
+            if (item.type === 'item') {
+                const li = document.createElement('li');
+                li.classList.add('pc-item');
+
+                const a = document.createElement('a');
+                a.classList.add('pc-link');
+                a.href = item.href;
+                if (item.target) a.target = item.target;
+
+                const spanIcon = document.createElement('span');
+                spanIcon.classList.add('pc-micon');
+                spanIcon.textContent = item.iconUrl;
+
+                const spanText = document.createElement('span');
+                spanText.classList.add('pc-mtext');
+                spanText.textContent = item.text;
+
+                a.appendChild(spanIcon);
+                a.appendChild(spanText);
+                li.appendChild(a);
+                navbar.appendChild(li);
+            }
+        });
+    })
+    .catch(error => {
+        console.error('Error cargando el menú:', error);
+    });

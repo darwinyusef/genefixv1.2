@@ -32,8 +32,8 @@ def custom_openapi(app):
         return app.openapi_schema
     openapi_schema = get_openapi(
         title="genefix",
-        version="0.0.1",
-        description="Api de genefix Secure puede contactarme como desarrollador a",
+        version="0.1.2",
+        description="Api de genefix Secure si tiene problemas puede contactarme como desarrollador a",
         routes=app.routes,
         contact={"name": os.getenv("AUTHOR"), "email": "wsgestor@gmail.com"}
     )

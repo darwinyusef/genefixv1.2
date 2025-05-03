@@ -63,6 +63,35 @@
         .month-year-picker:nth-child(1) {
             display: none;
         }
+
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        input,
+        select,
+        button {
+            margin: 5px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th,
+        td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f4f4f4;
+        }
     </style>
 </head>
 
@@ -117,22 +146,7 @@
                 </a>
             </div>
             <div class="navbar-content">
-                <ul class="pc-navbar">
-                    <li class="pc-item pc-caption">
-                        <label>Principal</label>
-                    </li>
-                    <li class="pc-item">
-                        <a href="./profile-update.html" class="pc-link "><span class="pc-micon"><i
-                                    data-feather="user-check"></i></span><span class="pc-mtext">Perfil</span></a>
-                    </li>
-
-                    <!-- Enlace de Registro -->
-                    <li class="pc-item">
-                        <a href="./causacioncontable_new.html" class="pc-link" target="_blank"><span class="pc-micon"><i
-                                    data-feather="user-plus"></i></span><span class="pc-mtext">Causación
-                                Contable</span></a>
-                    </li>
-                </ul>
+                <ul id="pc-navbar" class="pc-navbar"></ul>
             </div>
 
         </div>
@@ -251,61 +265,45 @@
 
                         <div class="card-body text-center">
 
-                            <style>
-                                .form-control-sm {
-                                    width: auto;
-                                    display: inline-block;
-                                }
-                            </style>
+                       
+                            <!-- <label for="nit">NIT:</label>
+                            <input type="text" id="nit" value="123456"> -->
 
+                            <label for="anio">Año:</label>
+                            <input type="number" id="anio" value="2025" min="2000" max="2099">
 
+                            <label for="mes">Mes:</label>
+                            <select id="mes">
+                                <option value="enero">Enero</option>
+                                <option value="febrero">Febrero</option>
+                                <option value="marzo">Marzo</option>
+                                <option value="abril">Abril</option>
+                                <option value="mayo" selected>Mayo</option>
+                                <!-- Agrega más meses si es necesario -->
+                            </select>
 
-                            <h2>Reporte de finalizaciones</h2>
-                            <div class="month-year-picker" style="text-transform:uppercase">
-                                <button class="nav-button prev-item">&lt;</button>
-                                <span class="current-month-year">Febrero 2025</span>
-                                <button class="nav-button next-item">&gt;</button>
-                            </div>
-                            <div class="form-inline mb-3">
-                                <label class="mr-2">Filtrar por columna:</label>
-                                <select class="form-control form-control-sm mr-2" id="filterColumn">
-                                    <option value="all">Todas las columnas</option>
-                                    <option value="nombre">Nombre</option>
-                                    <option value="edad">Edad</option>
-                                    <option value="ciudad">Ciudad</option>
-                                </select>
-                                <input type="text" class="form-control form-control-sm" id="filterInput"
-                                    placeholder="Ingrese texto a filtrar">
-                            </div>
+                            <button onclick="loadData()">Buscar</button>
 
-
-                            <table class="table table-striped">
+                            <table id="data-table">
                                 <thead>
                                     <tr>
-                                        <th scope="col">#</th>
-                                        <th scope="col" data-column="nombre">Nit</th>
-                                        <th scope="col" data-column="edad">Fecha</th>
-                                        <th scope="col" data-column="ciudad">Valor</th>
-                                        <th scope="col" data-column="ciudad">Concepto</th>
+                                        <th>ID</th>
+                                        <th>Fecha</th>
+                                        <th>Valor</th>
+                                        <th>Cuenta</th>
+                                        <th>Extra</th>
+                                        <th>Documento</th>
+                                        <th>Concepto</th>
                                     </tr>
                                 </thead>
-                                <tbody id="dataTable">
-                                    <tr>
-                                        <td>3</td>
-                                        <th scope="row">12345</th>
-                                        <td>12/04/2025</td>
-                                        <td>$ 25000</td>
-                                        <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorum asperiores
-                                            enim laboriosam.</td>
-                                    </tr>
-
-                                </tbody>
+                                <tbody></tbody>
                             </table>
 
-                            <nav aria-label="Page navigation">
-                                <ul class="pagination justify-content-center" id="pagination">
-                                </ul>
-                            </nav>
+                            <div>
+                                <button onclick="previousPage()">Anterior</button>
+                                <span id="page-info"></span>
+                                <button onclick="nextPage()">Siguiente</button>
+                            </div>
 
 
 
@@ -322,52 +320,7 @@
     <!-- [ Main Content ] end -->
     </div>
     <!-- Warning Section start -->
-    <!-- Older IE warning message -->
-    <!--[if lt IE 11]>
-        <div class="ie-warning">
-            <h1>Warning!!</h1>
-            <p>You are using an outdated version of Internet Explorer, please upgrade
-               <br/>to any of the following web browsers to access this website.
-            </p>
-            <div class="iew-container">
-                <ul class="iew-download">
-                    <li>
-                        <a href="http://www.google.com/chrome/">
-                            <img src="assets/images/browser/chrome.png" alt="Chrome">
-                            <div>Chrome</div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="https://www.mozilla.org/en-US/firefox/new/">
-                            <img src="assets/images/browser/firefox.png" alt="Firefox">
-                            <div>Firefox</div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="http://www.opera.com">
-                            <img src="assets/images/browser/opera.png" alt="Opera">
-                            <div>Opera</div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="https://www.apple.com/safari/">
-                            <img src="assets/images/browser/safari.png" alt="Safari">
-                            <div>Safari</div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="http://windows.microsoft.com/en-us/internet-explorer/download-ie">
-                            <img src="assets/images/browser/ie.png" alt="">
-                            <div>IE (11 & above)</div>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-            <p>Sorry for the inconvenience!</p>
-        </div>
-    <![endif]-->
-    <!-- Warning Section Ends -->
-    <!-- Required Js -->
+
     <script src="assets/js/vendor-all.min.js"></script>
     <script src="assets/js/plugins/bootstrap.min.js"></script>
     <script src="assets/js/plugins/feather.min.js"></script>
@@ -380,6 +333,65 @@
     <script src="assets/js/constantes.js"></script>
     <script src="assets/js/actions.js"></script>
     <script src="assets/js/logout.js"></script>
+
+
+
+    <script>
+        let skip = 0;
+        const limit = 10;
+
+        function loadData() {
+            // const nit = document.getElementById("nit").value;
+            const anio = document.getElementById("anio").value;
+            const mes = document.getElementById("mes").value;
+
+            fetch(`http://localhost:8000/api/v1/causacionesFinalContables?type=finalizado&skip=${skip}&limit=${limit}&anio=${anio}&mes=${mes}`, {
+                headers: {
+                    "accept": "application/json",
+                    "Authorization": "Bearer " + token
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    const tbody = document.querySelector("#data-table tbody");
+                    tbody.innerHTML = "";
+
+                    data.data.forEach(item => {
+                        const row = `
+            <tr>
+              <td>${item.id}</td>
+              <td>${new Date(item.fecha).toLocaleDateString()}</td>
+              <td>${item.valor}</td>
+              <td>${item.id_cuenta}</td>
+              <td>${item.extra}</td>
+              <td><a href="${item.documento_referencia}" target="_blank">PDF</a></td>
+              <td>${typeof item.concepto === 'string' && item.concepto.length > 100
+                                ? item.concepto.substring(0, 100) + "..."
+                                : item.concepto}</td>
+            </tr>`;
+                        tbody.insertAdjacentHTML("beforeend", row);
+                    });
+
+                    document.getElementById("page-info").textContent = `Página ${Math.floor(skip / limit) + 1}`;
+                })
+                .catch(error => console.error("Error al obtener datos:", error));
+        }
+
+        function nextPage() {
+            skip += limit;
+            loadData();
+        }
+
+        function previousPage() {
+            if (skip >= limit) {
+                skip -= limit;
+                loadData();
+            }
+        }
+
+        window.onload = loadData;
+    </script>
+
 
     <script>
 
@@ -494,51 +506,6 @@
         document.body.appendChild(picker);
 
 
-        async function cargarCausaciones({ type = "entregado", skip = 0, limit = 10, nit = null, anio = null, mes = null }) {
-            const params = new URLSearchParams();
-            params.append("type", type);
-            params.append("skip", skip);
-            params.append("limit", limit);
-            if (nit) params.append("nit", nit);
-            if (anio) params.append("anio", anio);
-            if (mes) params.append("mes", mes);
-
-            try {
-                const response = await fetch(`/causacionesFinalContables?${params.toString()}`, {
-                    method: "GET",
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json' // Opcional, pero recomendable indicar el tipo de contenido
-                    }
-
-                });
-
-                if (response.status === 204) {
-                    document.getElementById("dataTable").innerHTML = "<tr><td colspan='5'>No hay causaciones.</td></tr>";
-                    return;
-                }
-
-                const data = await response.json();
-                const tbody = document.getElementById("dataTable");
-                tbody.innerHTML = "";
-
-                data.data.forEach((item, index) => {
-                    const row = `
-                <tr>
-                    <th scope="row">${index + 1 + skip}</th>
-                    <td>${item.id_nit || "-"}</td>
-                    <td>${new Date(item.fecha).toLocaleDateString()}</td>
-                    <td>${item.valor?.toLocaleString("es-CO", { style: "currency", currency: "COP" }) || "-"}</td>
-                    <td>${item.concepto || "-"}</td>
-                </tr>
-            `;
-                    tbody.innerHTML += row;
-                });
-            } catch (error) {
-                console.error("Error cargando causaciones:", error);
-                document.getElementById("dataTable").innerHTML = "<tr><td colspan='5'>Error al cargar los datos.</td></tr>";
-            }
-        }
 
     </script>
 
