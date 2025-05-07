@@ -243,8 +243,8 @@ function enviarDatos(datos) {
                 mensaje = "La causación se ha registrado correctamente.";
                 mostrarAlerta(mensaje, "success");
                 setTimeout(() => {
-                    history.back();
-                }, 7000)
+                    window.location.href = "causacioncontable_new.html"
+                }, 5000)
             })
             .catch((e) => {
                 mostrarAlerta("Error en la petición id: " + e, "danger");
@@ -271,8 +271,8 @@ function actualizarDatos(datos, id) {
                 mensaje = "La causación se ha editado correctamente.";
                 mostrarAlerta(mensaje, "success");
                 setTimeout(() => {
-                    history.back();
-                }, 7000)
+                    window.location.href = "causacioncontable_new.html"
+                }, 5000)
             })
             .catch((e) => {
                 mostrarAlerta("Error en la petición id: " + e, "danger");

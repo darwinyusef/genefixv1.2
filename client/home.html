@@ -98,10 +98,10 @@
                                 <i data-feather="user"></i>
                                 <span>Perfil</span>
                             </a>
-                            <a href="#!" class="dropdown-item">
+                            <!-- <a href="#!" class="dropdown-item">
                                 <i data-feather="life-buoy"></i>
                                 <span>Support</span>
-                            </a>
+                            </a> -->
                             <button onclick="logout()" class="dropdown-item">
                                 <i data-feather="power"></i>
                                 <span>Logout</span>
@@ -132,23 +132,23 @@
                             role="button" aria-haspopup="false" aria-expanded="false">
                             <img src="assets/images/user/avatar-5.jpg" alt="user-image" class="user-avtar">
                             <span>
-                                <span class="user-name">Yusef</span>
-                                <span class="user-desc">Administrator</span>
+                                <span class="user-name"></span>
+                                <span class="user-desc"></span>
                             </span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right pc-h-dropdown">
                             <div class=" dropdown-header">
-                                <h6 class="text-overflow m-0">Welcome !</h6>
+                                <h6 class="text-overflow m-0">Bienvenido</h6>
                             </div>
-                            <a href="#!" class="dropdown-item">
+                            <a href="/profile-update.html" class="dropdown-item">
                                 <i data-feather="user"></i>
-                                <span>My Account</span>
+                                <span>Mi perfil</span>
                             </a>
 
-                            <a href="#!" class="dropdown-item">
+                            <!-- <a href="#!" class="dropdown-item">
                                 <i data-feather="life-buoy"></i>
                                 <span>Support</span>
-                            </a>
+                            </a> -->
 
                             <button onclick="logout()" class="dropdown-item">
                                 <i data-feather="power"></i>
@@ -172,10 +172,10 @@
                     <div class="row align-items-center">
                         <div class="col-md-12">
                             <div class="page-header-title">
-                                <h5 class="m-b-10">Formulario</h5>
+                                <h5 class="m-b-10">Inicio</h5>
                             </div>
                             <ul class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="index.html">Contabilidad</a></li>
+                                <li class="breadcrumb-item"><a href="home.html">Bienvenida</a></li>
                                 <!--li class="breadcrumb-item">Sample Page</li-->
                             </ul>
                         </div>
@@ -194,7 +194,7 @@
                         </div>
 
                         <div class="card-body text-center">
-                            <h3 class="mb-4">¡Hola, <span id="nombreUsuario">Yusef</span>! 👋</h3>
+                            <h3 class="mb-4">Bienvenido, <span id="nombreUsuario"></span>! 👋</h3>
                             <p class="lead">Este es tu espacio personal donde podrás gestionar tu información,
                                 visualizar reportes y configurar tu cuenta.</p>
 
@@ -211,53 +211,7 @@
     </div>
     <!-- [ Main Content ] end -->
     </div>
-    <!-- Warning Section start -->
-    <!-- Older IE warning message -->
-    <!--[if lt IE 11]>
-        <div class="ie-warning">
-            <h1>Warning!!</h1>
-            <p>You are using an outdated version of Internet Explorer, please upgrade
-               <br/>to any of the following web browsers to access this website.
-            </p>
-            <div class="iew-container">
-                <ul class="iew-download">
-                    <li>
-                        <a href="http://www.google.com/chrome/">
-                            <img src="assets/images/browser/chrome.png" alt="Chrome">
-                            <div>Chrome</div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="https://www.mozilla.org/en-US/firefox/new/">
-                            <img src="assets/images/browser/firefox.png" alt="Firefox">
-                            <div>Firefox</div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="http://www.opera.com">
-                            <img src="assets/images/browser/opera.png" alt="Opera">
-                            <div>Opera</div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="https://www.apple.com/safari/">
-                            <img src="assets/images/browser/safari.png" alt="Safari">
-                            <div>Safari</div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="http://windows.microsoft.com/en-us/internet-explorer/download-ie">
-                            <img src="assets/images/browser/ie.png" alt="">
-                            <div>IE (11 & above)</div>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-            <p>Sorry for the inconvenience!</p>
-        </div>
-    <![endif]-->
-    <!-- Warning Section Ends -->
-    <!-- Required Js -->
+
     <script src="assets/js/vendor-all.min.js"></script>
     <script src="assets/js/plugins/bootstrap.min.js"></script>
     <script src="assets/js/plugins/feather.min.js"></script>
@@ -269,6 +223,12 @@
     <script src="assets/js/plugins/apexcharts.min.js"></script>
     <script src="assets/js/actions.js"></script>
     <script src="assets/js/logout.js"></script>
+
+    <script>
+        const usuarioObj = JSON.parse(localStorage.getItem("user"));
+
+        document.getElementById('nombreUsuario').textContent = usuarioObj.name
+    </script>
 </body>
 
 </html>

@@ -33,6 +33,12 @@ document.getElementById('btn_login').addEventListener('click', async () => {
                 return
             }
             if (!response.ok) {
+                console.log(response);
+
+                if(response.statusText == "Unauthorized") {
+                    alert('Actualmente este usuario no ha sido activado y no tiene permisos de ingreso');
+                    throw new Error(errorData.message || 'Error al iniciar sesión');
+                }
                 const errorData = await response.json();
                 throw new Error(errorData.message || 'Error al iniciar sesión');
             }

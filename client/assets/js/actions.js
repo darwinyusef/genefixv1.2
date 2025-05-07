@@ -51,46 +51,70 @@ function mejorarFormatoFecha(fechaISO) {
     return `${dia}/${mes}/${anio}`;
 }
 
+function activationROl(item, navbar) {
+    if (item.type === 'caption') {
+        const li = document.createElement('li');
+        li.classList.add('pc-item', 'pc-caption');
+        const label = document.createElement('label');
+        label.textContent = item.label;
+        li.appendChild(label);
+        navbar.appendChild(li);
+    }
+
+    if (item.type === 'item') {
+        const li = document.createElement('li');
+        li.classList.add('pc-item');
+
+        const a = document.createElement('a');
+        a.classList.add('pc-link');
+        a.href = item.href;
+        if (item.target) a.target = item.target;
+
+        const spanIcon = document.createElement('span');
+        spanIcon.classList.add('pc-micon');
+        spanIcon.textContent = item.iconUrl;
+
+        const spanText = document.createElement('span');
+        spanText.classList.add('pc-mtext');
+        spanText.textContent = item.text;
+
+        a.appendChild(spanIcon);
+        a.appendChild(spanText);
+        li.appendChild(a);
+        navbar.appendChild(li);
+    }
+
+}
+
 fetch('assets/js/menu.json') // Cambiá la ruta si es diferente
     .then(response => response.json())
     .then(data => {
-        console.log(data);
+
         const navbar = document.getElementById('pc-navbar');
 
+        const us = JSON.parse(localStorage.getItem("user"));
+
         data.menu.forEach(item => {
-            if (item.type === 'caption') {
-                const li = document.createElement('li');
-                li.classList.add('pc-item', 'pc-caption');
-                const label = document.createElement('label');
-                label.textContent = item.label;
-                li.appendChild(label);
-                navbar.appendChild(li);
+            if(us.rol == "user" && item.rol == "user") {
+                activationROl(item, navbar)
+            } 
+
+            if(us.rol == "admin") {
+                activationROl(item, navbar)
             }
 
-            if (item.type === 'item') {
-                const li = document.createElement('li');
-                li.classList.add('pc-item');
-
-                const a = document.createElement('a');
-                a.classList.add('pc-link');
-                a.href = item.href;
-                if (item.target) a.target = item.target;
-
-                const spanIcon = document.createElement('span');
-                spanIcon.classList.add('pc-micon');
-                spanIcon.textContent = item.iconUrl;
-
-                const spanText = document.createElement('span');
-                spanText.classList.add('pc-mtext');
-                spanText.textContent = item.text;
-
-                a.appendChild(spanIcon);
-                a.appendChild(spanText);
-                li.appendChild(a);
-                navbar.appendChild(li);
-            }
         });
     })
     .catch(error => {
         console.error('Error cargando el menú:', error);
     });
+
+
+
+function defineTopRol() {
+    const us = JSON.parse(localStorage.getItem("user"));
+    document.querySelector(".pc-head-link .user-name").textContent = us.name
+    document.querySelector(".pc-head-link .user-desc").textContent = us.rol == "admin" ? "Administrador" : "Usuario" 
+}
+
+defineTopRol()  

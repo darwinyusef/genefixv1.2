@@ -53,7 +53,7 @@ def activate_user(user: UserRolActive, db: Session = Depends(get_db), token: dic
     
     db.commit()
     db.refresh(act_user)
-    return UserOut.model_validate(act_user)
+    return act_user
 
 
 

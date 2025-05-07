@@ -1,36 +1,64 @@
 {
+  "color": [
+    {
+      "color": "red",
+      "rol": "admin"
+    },
+    {
+      "color": "red",
+      "rol": "user"
+    }
+  ],
   "menu": [
     {
       "type": "caption",
-      "label": "Principal"
+      "label": "Principal",
+      "rol": "user"
     },
     {
-        "type": "item",
-        "text": "Home",
-        "href": "./home.html",
-        "iconUrl": "🏠"
-      },
+      "type": "item",
+      "text": "Home",
+      "href": "./home.html",
+      "iconUrl": "🏠",
+      "rol": "user"
+    },
     {
       "type": "item",
       "text": "Perfil",
       "href": "./profile-update.html",
-      "iconUrl": "🧒🏻"
+      "iconUrl": "🧒🏻",
+      "rol": "user"
     },
     {
       "type": "item",
       "text": "Causación Contable",
       "href": "./causacioncontable_new.html",
-      "iconUrl": "📄"
+      "iconUrl": "📄",
+      "rol": "user"
     },
     {
-        "type": "caption",
-        "label": "Reportes"
-      },
+      "type": "caption",
+      "label": "Reportes",
+      "rol": "user"
+    },
     {
       "type": "item",
       "text": "Reporte final",
       "href": "./causacioncontable_report.html",
-      "iconUrl": "💼"
+      "iconUrl": "💼",
+      "rol": "user"
+    },
+    {
+      "type": "caption",
+      "label": "Administrador",
+      "rol": "Admin"
+    },
+    {
+      "type": "item",
+      "text": "Activación de usuarios",
+      "href": "./activation.html",
+      "iconUrl": "💼",
+      "rol": "Admin"
     }
   ]
 }

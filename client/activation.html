@@ -32,10 +32,86 @@
     <link rel="stylesheet" href="assets/css/customizer.css">
     <link id="rol_user" rel="stylesheet" href="assets/css/change_loggin.css">
     <link id="rol_admin" rel="stylesheet" href="assets/css/typeadmin.css">
+    <style>
+        .month-year-picker {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            text-transform: uppercase;
+        }
 
+        .nav-button {
+            padding: 8px 12px;
+            cursor: pointer;
+            border: none;
+            background-color: #f0f0f0;
+            border-radius: 3px;
+        }
+
+        .nav-button:hover {
+            background-color: #e0e0e0;
+        }
+
+        .current-month-year {
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .month-year-picker:nth-child(1) {
+            display: none;
+        }
+
+
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        input,
+        select,
+        button {
+            margin: 5px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            padding: 20px;
+        }
+
+        th,
+        td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f0f0f0;
+        }
+        .activate {
+            cursor: pointer;
+            font-size: 22px;
+        }
+
+        .activate:hover {
+            text-shadow: 0px 0px 5px #CE0000;
+        }
+    </style>
 </head>
 
 <body class="">
+
+    <div class="loader-wrapper">
+        <span class="loader"></span>
+    </div>
+
+    <div id="alerta" class="alert animate__animated" role="alert" style="display: none;">
+        A simple primary alert—check it out!
+    </div>
     <!-- [ Pre-loader ] start -->
     <div class="loader-bg">
         <div class="loader-track">
@@ -145,11 +221,11 @@
                                 <i data-feather="user"></i>
                                 <span>Mi perfil</span>
                             </a>
-
-                            <!-- <a href="#!" class="dropdown-item">
+                            
+                            <!-- <!-- <a href="#!" class="dropdown-item">
                                 <i data-feather="life-buoy"></i>
                                 <span>Support</span>
-                            </a> -->
+                            </a> --> -->
 
                             <button onclick="logout()" class="dropdown-item">
                                 <i data-feather="power"></i>
@@ -173,10 +249,10 @@
                     <div class="row align-items-center">
                         <div class="col-md-12">
                             <div class="page-header-title">
-                                <h5 class="m-b-10">Formulario</h5>
+                                <p class="m-b-10">Causación contable | </p>
                             </div>
                             <ul class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="index.html">Contabilidad</a></li>
+                                <li class="breadcrumb-item"><a href="index.html">Mis reportes</a></li>
                                 <!--li class="breadcrumb-item">Sample Page</li-->
                             </ul>
                         </div>
@@ -186,89 +262,45 @@
             <!-- [ breadcrumb ] end -->
             <!-- [ Main Content ] start -->
             <div class="row">
+
                 <!-- [ sample-page ] start -->
                 <div class="col-sm-12">
-                    <div class="card">
+                    <div class="card" >
                         <div class="card-header">
-                            <h5>Actualización de Perfil</h5>
+                            <h5>Activación de usuarios en la plataforma</h5>
                         </div>
-                        <div class="card-body">
-                            <div class="container mt-5">
-                                <form id="formPerfil">
-                                    <div class="row">
-                                        <div class="form-group col-12">
-                                            <label for="name">Nombre</label>
-                                            <input type="text" class="form-control" id="name">
-                                        </div>
-                                        <div class="form-group col-12">
-                                            <label for="email">Correo</label>
-                                            <input type="email" class="form-control" id="email">
-                                        </div>
-                                        <div class="form-group col-12">
-                                            <label for="telefono">Teléfono</label>
-                                            <input type="text" class="form-control" id="telefono">
-                                        </div>
-                                    </div>
-                                </form>
-                                <div id="mensaje"></div>
-                            </div>
+
+                        <div style="padding:20px;">
+                            <table id="data-table" >
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Username</th>
+                                        <th>Nombre</th>
+                                        <th>Email</th>
+                                        <th>Rol</th>
+                                        <th>Activo</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+    
+                            <p id="page-info"></p>
                         </div>
+
                     </div>
                 </div>
-                <!-- [ sample-page ] end -->
             </div>
-            <!-- [ Main Content ] end -->
+
+            <!-- [ sample-page ] end -->
         </div>
+        <!-- [ Main Content ] end -->
+    </div>
     </div>
     <!-- [ Main Content ] end -->
     </div>
     <!-- Warning Section start -->
-    <!-- Older IE warning message -->
-    <!--[if lt IE 11]>
-        <div class="ie-warning">
-            <h1>Warning!!</h1>
-            <p>You are using an outdated version of Internet Explorer, please upgrade
-               <br/>to any of the following web browsers to access this website.
-            </p>
-            <div class="iew-container">
-                <ul class="iew-download">
-                    <li>
-                        <a href="http://www.google.com/chrome/">
-                            <img src="assets/images/browser/chrome.png" alt="Chrome">
-                            <div>Chrome</div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="https://www.mozilla.org/en-US/firefox/new/">
-                            <img src="assets/images/browser/firefox.png" alt="Firefox">
-                            <div>Firefox</div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="http://www.opera.com">
-                            <img src="assets/images/browser/opera.png" alt="Opera">
-                            <div>Opera</div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="https://www.apple.com/safari/">
-                            <img src="assets/images/browser/safari.png" alt="Safari">
-                            <div>Safari</div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="http://windows.microsoft.com/en-us/internet-explorer/download-ie">
-                            <img src="assets/images/browser/ie.png" alt="">
-                            <div>IE (11 & above)</div>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-            <p>Sorry for the inconvenience!</p>
-        </div>
-    <![endif]-->
-    <!-- Warning Section Ends -->
-    <!-- Required Js -->
+
     <script src="assets/js/vendor-all.min.js"></script>
     <script src="assets/js/plugins/bootstrap.min.js"></script>
     <script src="assets/js/plugins/feather.min.js"></script>
@@ -278,8 +310,72 @@
     <script src="assets/js/uikit.min.js"></script>
 
     <script src="assets/js/plugins/apexcharts.min.js"></script>
-    
+    <script src="assets/js/constantes.js"></script>
     <script src="assets/js/actions.js"></script>
+    <script src="assets/js/logout.js"></script>
+
+
+
+    <script>
+        fetch(`http://localhost:8000/api/v1/users`, {
+            headers: {
+                "accept": "application/json",
+                "Authorization": "Bearer " + token
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                const tbody = document.querySelector("#data-table tbody");
+                tbody.innerHTML = "";
+
+                data.forEach(item => {
+                    const activo = item.rol !== "inactive" ? "✅" : "";
+                    const activateButton = item.rol === "inactive"
+                        ? `<div class="activate" onclick="activateUser('${item.username}', '${item.name}')">✍🏻</div>`
+                        : "";
+
+                    const row = `
+                        <tr>
+                        <td>${item.id}</td>
+                        <td>${item.username}</td>
+                        <td>${item.name}</td>
+                        <td>${item.email}</td>
+                        <td>${item.rol}</td>
+                        <td>${activo} ${activateButton}</td>
+                        </tr>`;
+                    tbody.insertAdjacentHTML("beforeend", row);
+                });
+            })
+            .catch(error => console.error("Error al obtener datos:", error));
+
+
+
+        function activateUser(username, name) {
+            fetch('http://localhost:8000/api/v1/activate', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token
+                },
+                body: JSON.stringify({
+                    username: username,
+                    name: name,
+                    rol: "user"
+                })
+            })
+                .then(res => res.json())
+                .then(data => {
+                    mostrarAlerta("Usuario activado con éxito", "success");
+                    if (data.rol != "user") throw new Error("No se pudo activar el usuario.");
+                    window.location.reload();
+                })
+                .catch(error => {
+                    console.error("Error al activar usuario:", error);
+                    
+                });
+        }
+    </script>
+
 
 </body>
 
