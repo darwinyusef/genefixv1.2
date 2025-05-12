@@ -389,7 +389,7 @@
 
                 if (confirm(`¿Estás seguro de que quieres borrar el registro con ID: ${idParaBorrar}?`)) {
                     // El usuario confirmó, entonces procedemos a enviar la solicitud DELETE
-                    const urlBorrar = `http://localhost:8000/api/v1/causacionContable/${idParaBorrar}`;
+                    const urlBorrar = `${host}/causacionContable/${idParaBorrar}`;
 
                     fetch(urlBorrar, {
                         method: 'DELETE',

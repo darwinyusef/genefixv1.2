@@ -7,6 +7,8 @@ from app.config.database import get_db
 from app.models import CausacionContable as CausacionContableModel
 from app.shemas.shema_causacion_contable import CausacionContableCreate, CausacionContableUpdate, CausacionContable
 from app.models import Configuration as ConfigurationModel
+from app.shemas.shema_send_causacion import CausacionDTO
+from app.repositories.causacion_repository import CausacionRepository
 
 from app.config.config import decode_token, get_current_user 
 from app.config.mail import AWS_BUCKET_NAME, AWS_S3_URL, s3_client
@@ -14,11 +16,13 @@ from datetime import datetime, timezone
 import uuid
 
 from dotenv import load_dotenv
+
 load_dotenv() 
 import os
 
 version = os.getenv("API_VERSION")
-router = APIRouter(prefix=f"/api/{version}", tags=['Causacion Contable'])
+tokenbegranda = os.getenv("TOKEN_BEGRANDA")
+router = APIRouter(prefix=APIRouter(prefix=f"/api/{version}"), tags=['Causacion Contable'])
 
 def dateNow(): 
     fecha_actual = datetime.now()
@@ -170,15 +174,34 @@ async def read_causacion_and_update(db: Session = Depends(get_db), token: dict =
     _, codigo_documento = increment_counter(db)
     public_url = await upload_file_helper(file)
 
+    documentos = []
     for causacion in causaciones:
-        causacion.estado = "activado"
+        causacion.estado = "finalizado"
         causacion.id_documento = str(codigo_documento)
         causacion.documento_referencia = public_url
         
+        documentos.append(CausacionDTO(
+            id_documento=str(codigo_documento),
+            id_comprobante=causacion.id_comprobante,
+            id_nit=causacion.id_nit,
+            fecha=str(causacion.fecha),
+            fecha_manual=str(causacion.fecha_manual),
+            id_cuenta=causacion.id_cuenta,
+            valor=str(causacion.valor),
+            tipo=causacion.tipo,
+            concepto=causacion.concepto,
+            documento_referencia=public_url,
+            token=None,
+            extra=str(causacion.extra)
+        ))
+    
     db.commit()
-    print(causaciones)
-    return { "ms": "ok", "description": "Desea enviar más causaciones o desea cerrar las actividades de este mes" }
+    # Enviamos a API externa
+    resultado_envio = await CausacionRepository.enviar_causaciones_a_api(documentos, token=tokenbegranda)
+    
+    return { "ms": "ok", "description": "Desea enviar más causaciones o desea cerrar las actividades de este mes", "res_begranda": resultado_envio }
       
+
 
 @router.post("/finalizarCausacion")
 async def finalizarCausaciones(db: Session = Depends(get_db), token: dict = Depends(get_current_user)):
@@ -192,7 +215,7 @@ async def finalizarCausaciones(db: Session = Depends(get_db), token: dict = Depe
         return { "status_code": status.HTTP_204_NO_CONTENT, "content":0 }
     
     for causacion in causaciones:
-        causacion.estado = "finalizado"
+        causacion.estado = "entregado"
         causacion.fecha = dateNow()
     db.commit()
     

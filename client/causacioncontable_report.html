@@ -345,7 +345,7 @@
             const anio = document.getElementById("anio").value;
             const mes = document.getElementById("mes").value;
 
-            fetch(`http://localhost:8000/api/v1/causacionesFinalContables?type=finalizado&skip=${skip}&limit=${limit}&anio=${anio}&mes=${mes}`, {
+            fetch(`${host}/causacionesFinalContables?type=finalizado&skip=${skip}&limit=${limit}&anio=${anio}&mes=${mes}`, {
                 headers: {
                     "accept": "application/json",
                     "Authorization": "Bearer " + token

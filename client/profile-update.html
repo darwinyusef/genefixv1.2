@@ -267,7 +267,7 @@
                 email
             };
 
-            fetch(`http://localhost:8000/api/v1/users/${us.id}`, {
+            fetch(`${host}/users/${us.id}`, {
                 method: 'PUT',
                 headers: {
                     'Authorization': `Bearer ${token}`,
