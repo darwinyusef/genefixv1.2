@@ -1,7 +1,10 @@
 from pydantic import BaseModel
 
+
+class CausacionIDs(BaseModel):
+    id: int
 class CausacionDTO(BaseModel):
-    id_documento: str
+    id_documento: int
     id_comprobante: int
     id_nit: int
     fecha: str
@@ -11,5 +14,5 @@ class CausacionDTO(BaseModel):
     tipo: int
     concepto: str
     documento_referencia: str
-    token: str
+    token: str | None
     extra: str

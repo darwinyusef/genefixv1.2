@@ -35,7 +35,7 @@ s3_client = boto3.client(
     region_name=AWS_DEFAULT_REGION
 )
 
-@router.post("/uploadfile/", tags=['Send'])
+# @router.post("/uploadfile/", tags=['Send'])
 async def upload_file(file: UploadFile = File(...)):
     try:
         contents = await file.read()
@@ -53,7 +53,7 @@ async def upload_file(file: UploadFile = File(...)):
 TEMPLATE_PATH = "templates"
 env = Environment(loader=FileSystemLoader(TEMPLATE_PATH))
 
-@router.post("/mail", tags=['Send'])
+# @router.post("/mail", tags=['Send'])
 async def enviar_correo_con_plantilla(
     destinatario: str = Form(...),
     asunto: str = Form(...),

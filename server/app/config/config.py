@@ -55,7 +55,7 @@ class CustomHTTPBearer(HTTPBearer):
     async def __call__(self, request: Request) -> HTTPAuthorizationCredentials:
         try:
             credentials: HTTPAuthorizationCredentials = await super().__call__(request)
-            print(credentials)
+            # print(credentials)
             if not credentials:
                 raise HTTPException(
                     status_code=status.HTTP_403_FORBIDDEN,
@@ -63,7 +63,7 @@ class CustomHTTPBearer(HTTPBearer):
                 )
             return credentials
         except HTTPException as e:
-            print(e)
+            # print(e)
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="Token inválido o ausente."

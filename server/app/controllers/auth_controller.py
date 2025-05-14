@@ -103,7 +103,7 @@ async def login(login_data: LoginRequest, response: Response, db: Session = Depe
     
 # firma administrativa para obtener permisos de movimientos 
 def get_csrf_token(login_data, db_user: User, db):
-    print(login_data)
+    # print(login_data)
     try:
         if db_user.rol == "admin":
             # Generar el CSRF token

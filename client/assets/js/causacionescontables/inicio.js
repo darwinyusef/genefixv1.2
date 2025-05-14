@@ -1,5 +1,5 @@
 // Validar el NIT al escribir 
-const inputNit = document.getElementById('id_nit');
+const inputNit = document.getElementById('nit');
 const API_KEY = "ybb0jhtlcug4Dhbpi6CEP7Up68LriYcPc4209786b008c6327dbe47644f133aadVlJUB0iK5VXzg0CIM8JNNHfU7EoHzU2X"
 
 
@@ -13,21 +13,16 @@ inputNit.addEventListener('input', async function () {
             const result = await response.json();
             if (result.status == "success") {
                 if (result.data.length > 0) {
-                    // Encontrado
                     this.classList.remove('is-invalid');
                     this.classList.add('is-valid');
-                    // console.log('NIT encontrado');
-
                     const data = result.data[0]?.id;
-                    // console.log('ID NIT:', data);
+                    document.getElementById('id_nit').value = data
                 } else {
                     // No encontrado
                     this.classList.remove('is-valid');
                     this.classList.add('is-invalid');
                     console.log('NIT no encontrado: Si desea ingresarlo debe comunicarse con el administrador del sistema');
                 }
-                // Objeto con claves dinámicas "1", "2", "3"...
-
 
             } else {
                 // No encontrado
@@ -162,7 +157,7 @@ document.getElementById("btn_guardar").addEventListener("click", async (e) => {
     e.preventDefault();
 
     const camposValidos =
-        validarCampo('id_nit', 'El NIT es obligatorio', 'num') &
+        validarCampo('nit', 'El NIT es obligatorio', 'num') &
         validarCampo('fecha_manual', 'La fecha manual es obligatoria') &
         validarCampo('valor', 'El valor es obligatorio', 'num') &
         validarCampo('concepto', 'El concepto es obligatorio') &
@@ -185,7 +180,7 @@ document.getElementById("btn_editar").addEventListener("click", async (e) => {
 
     id_unico = document.getElementById('id_unico').value
     const camposValidos =
-        validarCampo('id_nit', 'El NIT es obligatorio', 'num') &
+        validarCampo('nit', 'El NIT es obligatorio', 'num') &
         validarCampo('fecha_manual', 'La fecha manual es obligatoria') &
         validarCampo('valor', 'El valor es obligatorio', 'num') &
         validarCampo('concepto', 'El concepto es obligatorio') &
@@ -212,6 +207,7 @@ function levantarData() {
         id_documento: null,
         id_comprobante: 2,
         id_nit: document.getElementById("id_nit").value.trim(),
+        nit: document.getElementById("nit").value.trim(),
         fecha: obtenerFechaActual().trim(),
         fecha_manual: document.getElementById("fecha_manual").value.trim(),
         id_cuenta: 6068094,

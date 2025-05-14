@@ -1,7 +1,5 @@
 const user = localStorage.getItem('user');
 
-
-
 if (!user) {
     // No existe usuario -> Redireccionar al login
     localStorage.removeItem('registrado')

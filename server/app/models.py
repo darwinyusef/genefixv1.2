@@ -22,15 +22,7 @@ class User(Base):
 
     # Relaciones
     causaciones = relationship("CausacionContable", back_populates="user", cascade="all, delete")
-
-
-class PasswordResetToken(Base):
-    __tablename__ = 'password_reset_tokens'
-
-    email = Column(String(255), primary_key=True, index=True)
-    token = Column(String(255), nullable=False)
-    created_at = Column(DateTime, nullable=True)
-
+    configurations = relationship("Configuration", back_populates="user")
 
 class CausacionContable(Base):
     __tablename__ = 'causacioncontable'
@@ -39,6 +31,7 @@ class CausacionContable(Base):
     id_documento = Column(String, nullable=True)
     id_comprobante = Column(Integer, nullable=False)
     id_nit = Column(Integer, nullable=False)
+    nit = Column(Integer, nullable=False)
     fecha = Column(DateTime, nullable=False, default=datetime.utcnow)
     fecha_manual = Column(DateTime, nullable=True)
     id_cuenta = Column(Integer, nullable=False)
@@ -50,6 +43,8 @@ class CausacionContable(Base):
     extra = Column(Text, nullable=True)
     user_id = Column(Integer, ForeignKey('users.id', ondelete='CASCADE'))
     estado = Column(String(255), default='entregado')
+    report_begranda = Column(String(255), nullable=True)
+    begranda = Column(DateTime, default=datetime.now, nullable=True)
     created_at = Column(DateTime, default=datetime.now)
     updated_at = Column(DateTime, default=datetime.now, onupdate=datetime.now)
 
@@ -65,6 +60,8 @@ class Configuration(Base):
     description = Column(String(255), nullable=True)
     type = Column(String(255), default='string', nullable=True)
     state = Column(String(255), default='string', nullable=True)
-    id_user = Column(Integer, nullable=True)
+    id_user = Column(Integer, ForeignKey("users.id"), nullable=True)  # 🔗 Clave foránea
+    user = relationship("User", back_populates="configurations")  
+    
     created_at = Column(DateTime, default=datetime.now(timezone.utc))
     updated_at = Column(DateTime, default=datetime.now(timezone.utc), onupdate=datetime.now(timezone.utc))

@@ -118,3 +118,8 @@ function defineTopRol() {
 }
 
 defineTopRol()  
+
+
+function back() {
+    history.back();
+}

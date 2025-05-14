@@ -13,3 +13,12 @@ class Configuration(BaseModel):
 
     class Config:
         from_attributes = True
+
+class RecoverPassRequest(BaseModel):
+    type: str  # "email" o "password"
+    email: str
+    
+    
+class ChangeRequest(BaseModel):
+    type: str  # "email" o "password"
+    change: str
