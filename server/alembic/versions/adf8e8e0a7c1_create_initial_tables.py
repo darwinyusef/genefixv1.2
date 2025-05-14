@@ -35,13 +35,6 @@ def upgrade() -> None:
     sa.UniqueConstraint('key')
     )
     op.create_index(op.f('ix_configurations_id'), 'configurations', ['id'], unique=False)
-    op.create_table('password_reset_tokens',
-    sa.Column('email', sa.String(255), nullable=False),
-    sa.Column('token', sa.String(255), nullable=False),
-    sa.Column('created_at', sa.DateTime(), nullable=True),
-    sa.PrimaryKeyConstraint('email')
-    )
-    op.create_index(op.f('ix_password_reset_tokens_email'), 'password_reset_tokens', ['email'], unique=False)
     op.create_table('users',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('username', sa.String(255), nullable=False),
@@ -90,8 +83,6 @@ def downgrade() -> None:
     op.drop_table('causacioncontable')
     op.drop_index(op.f('ix_users_id'), table_name='users')
     op.drop_table('users')
-    op.drop_index(op.f('ix_password_reset_tokens_email'), table_name='password_reset_tokens')
-    op.drop_table('password_reset_tokens')
     op.drop_index(op.f('ix_configurations_id'), table_name='configurations')
     op.drop_table('configurations')
     # ### end Alembic commands ###
