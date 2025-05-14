@@ -6,6 +6,7 @@ from app.config.config import custom_openapi
 from app.controllers.auth_controller import router as auth_router
 from app.controllers.user_controller import router as user_router
 from app.controllers.causacion_contable_controller import router as causacion_router
+from app.controllers.reset_password_controller import router as recover_pass
 from app.config.mail import router as mail_router
 from app.config.middleware_404 import  NotFoundMiddleware
 
@@ -35,7 +36,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.get("/")
+@app.get("/", tags=['Bienvenida'])
 def material(): 
     return {
         "info": "bienvenido a genefix",
@@ -48,5 +49,6 @@ app.include_router(auth_router)
 app.include_router(user_router)
 app.include_router(mail_router)
 app.include_router(causacion_router)
+app.include_router(recover_pass)
 
 app.add_middleware(NotFoundMiddleware)

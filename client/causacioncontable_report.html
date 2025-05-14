@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>Genefix Formulario</title>
+    <title>Genefix | Reporte final</title>
     <!-- HTML5 Shim and Respond.js IE11 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 11]>
@@ -67,7 +67,6 @@
 
         body {
             font-family: Arial, sans-serif;
-            margin: 20px;
         }
 
         input,
@@ -139,7 +138,7 @@
     <nav class="pc-sidebar ">
         <div class="navbar-wrapper">
             <div class="m-header">
-                <a href="causacioncontable_new.html" class="b-brand">
+                <a href="home.html" class="b-brand">
                     <!-- ========   change your logo hear   ============ -->
                     <img src="assets/images/logo.png" alt="" class="logo logo-lg">
                     <img src="assets/images/logo-sm.png" alt="" class="logo logo-sm">
@@ -163,7 +162,7 @@
                             Acciones
                         </a>
                         <div class="dropdown-menu pc-h-dropdown">
-                            <a href="#!" class="dropdown-item">
+                            <a href="profile-update.html" class="dropdown-item">
                                 <i data-feather="user"></i>
                                 <span>Perfil</span>
                             </a>
@@ -182,10 +181,7 @@
             <div class="ml-auto">
                 <ul class="list-unstyled">
                     <li class="dropdown pc-h-item">
-                        <a class="pc-head-link dropdown-toggle arrow-none mr-0" data-toggle="dropdown" href="#"
-                            role="button" aria-haspopup="false" aria-expanded="false">
-                            <i data-feather="search"></i>
-                        </a>
+
                         <div class="dropdown-menu dropdown-menu-right pc-h-dropdown drp-search">
                             <form class="px-3">
                                 <div class="form-group mb-0 d-flex align-items-center">
@@ -209,7 +205,7 @@
                             <div class=" dropdown-header">
                                 <h6 class="text-overflow m-0">Bienvenido</h6>
                             </div>
-                            <a href="/profile-update.html" class="dropdown-item">
+                            <a href="profile-update.html" class="dropdown-item">
                                 <i data-feather="user"></i>
                                 <span>Mi perfil</span>
                             </a>
@@ -241,7 +237,7 @@
                     <div class="row align-items-center">
                         <div class="col-md-12">
                             <div class="page-header-title">
-                                <p class="m-b-10">Causación contable | </p>
+                                <p class="m-b-10">Causación contable | reporte final </p>
                             </div>
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="index.html">Mis reportes</a></li>
@@ -265,7 +261,7 @@
 
                         <div class="card-body text-center">
 
-                       
+
                             <!-- <label for="nit">NIT:</label>
                             <input type="text" id="nit" value="123456"> -->
 
@@ -291,6 +287,7 @@
                                         <th>Fecha</th>
                                         <th>Valor</th>
                                         <th>Cuenta</th>
+                                        <th>Estado Begranda</th>
                                         <th>Extra</th>
                                         <th>Documento</th>
                                         <th>Concepto</th>
@@ -345,7 +342,7 @@
             const anio = document.getElementById("anio").value;
             const mes = document.getElementById("mes").value;
 
-            fetch(`http://localhost:8000/api/v1/causacionesFinalContables?type=finalizado&skip=${skip}&limit=${limit}&anio=${anio}&mes=${mes}`, {
+            fetch(`${host}/causacionesFinalContables?type=finalizado&skip=${skip}&limit=${limit}&anio=${anio}&mes=${mes}`, {
                 headers: {
                     "accept": "application/json",
                     "Authorization": "Bearer " + token
@@ -357,12 +354,20 @@
                     tbody.innerHTML = "";
 
                     data.data.forEach(item => {
+                        const fecha = new Date(item.begranda);
+                        const formato = String(fecha.getDate()).padStart(2, '0') + "/" +
+                            String(fecha.getMonth() + 1).padStart(2, '0') + "/" +
+                            fecha.getFullYear() + " " +
+                            String(fecha.getHours()).padStart(2, '0') + ":" +
+                            String(fecha.getMinutes()).padStart(2, '0');
+                        const reporte = JSON.parse(item.report_begranda);
                         const row = `
             <tr>
               <td>${item.id}</td>
               <td>${new Date(item.fecha).toLocaleDateString()}</td>
               <td>${item.valor}</td>
               <td>${item.id_cuenta}</td>
+              <td>${formato} - ${reporte.message} </td>
               <td>${item.extra}</td>
               <td><a href="${item.documento_referencia}" target="_blank">PDF</a></td>
               <td>${typeof item.concepto === 'string' && item.concepto.length > 100

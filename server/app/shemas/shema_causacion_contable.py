@@ -6,6 +6,7 @@ class CausacionContableBase(BaseModel):
     id_documento: Optional[int] = None
     id_comprobante: int
     id_nit: int
+    nit: int
     fecha: datetime
     fecha_manual: date = None
     id_cuenta: int
@@ -21,6 +22,7 @@ class CausacionContableCreate(CausacionContableBase):
 
 class CausacionContableUpdate(BaseModel):
     id_nit: int
+    nit: int
     fecha_manual: date = None
     valor: float
     concepto: str

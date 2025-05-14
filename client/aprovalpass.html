@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>Genefix Formulario</title>
+    <title>Genefix | Activación </title>
     <!-- HTML5 Shim and Respond.js IE11 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 11]>
@@ -32,10 +32,87 @@
     <link rel="stylesheet" href="assets/css/customizer.css">
     <link id="rol_user" rel="stylesheet" href="assets/css/change_loggin.css">
     <link id="rol_admin" rel="stylesheet" href="assets/css/typeadmin.css">
+    <style>
+        .month-year-picker {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            text-transform: uppercase;
+        }
 
+        .nav-button {
+            padding: 8px 12px;
+            cursor: pointer;
+            border: none;
+            background-color: #f0f0f0;
+            border-radius: 3px;
+        }
+
+        .nav-button:hover {
+            background-color: #e0e0e0;
+        }
+
+        .current-month-year {
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .month-year-picker:nth-child(1) {
+            display: none;
+        }
+
+
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        input,
+        select,
+        button {
+            margin: 5px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            padding: 20px;
+        }
+
+        th,
+        td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f0f0f0;
+        }
+
+        .activate {
+            cursor: pointer;
+            font-size: 22px;
+        }
+
+        .activate:hover {
+            text-shadow: 0px 0px 5px #CE0000;
+        }
+    </style>
 </head>
 
 <body class="">
+
+    <div class="loader-wrapper">
+        <span class="loader"></span>
+    </div>
+
+    <div id="alerta" class="alert animate__animated" role="alert" style="display: none;">
+        A simple primary alert—check it out!
+    </div>
     <!-- [ Pre-loader ] start -->
     <div class="loader-bg">
         <div class="loader-track">
@@ -71,7 +148,7 @@
     <nav class="pc-sidebar ">
         <div class="navbar-wrapper">
             <div class="m-header">
-                <a href="causacioncontable_new.html" class="b-brand">
+                <a href="home.html" class="b-brand">
                     <!-- ========   change your logo hear   ============ -->
                     <img src="assets/images/logo.png" alt="" class="logo logo-lg">
                     <img src="assets/images/logo-sm.png" alt="" class="logo logo-sm">
@@ -95,7 +172,7 @@
                             Acciones
                         </a>
                         <div class="dropdown-menu pc-h-dropdown">
-                            <a href="#!" class="dropdown-item">
+                            <a href="profile-update.html" class="dropdown-item">
                                 <i data-feather="user"></i>
                                 <span>Perfil</span>
                             </a>
@@ -114,10 +191,7 @@
             <div class="ml-auto">
                 <ul class="list-unstyled">
                     <li class="dropdown pc-h-item">
-                        <a class="pc-head-link dropdown-toggle arrow-none mr-0" data-toggle="dropdown" href="#"
-                            role="button" aria-haspopup="false" aria-expanded="false">
-                            <i data-feather="search"></i>
-                        </a>
+
                         <div class="dropdown-menu dropdown-menu-right pc-h-dropdown drp-search">
                             <form class="px-3">
                                 <div class="form-group mb-0 d-flex align-items-center">
@@ -141,15 +215,15 @@
                             <div class=" dropdown-header">
                                 <h6 class="text-overflow m-0">Bienvenido</h6>
                             </div>
-                            <a href="/profile-update.html" class="dropdown-item">
+                            <a href="profile-update.html" class="dropdown-item">
                                 <i data-feather="user"></i>
                                 <span>Mi perfil</span>
                             </a>
 
-                            <!-- <a href="#!" class="dropdown-item">
+                            <!-- <!-- <a href="#!" class="dropdown-item">
                                 <i data-feather="life-buoy"></i>
                                 <span>Support</span>
-                            </a> -->
+                            </a> --> -->
 
                             <button onclick="logout()" class="dropdown-item">
                                 <i data-feather="power"></i>
@@ -173,11 +247,10 @@
                     <div class="row align-items-center">
                         <div class="col-md-12">
                             <div class="page-header-title">
-                                <h5 class="m-b-10">Formulario</h5>
+                                <p class="m-b-10">Causación contable | Activación de usuarios</p>
                             </div>
                             <ul class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="index.html">Contabilidad</a></li>
-                                <!--li class="breadcrumb-item">Sample Page</li-->
+                                <li class="breadcrumb-item"><a href="home.html">Inicio</a></li>
                             </ul>
                         </div>
                     </div>
@@ -186,89 +259,66 @@
             <!-- [ breadcrumb ] end -->
             <!-- [ Main Content ] start -->
             <div class="row">
+
                 <!-- [ sample-page ] start -->
                 <div class="col-sm-12">
                     <div class="card">
                         <div class="card-header">
-                            <h5>Actualización de Perfil</h5>
+                            <h5>Activación de usuarios en la plataforma</h5>
                         </div>
-                        <div class="card-body">
-                            <div class="container mt-5">
-                                <form id="formPerfil">
-                                    <div class="row">
-                                        <div class="form-group col-12">
-                                            <label for="name">Nombre</label>
-                                            <input type="text" class="form-control" id="name">
-                                        </div>
-                                        <div class="form-group col-12">
-                                            <label for="email">Correo</label>
-                                            <input type="email" class="form-control" id="email">
-                                        </div>
-                                        <div class="form-group col-12">
-                                            <label for="telefono">Teléfono</label>
-                                            <input type="text" class="form-control" id="telefono">
-                                        </div>
-                                    </div>
-                                </form>
-                                <div id="mensaje"></div>
-                            </div>
+
+                        <div style="padding:20px;">
+                            <table id="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Tipo</th>
+                                        <th>Status</th>
+                                        <th>Descripción</th>
+                                        <th>Email</th>
+                                        <th>Activo</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+
+                            <p id="page-info"></p>
                         </div>
+
                     </div>
                 </div>
-                <!-- [ sample-page ] end -->
             </div>
-            <!-- [ Main Content ] end -->
+
+            <!-- [ sample-page ] end -->
         </div>
+        <!-- [ Main Content ] end -->
+    </div>
     </div>
     <!-- [ Main Content ] end -->
     </div>
     <!-- Warning Section start -->
-    <!-- Older IE warning message -->
-    <!--[if lt IE 11]>
-        <div class="ie-warning">
-            <h1>Warning!!</h1>
-            <p>You are using an outdated version of Internet Explorer, please upgrade
-               <br/>to any of the following web browsers to access this website.
-            </p>
-            <div class="iew-container">
-                <ul class="iew-download">
-                    <li>
-                        <a href="http://www.google.com/chrome/">
-                            <img src="assets/images/browser/chrome.png" alt="Chrome">
-                            <div>Chrome</div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="https://www.mozilla.org/en-US/firefox/new/">
-                            <img src="assets/images/browser/firefox.png" alt="Firefox">
-                            <div>Firefox</div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="http://www.opera.com">
-                            <img src="assets/images/browser/opera.png" alt="Opera">
-                            <div>Opera</div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="https://www.apple.com/safari/">
-                            <img src="assets/images/browser/safari.png" alt="Safari">
-                            <div>Safari</div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="http://windows.microsoft.com/en-us/internet-explorer/download-ie">
-                            <img src="assets/images/browser/ie.png" alt="">
-                            <div>IE (11 & above)</div>
-                        </a>
-                    </li>
-                </ul>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Cambiar el password</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input id="new-password" type="text" class="form-control" placeholder="Agrega el nuevo password" >
+                </div>
+                <div class="modal-footer">
+                    <button style="background-color: #bb214b;" onclick="recoverPass()" type="button" class="btn btn-primary">Cambiar el password</button>
+                </div>
             </div>
-            <p>Sorry for the inconvenience!</p>
         </div>
-    <![endif]-->
-    <!-- Warning Section Ends -->
-    <!-- Required Js -->
+    </div>
+
     <script src="assets/js/vendor-all.min.js"></script>
     <script src="assets/js/plugins/bootstrap.min.js"></script>
     <script src="assets/js/plugins/feather.min.js"></script>
@@ -278,8 +328,80 @@
     <script src="assets/js/uikit.min.js"></script>
 
     <script src="assets/js/plugins/apexcharts.min.js"></script>
-    
+    <script src="assets/js/constantes.js"></script>
     <script src="assets/js/actions.js"></script>
+    <script src="assets/js/logout.js"></script>
+
+
+
+    <script>
+        let finalID = 0; 
+
+        fetch(`${host}/solicitude`, {
+            headers: {
+                "accept": "application/json",
+                "Authorization": "Bearer " + token
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                const tbody = document.querySelector("#data-table tbody");
+                tbody.innerHTML = "";
+                if (data.ms == "ok") {
+                    data.config.forEach(item => {
+                        const activo = item.value !== "solicitude" ? "✅" : `<div class="activate" data-toggle="modal" data-target="#exampleModal"  onclick="idChange(${item.id})">✍🏻</div>`;
+
+                        const row = `
+                            <tr>
+                            <td>${item.id}</td>
+                            <td>${item.type}</td>
+                            <td>${item.state}</td>
+                            <td>${item.description}</td>
+                            <td>${item.user.email}</td>
+                            <td>${activo}</td>
+                            </tr>`;
+                        tbody.insertAdjacentHTML("beforeend", row);
+                    });
+                }
+            })
+            .catch(error => console.error("Error al obtener datos:", error));
+
+
+
+        function recoverPass() {
+            const newPass = document.getElementById("new-password").value;
+            fetch(`${host}/recover-pass/${finalID}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token
+                },
+                body: JSON.stringify({
+                    type: "password",
+                    change: newPass,
+                })
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if(data.message == "Estado actualizado a completed") {
+                        mostrarAlerta("Se ha modificado el password con éxito", "success");
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 2000); 
+                    }
+                    
+                })
+                .catch(error => {
+                    console.error("Error al activar usuario:", error);
+                });
+        }
+
+        function idChange(id) {
+            finalID = id; 
+        }
+    </script>
+
 
 </body>
 

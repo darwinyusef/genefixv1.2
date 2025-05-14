@@ -2,14 +2,8 @@
 <html lang="en">
 
 <head>
-    <title>Genefix Formulario</title>
-    <!-- HTML5 Shim and Respond.js IE11 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 11]>
-    	<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    	<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    	<![endif]-->
-    <!-- Meta -->
+    <title>Genefix | Formulario</title>
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -75,7 +69,7 @@
     <nav class="pc-sidebar">
         <div class="navbar-wrapper">
             <div class="m-header">
-                <a href="causacioncontable_new.html" class="b-brand">
+                <a href="home.html" class="b-brand">
                     <!-- ========   change your logo hear   ============ -->
                     <img src="assets/images/logo.png" alt="" class="logo logo-lg">
                     <img src="assets/images/logo-sm.png" alt="" class="logo logo-sm">
@@ -99,7 +93,7 @@
                             Acciones
                         </a>
                         <div class="dropdown-menu pc-h-dropdown">
-                            <a href="#!" class="dropdown-item">
+                            <a href="profile-update.html" class="dropdown-item">
                                 <i data-feather="user"></i>
                                 <span>Perfil</span>
                             </a>
@@ -118,10 +112,7 @@
             <div class="ml-auto">
                 <ul class="list-unstyled">
                     <li class="dropdown pc-h-item">
-                        <a class="pc-head-link dropdown-toggle arrow-none mr-0" data-toggle="dropdown" href="#"
-                            role="button" aria-haspopup="false" aria-expanded="false">
-                            <i data-feather="search"></i>
-                        </a>
+                       
                         <!-- <div class="dropdown-menu dropdown-menu-right pc-h-dropdown drp-search">
                             <form class="px-3">
                                 <div class="form-group mb-0 d-flex align-items-center">
@@ -145,7 +136,7 @@
                             <div class=" dropdown-header">
                                 <h6 class="text-overflow m-0">Bienvenido</h6>
                             </div>
-                            <a href="/profile-update.html" class="dropdown-item">
+                            <a href="profile-update.html" class="dropdown-item">
                                 <i data-feather="user"></i>
                                 <span>Mi perfil</span>
                             </a>
@@ -180,7 +171,7 @@
                                 <p class="m-b-10">Causaciones Contables | </p>
                             </div>
                             <ul class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="#">Registro</a></li>
+                                <li class="breadcrumb-item"><div onclick="back()">Registro</div></li>
                                 <!--li class="breadcrumb-item">Sample Page</li-->
                             </ul>
                         </div>
@@ -203,7 +194,8 @@
                                                                               <!-- ID NIT -->
                                         <div class="form-group col-12">
                                             <label for="id_nit">ID NIT</label>
-                                            <input type="text" class="form-control" id="id_nit" required>
+                                            <input type="text" class="form-control" id="nit" required>
+                                            <input type="hidden" id="id_nit">
                                             <div class="invalid-feedback">
                                                 NIT No encontrado: Si desea ingresarlo debe comunicarse con el administrador del sistema
                                             </div>
@@ -330,7 +322,8 @@
     <script src="assets/js/actions.js"></script>
     <script src="assets/js/constantes.js"></script>
     <script src="assets/js/causacionescontables/inicio.js"></script>
-
+    <script src="assets/js/logout.js"></script>
+    
     <script>
         
         const inputFecha = document.getElementById('fecha_manual');
@@ -362,6 +355,7 @@
 
                 // Asignar datos al formulario
                 document.getElementById("id_nit").value = data.id_nit || "";
+                document.getElementById("nit").value = data.nit || "";
                 document.getElementById("fecha_manual").value = data.fecha_manual || "";
                 document.getElementById("valor").value = data.valor || "";
                 document.getElementById("concepto").value = data.concepto || "";
@@ -428,6 +422,8 @@
 
 
     });
+
+   
     </script>
 </body>
 

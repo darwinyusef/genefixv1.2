@@ -45,7 +45,7 @@
       "type": "item",
       "text": "Reporte final",
       "href": "./causacioncontable_report.html",
-      "iconUrl": "💼",
+      "iconUrl": "🚶🏼‍♂️",
       "rol": "user"
     },
     {
@@ -58,6 +58,13 @@
       "text": "Activación de usuarios",
       "href": "./activation.html",
       "iconUrl": "💼",
+      "rol": "Admin"
+    }, 
+    {
+      "type": "item",
+      "text": "Recuperación de contraseña",
+      "href": "./aprovalpass.html",
+      "iconUrl": "🤖",
       "rol": "Admin"
     }
   ]

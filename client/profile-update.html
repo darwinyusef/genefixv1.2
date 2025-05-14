@@ -71,7 +71,7 @@
     <nav class="pc-sidebar ">
         <div class="navbar-wrapper">
             <div class="m-header">
-                <a href="causacioncontable_new.html" class="b-brand">
+                <a href="home.html" class="b-brand">
                     <!-- ========   change your logo hear   ============ -->
                     <img src="assets/images/logo.png" alt="" class="logo logo-lg">
                     <img src="assets/images/logo-sm.png" alt="" class="logo logo-sm">
@@ -95,7 +95,7 @@
                             Acciones
                         </a>
                         <div class="dropdown-menu pc-h-dropdown">
-                            <a href="#!" class="dropdown-item">
+                            <a href="profile-update.html" class="dropdown-item">
                                 <i data-feather="user"></i>
                                 <span>Perfil</span>
                             </a>
@@ -114,10 +114,7 @@
             <div class="ml-auto">
                 <ul class="list-unstyled">
                     <li class="dropdown pc-h-item">
-                        <a class="pc-head-link dropdown-toggle arrow-none mr-0" data-toggle="dropdown" href="#"
-                            role="button" aria-haspopup="false" aria-expanded="false">
-                            <i data-feather="search"></i>
-                        </a>
+                       
                         <div class="dropdown-menu dropdown-menu-right pc-h-dropdown drp-search">
                             <form class="px-3">
                                 <div class="form-group mb-0 d-flex align-items-center">
@@ -141,7 +138,7 @@
                             <div class=" dropdown-header">
                                 <h6 class="text-overflow m-0">Bienvenido</h6>
                             </div>
-                            <a href="/profile-update.html" class="dropdown-item">
+                            <a href="profile-update.html" class="dropdown-item">
                                 <i data-feather="user"></i>
                                 <span>Mi perfil</span>
                             </a>
@@ -173,10 +170,10 @@
                     <div class="row align-items-center">
                         <div class="col-md-12">
                             <div class="page-header-title">
-                                <h5 class="m-b-10">Formulario</h5>
+                                <h5 class="m-b-10">Perfil</h5>
                             </div>
                             <ul class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="index.html">Contabilidad</a></li>
+                                <li class="breadcrumb-item"><a href="home.html">Inicio</a></li>
                                 <!--li class="breadcrumb-item">Sample Page</li-->
                             </ul>
                         </div>
@@ -238,7 +235,8 @@
     <script src="assets/js/plugins/apexcharts.min.js"></script>
     <script src="assets/js/constantes.js"></script>
     <script src="assets/js/actions.js"></script>
-
+    <script src="assets/js/logout.js"></script>
+    
     <script>
 
         const us = JSON.parse(localStorage.getItem("user"));
@@ -267,7 +265,7 @@
                 email
             };
 
-            fetch(`http://localhost:8000/api/v1/users/${us.id}`, {
+            fetch(`${host}/users/${us.id}`, {
                 method: 'PUT',
                 headers: {
                     'Authorization': `Bearer ${token}`,

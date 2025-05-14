@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>Genefix Formulario</title>
+    <title>Genefix | Causación finalización</title>
     <!-- HTML5 Shim and Respond.js IE11 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 11]>
@@ -63,11 +63,24 @@
         .homecausation {
             display: flex;
             justify-content: center;
-            gap: 30px; 
+            gap: 30px;
         }
 
         .clearbadge {
             zoom: 0.6;
+        }
+
+        @media (max-width: 768px) {
+            .buttons_menu {
+                display: flex;
+                justify-content: center;
+                flex-direction: column;
+                width: 20px;
+                position: absolute;
+                top: 10px;
+                right: 20px;
+                gap: 4px;
+            }
         }
     </style>
 </head>
@@ -117,7 +130,7 @@
     <nav class="pc-sidebar ">
         <div class="navbar-wrapper">
             <div class="m-header">
-                <a href="causacioncontable_new.html" class="b-brand">
+                <a href="home.html" class="b-brand">
                     <!-- ========   change your logo hear   ============ -->
                     <img src="assets/images/logo.png" alt="" class="logo logo-lg">
                     <img src="assets/images/logo-sm.png" alt="" class="logo logo-sm">
@@ -141,7 +154,7 @@
                             Acciones
                         </a>
                         <div class="dropdown-menu pc-h-dropdown">
-                            <a href="#!" class="dropdown-item">
+                            <a href="profile-update.html" class="dropdown-item">
                                 <i data-feather="user"></i>
                                 <span>Perfil</span>
                             </a>
@@ -160,10 +173,7 @@
             <div class="ml-auto">
                 <ul class="list-unstyled">
                     <li class="dropdown pc-h-item">
-                        <a class="pc-head-link dropdown-toggle arrow-none mr-0" data-toggle="dropdown" href="#"
-                            role="button" aria-haspopup="false" aria-expanded="false">
-                            <i data-feather="search"></i>
-                        </a>
+
                         <div class="dropdown-menu dropdown-menu-right pc-h-dropdown drp-search">
                             <form class="px-3">
                                 <div class="form-group mb-0 d-flex align-items-center">
@@ -187,7 +197,7 @@
                             <div class=" dropdown-header">
                                 <h6 class="text-overflow m-0">Bienvenido</h6>
                             </div>
-                            <a href="/profile-update.html" class="dropdown-item">
+                            <a href="profile-update.html" class="dropdown-item">
                                 <i data-feather="user"></i>
                                 <span>Mi perfil</span>
                             </a>
@@ -219,10 +229,10 @@
                     <div class="row align-items-center">
                         <div class="col-md-12">
                             <div class="page-header-title">
-                                <h5 class="m-b-10">Formulario</h5>
+                                <h5 class="m-b-10">Causación finalización</h5>
                             </div>
                             <ul class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="index.html">Contabilidad</a></li>
+                                <li class="breadcrumb-item"><a href="home.html">Inicio</a></li>
                                 <!--li class="breadcrumb-item">Sample Page</li-->
                             </ul>
                         </div>
@@ -242,20 +252,22 @@
 
                                 <hr>
                                 <div class="card text-center">
+                                    <style>
+                                        @media (max-width: 768px) {
+
+                                            .homecausation {
+                                                flex-direction: column;
+                                            }
+                                        }
+                                    </style>
                                     <div class="card-body homecausation">
-                                        <h3 class="card-title">Generación de nuevas causaciones contables.</h3>
-                                        <p class="card-text">Esta funcionalidad te permite crear causaciones (registros
-                                            de obligaciones de pago por caja menor) si
-                                            deseas incluir y adjuntar a todos los registros al final podrá adjuntar un
-                                            solo documento de soporte.
-                                            y agrupar varias causaciones en un único documento, permitiendo se
-                                            simplifique
-                                            el proceso de subida y se mantenga la documentación
-                                            relacionada de manera más organizada dentro del sistema. Por ejemplo, si
-                                            tienes varias facturas de un mismo proveedor correspondientes a diferentes
-                                            causaciones, puedes agruparlas en un solo documento PDF para subirlo con
-                                            unico ID de registro de
-                                            soporte.
+                                        <h3 class="card-title">Activar y finalizar las causaciones contables.</h3>
+                                        <p class="card-text">Al activar la causación contable, puedes vincular cada
+                                            registro creado con la contabilidad del sistema. Esto permite asignar las
+                                            cuentas y centros de costo correspondientes. En esta etapa también se puede
+                                            optar por agrupar varias causaciones en un único documento de soporte (como
+                                            un PDF con múltiples facturas), facilitando la trazabilidad y reduciendo la
+                                            carga operativa de adjuntar archivos individuales por cada registro.
 
                                         </p>
 
@@ -339,6 +351,12 @@
         })
             .then(response => response.json())
             .then(data => {
+                if (data.content == 0) {
+                    mostrarAlerta(`Actualmente no cuenta con causaciones a finalizar se volvera al inicio`, "danger");
+                    setTimeout(() => {
+                        window.location.href = "causacioncontable_new.html"
+                    }, 4000);
+                }
                 if (data.status_code == 204) {
                     document.getElementById('enviarArchivoModal').hidden = true;
                     document.getElementById('primera').hidden = false;
@@ -362,7 +380,7 @@
                         <div class="card-body">
                             <h5 class="card-title">Registro para finalizar: <br> <strong style="text-transform: uppercase;">${item.estado} </strong></h5>
                             <ul>
-                                <li>NIT: ${item.id_nit}</li>
+                                <li>NIT: ${item.nit}</li>
                                 <li>Fecha: ${mejorarFormatoFecha(item.fecha)}</li>
                                 <li>Valor: ${item.valor}</li>
                                 <li class="ellipsis">Concepto: ${item.concepto}</li>
@@ -389,7 +407,7 @@
 
                 if (confirm(`¿Estás seguro de que quieres borrar el registro con ID: ${idParaBorrar}?`)) {
                     // El usuario confirmó, entonces procedemos a enviar la solicitud DELETE
-                    const urlBorrar = `http://localhost:8000/api/v1/causacionContable/${idParaBorrar}`;
+                    const urlBorrar = `${host}/causacionContable/${idParaBorrar}`;
 
                     fetch(urlBorrar, {
                         method: 'DELETE',
