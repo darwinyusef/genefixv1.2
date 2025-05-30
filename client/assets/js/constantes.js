@@ -16,9 +16,9 @@ fetch(`${host}/profile`, {
                 localStorage.removeItem('registrado')
                 localStorage.removeItem('user')
                 localStorage.removeItem('access_token')
-                if(window.location.pathname != '/client/' && window.location.pathname != '/client/register.html') {
+                if(window.location.pathname != '/' && window.location.pathname != '/register.html') {
                     alert('La session no se encuentra activa')
-                    window.location.href = "/client"
+                    window.location.href = "/"
                 }
             } 
     })

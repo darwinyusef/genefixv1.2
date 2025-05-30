@@ -1,0 +1,42 @@
+<select id="categoriaSelect"></select>
+
+<script>
+     async function listadoCentroCostos() {
+        const response = await fetch('causacionescontables/centroCostos.json');
+        const data = await response.json();
+
+        // Filtrar las categorías principales (sin descripción)
+        const categoriasPrincipales = data.filter(cat => cat.descripcion === "");
+
+        // Crear un objeto para agrupar categorías normales por su tipo (categoría principal)
+        const agrupadas = {};
+        categoriasPrincipales.forEach(p => {
+            agrupadas[p.nombre] = [];
+        });
+
+        data.forEach(cat => {
+            if (cat.descripcion && cat.tipo && agrupadas.hasOwnProperty(cat.tipo)) {
+                agrupadas[cat.tipo].push(cat);
+            }
+        });
+
+        // Crear el select y sus optgroups
+        const select = document.getElementById('categoriaSelect');
+
+        for (const principal of categoriasPrincipales) {
+            const optgroup = document.createElement('optgroup');
+            optgroup.label = principal.nombre;
+
+            const hijos = agrupadas[principal.nombre];
+            if (hijos && hijos.length > 0) {
+                hijos.forEach(hijo => {
+                    const option = document.createElement('option');
+                    option.value = hijo.codigo;
+                    option.textContent = `${hijo.codigo} - ${hijo.nombre}`;
+                    optgroup.appendChild(option);
+                });
+                select.appendChild(optgroup);
+            }
+        }
+    } listadoCentroCostos()
+</script>

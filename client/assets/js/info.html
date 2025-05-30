@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Gestión de Comprobantes</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body class="p-4">
+
+    <div class="container">
+        <h1 class="mb-4">Gestión de Comprobantes</h1>
+
+        <!-- Input para mostrar la cuenta seleccionada -->
+        <div class="mb-3">
+            <label for="inputCuentaSeleccionada" class="form-label">Código y nombre de la cuenta contable seleccionada:</label>
+            <div class="input-group">
+                <input type="text" id="inputCuentaSeleccionada" class="form-control" placeholder="Código" disabled>
+                <input type="hidden" id="finalEnviadoCuentaSeleccionada">
+                <button class="btn btn-outline-secondary" type="button" data-bs-toggle="modal" data-bs-target="#modalBuscarCuenta">
+                    <input type="hidden" id="id_cuenta">
+                   🔍
+                </button>
+            </div>
+        </div>
+
+        <!-- Input oculto para guardar el ID interno de la cuenta -->
+    </div>
+
+    <!-- Modal de búsqueda de cuenta -->
+    <div class="modal fade" id="modalBuscarCuenta" tabindex="-1" aria-labelledby="modalLabelCuenta" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalLabelCuenta">Buscar Cuenta Contable</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <div class="row">
+                            <div class="col-6">
+                                <label for="f_cuenta" class="form-label">Cuenta:</label>
+                                <input type="text" id="f_cuenta" class="form-control" placeholder="Número de cuenta">
+                            </div>
+                            <div class="col-6" style="margin-top: -10px;">
+                                <label for="f_nombre" class="form-label mt-2">Nombre:</label>
+                                <input type="text" id="f_nombre" class="form-control" placeholder="Nombre de la cuenta">
+                            </div>
+                            <div class="col-12 text-right d-flex justify-content-end">
+                                <button class="btn btn-primary mt-3" onclick="buscarCuenta()">Buscar</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="resultadosCuenta" class="mt-4"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Script funcional -->
+    <script>
+        const API_KEY = "ybb0jhtlcug4Dhbpi6CEP7Up68LriYcPc4209786b008c6327dbe47644f133aadVlJUB0iK5VXzg0CIM8JNNHfU7EoHzU2X";
+
+        const buscarCuenta = async () => {
+            const cuenta = document.getElementById('f_cuenta').value;
+            const nombre = document.getElementById('f_nombre').value;
+
+            if (cuenta === "" && nombre === "") {
+                alert('Por favor, ingrese un valor para buscar');
+                return;
+            }
+
+            let url = `http://begranda.com/equilibrium2/public/api/account?eq-auxiliar=1&&key=${API_KEY}&`;
+
+            if (cuenta) {
+                url += `f-cuenta=${cuenta}&`;
+            }
+
+            if (nombre) {
+                url += `f-nombre=${nombre}`;
+            }
+
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                if (data.status !== "success") {
+                    alert('Error al buscar cuentas contables');
+                    return;
+                }
+                mostrarResultadosCuenta(data.data);
+            } catch (error) {
+                console.error('Error en la búsqueda:', error);
+            }
+        };
+
+        const mostrarResultadosCuenta = (data) => {
+            const div = document.getElementById('resultadosCuenta');
+            div.innerHTML = '';
+
+            if (!data || Object.keys(data).length === 0) {
+                div.innerHTML = '<p>No se encontraron resultados.</p>';
+                return;
+            }
+
+            let tabla = '<table class="table table-hover">';
+            tabla += '<thead><tr><th>ID</th><th>Cuenta</th><th>Nombre</th><th>Acción</th></tr></thead><tbody>';
+
+            Object.values(data).forEach(item => {
+                tabla += `
+                    <tr>
+                        <td>${item.id}</td>
+                        <td>${item.cuenta}</td>
+                        <td>${item.nombre}</td>
+                        <td>
+                            <button class="btn btn-sm btn-primary" onclick="seleccionarCuenta('${item.id}', '${item.cuenta}', '${item.nombre}')">Agregar</button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            tabla += '</tbody></table>';
+            div.innerHTML = tabla;
+        };
+
+        const seleccionarCuenta = (id, cuenta, nombre) => {
+            document.getElementById('id_cuenta').value = id;
+            document.getElementById('inputCuentaSeleccionada').value = `${id} - ${cuenta} - ${nombre}`;
+            document.getElementById('finalEnviadoCuentaSeleccionada').value = cuenta;
+            finalEnviadoCuentaSeleccionada
+            const modal = bootstrap.Modal.getInstance(document.getElementById('modalBuscarCuenta'));
+            modal.hide();
+        };
+    </script>
+
+</body>
+
+</html>

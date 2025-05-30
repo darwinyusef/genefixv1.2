@@ -108,3 +108,31 @@ TODO se eliminan los API_KEY ya que lo que se pensaba inicialmente era cerrarlos
 //         console.error('Error al cargar comprobantes', error);
 //     }
 // }
+
+
+
+// allExtra = null;
+// function centroCostos() {
+//     const select = document.getElementById('extra');
+//     const descripcion = document.getElementById('descripcionText');
+
+//     fetch('assets/js/causacionescontables/centroCostos.json')
+//         .then((res) => res.json())
+//         .then((res) => {
+//             // console.log(res);
+//             res.forEach(item => {
+//                 const option = document.createElement('option');
+//                 option.value = item.codigo;
+//                 option.textContent = `${item.codigo} - ${item.nombre}`;
+//                 select.appendChild(option);
+//             });
+//             allExtra = res;
+//             select.addEventListener('change', function () {
+//                 const seleccionado = res.find(item => item.codigo === this.value);
+//                 descripcion.textContent = seleccionado ? seleccionado.descripcion : 'Descripción no disponible.';
+//             });
+//         })
+//         .catch((e) => {
+//             console.error('Error al cargar los centros de costos:', e);
+//         });
+// } centroCostos();

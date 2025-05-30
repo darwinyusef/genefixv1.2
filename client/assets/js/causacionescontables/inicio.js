@@ -13,10 +13,12 @@ inputNit.addEventListener('input', async function () {
             const result = await response.json();
             if (result.status == "success") {
                 if (result.data.length > 0) {
+                    const data = result.data[0]
+                    console.log(data);
                     this.classList.remove('is-invalid');
                     this.classList.add('is-valid');
-                    const data = result.data[0]?.id;
-                    document.getElementById('id_nit').value = data
+                    document.getElementById('nit_text').textContent = `Valido: ${data?.nit_1} ${data?.nombres || ''} ${data?.apellido_1 || ''}  ${data?.razon_social ? "-" + data?.razon_social : ''}`;
+                    document.getElementById('id_nit').value = data?.id || '';
                 } else {
                     // No encontrado
                     this.classList.remove('is-valid');
@@ -60,8 +62,6 @@ valorInput.addEventListener('focus', () => {
     // Al enfocar, remover el formato para que sea más fácil editar
     valorInput.value = valorInput.value.replace(/\D/g, '');
 });
-
-
 
 
 // Función genérica para validar campos
@@ -126,39 +126,55 @@ function validarConcepto() {
     }
 }
 
-allExtra = null;
-function centroCostos() {
+async function listadoCentroCostos() {
+    const response = await fetch('assets/js/causacionescontables/centroCostos.json');
+    const data = await response.json();
+
+    const categoriasPrincipales = data.filter(cat => cat.descripcion === "");
+
+    const agrupadas = {};
+    categoriasPrincipales.forEach(p => {
+        agrupadas[p.nombre] = [];
+    });
+
+    data.forEach(cat => {
+        if (cat.descripcion && cat.tipo && agrupadas.hasOwnProperty(cat.tipo)) {
+            agrupadas[cat.tipo].push(cat);
+        }
+    });
+
     const select = document.getElementById('extra');
     const descripcion = document.getElementById('descripcionText');
 
-    fetch('assets/js/causacionescontables/centroCostos.json')
-        .then((res) => res.json())
-        .then((res) => {
-            // console.log(res);
-            res.forEach(item => {
-                const option = document.createElement('option');
-                option.value = item.codigo;
-                option.textContent = `${item.codigo} - ${item.nombre}`;
-                select.appendChild(option);
-            });
-            allExtra = res;
-            select.addEventListener('change', function () {
-                const seleccionado = res.find(item => item.codigo === this.value);
-                descripcion.textContent = seleccionado ? seleccionado.descripcion : 'Descripción no disponible.';
-            });
-        })
-        .catch((e) => {
-            console.error('Error al cargar los centros de costos:', e);
-        });
-} centroCostos();
+    for (const principal of categoriasPrincipales) {
+        const optgroup = document.createElement('optgroup');
+        optgroup.label = principal.nombre;
 
+        const hijos = agrupadas[principal.nombre];
+        if (hijos && hijos.length > 0) {
+            hijos.forEach(hijo => {
+                const option = document.createElement('option');
+                option.value = hijo.codigo;
+                option.textContent = `${hijo.codigo} - ${hijo.nombre}`;
+                optgroup.appendChild(option);
+            });
+            select.appendChild(optgroup);
+        }
+    }
+    select.addEventListener('change', function (e) {
+        const seleccionado = data.find(item => item.codigo === e.target.value);
+        descripcion.textContent = seleccionado ? seleccionado.descripcion : 'Descripción no disponible.';
+    });
+
+
+} listadoCentroCostos()
 
 document.getElementById("btn_guardar").addEventListener("click", async (e) => {
     e.preventDefault();
 
     const camposValidos =
         validarCampo('nit', 'El NIT es obligatorio', 'num') &
-        validarCampo('fecha_manual', 'La fecha manual es obligatoria') &
+        // validarCampo('fecha_manual', 'La fecha manual es obligatoria') &
         validarCampo('valor', 'El valor es obligatorio', 'num') &
         validarCampo('concepto', 'El concepto es obligatorio') &
         validarCampo('extra', 'El extra es obligatorio');
@@ -167,7 +183,7 @@ document.getElementById("btn_guardar").addEventListener("click", async (e) => {
         console.log("Hay errores en el formulario.");
         return;
     }
-    
+
     datos = levantarData()
     console.log("Datos listos para enviar:", datos);
     enviarDatos(datos);
@@ -181,7 +197,7 @@ document.getElementById("btn_editar").addEventListener("click", async (e) => {
     id_unico = document.getElementById('id_unico').value
     const camposValidos =
         validarCampo('nit', 'El NIT es obligatorio', 'num') &
-        validarCampo('fecha_manual', 'La fecha manual es obligatoria') &
+        // validarCampo('fecha_manual', 'La fecha manual es obligatoria') &
         validarCampo('valor', 'El valor es obligatorio', 'num') &
         validarCampo('concepto', 'El concepto es obligatorio') &
         validarCampo('extra', 'El extra es obligatorio');
@@ -190,7 +206,7 @@ document.getElementById("btn_editar").addEventListener("click", async (e) => {
         console.log("Hay errores en el formulario.");
         return;
     }
-    
+
     datos = levantarData()
     console.log("Datos listos para enviar:", datos);
     actualizarDatos(datos, id_unico);
@@ -222,60 +238,134 @@ function levantarData() {
 }
 
 function enviarDatos(datos) {
-        fetch(`${host}/causacionContable`, {
-            method: "POST",
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(datos)
+    fetch(`${host}/causacionContable`, {
+        method: "POST",
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(datos)
+    })
+        .then((res) => res.json())
+        .then((res) => {
+            if (!res.ok) {
+                mostrarAlerta("Error en la petición id: response.false", "danger");
+                throw new Error("Error en la petición");
+            }
+            mensaje = "La causación se ha registrado correctamente.";
+            mostrarAlerta(mensaje, "success");
+            setTimeout(() => {
+                window.location.href = "causacioncontable_new.html"
+            }, 5000)
         })
-            .then((res) => res.json())
-            .then((res) => {
-                if (!res.ok) {
-                    mostrarAlerta("Error en la petición id: response.false", "danger");
-                    throw new Error("Error en la petición");
-                }
-                mensaje = "La causación se ha registrado correctamente.";
-                mostrarAlerta(mensaje, "success");
-                setTimeout(() => {
-                    window.location.href = "causacioncontable_new.html"
-                }, 5000)
-            })
-            .catch((e) => {
-                mostrarAlerta("Error en la petición id: " + e, "danger");
-                console.log(e)
-            });
+        .catch((e) => {
+            mostrarAlerta("Error en la petición id: " + e, "danger");
+            console.log(e)
+        });
 }
 
 
 function actualizarDatos(datos, id) {
-        fetch(`${host}/causacionContable/${id}`, {
-            method: "PUT",
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(datos)
+    fetch(`${host}/causacionContable/${id}`, {
+        method: "PUT",
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(datos)
+    })
+        .then((res) => res.json())
+        .then((res) => {
+            if (!res.ok) {
+                mostrarAlerta("Error en la petición id: response.false", "danger");
+                throw new Error("Error en la petición");
+            }
+            mensaje = "La causación se ha editado correctamente.";
+            mostrarAlerta(mensaje, "success");
+            setTimeout(() => {
+                window.location.href = "causacioncontable_new.html"
+            }, 5000)
         })
-            .then((res) => res.json())
-            .then((res) => {
-                if (!res.ok) {
-                    mostrarAlerta("Error en la petición id: response.false", "danger");
-                    throw new Error("Error en la petición");
-                }
-                mensaje = "La causación se ha editado correctamente.";
-                mostrarAlerta(mensaje, "success");
-                setTimeout(() => {
-                    window.location.href = "causacioncontable_new.html"
-                }, 5000)
-            })
-            .catch((e) => {
-                mostrarAlerta("Error en la petición id: " + e, "danger");
-                console.log(e)
-            });
+        .catch((e) => {
+            mostrarAlerta("Error en la petición id: " + e, "danger");
+            console.log(e)
+        });
 }
 
+
+
+//******************** En deprecated activo nuevamente */
+
+
+const buscarCuenta = async () => {
+    const cuenta = document.getElementById('f_cuenta').value;
+    const nombre = document.getElementById('f_nombre').value;
+
+    if (cuenta === "" && nombre === "") {
+        alert('Por favor, ingrese un valor para buscar');
+        return;
+    }
+
+    let url = `http://begranda.com/equilibrium2/public/api/account?eq-auxiliar=1&&key=${API_KEY}&`;
+
+    if (cuenta) {
+        url += `f-cuenta=${cuenta}&`;
+    }
+
+    if (nombre) {
+        url += `f-nombre=${nombre}`;
+    }
+
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+        if (data.status !== "success") {
+            alert('Error al buscar cuentas contables');
+            return;
+        }
+        mostrarResultadosCuenta(data.data);
+    } catch (error) {
+        console.error('Error en la búsqueda:', error);
+    }
+};
+
+const mostrarResultadosCuenta = (data) => {
+    const div = document.getElementById('resultadosCuenta');
+    div.innerHTML = '';
+
+    if (!data || Object.keys(data).length === 0) {
+        div.innerHTML = '<p>No se encontraron resultados.</p>';
+        return;
+    }
+
+    let tabla = '<table class="table table-hover">';
+    tabla += '<thead><tr><th>ID</th><th>Cuenta</th><th>Nombre</th><th>Acción</th></tr></thead><tbody>';
+
+    Object.values(data).forEach(item => {
+        tabla += `
+            <tr>
+                <td>${item.id}</td>
+                <td>${item.cuenta}</td>
+                <td>${item.nombre}</td>
+                <td>
+                    <button class="btn btn-sm btn-primary" onclick="seleccionarCuenta('${item.id}', '${item.cuenta}', '${item.nombre}')">Agregar</button>
+                </td>
+            </tr>
+        `;
+    });
+
+    tabla += '</tbody></table>';
+    div.innerHTML = tabla;
+};
+
+const seleccionarCuenta = (id, cuenta, nombre) => {
+    document.getElementById('id_cuenta').value = id;
+    document.getElementById('inputCuentaSeleccionada').value = `${id} - ${cuenta} - ${nombre}`;
+    document.getElementById('finalEnviadoCuentaSeleccionada').value = cuenta;
+    finalEnviadoCuentaSeleccionada
+    const modal = bootstrap.Modal.getInstance(document.getElementById('modalBuscarCuenta'));
+    modal.hide();
+};
 
 
 

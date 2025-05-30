@@ -200,7 +200,7 @@
                                                 NIT No encontrado: Si desea ingresarlo debe comunicarse con el administrador del sistema
                                             </div>
                                             <div class="valid-feedback">
-                                                NIT válido.
+                                                NIT. <span style="text-transform: uppercase;" id="nit_text"></span>
                                             </div>
                                         </div>
 
@@ -241,6 +241,50 @@
                                         
                                         <input type="hidden" id="id_unico"> 
 
+
+                                        <div class="col mb-3">
+                                            <label for="inputCuentaSeleccionada" class="form-label">Código y nombre de la cuenta contable seleccionada:</label>
+                                            <div class="input-group">
+                                                <input type="text" id="inputCuentaSeleccionada" class="form-control" placeholder="Código" disabled>
+                                                <input type="hidden" id="finalEnviadoCuentaSeleccionada">
+                                                <input type="hidden" id="id_cuenta">
+                                                <button class="btn btn-outline-secondary" type="button" data-bs-toggle="modal" data-bs-target="#modalBuscarCuenta">
+                                                   🔍
+                                                </button>
+                                            </div>
+                                        </div>
+
+
+                                         <!-- Modal de búsqueda de cuenta -->
+                                        <div class="modal fade" id="modalBuscarCuenta" tabindex="-1" aria-labelledby="modalLabelCuenta" aria-hidden="true">
+                                            <div class="modal-dialog modal-lg">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="modalLabelCuenta">Buscar Cuenta Contable</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="mb-3">
+                                                            <div class="row">
+                                                                <div class="col-6">
+                                                                    <label for="f_cuenta" class="form-label">Cuenta:</label>
+                                                                    <input type="text" id="f_cuenta" class="form-control" placeholder="Número de cuenta">
+                                                                </div>
+                                                                <div class="col-6" style="margin-top: -10px;">
+                                                                    <label for="f_nombre" class="form-label mt-2">Nombre:</label>
+                                                                    <input type="text" id="f_nombre" class="form-control" placeholder="Nombre de la cuenta">
+                                                                </div>
+                                                                <div class="col-12 text-right d-flex justify-content-end">
+                                                                    <button class="btn btn-primary mt-3" onclick="buscarCuenta()">Buscar</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div id="resultadosCuenta" class="mt-4"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                         
 
                                         <!-- Submit Button -->
@@ -270,30 +314,6 @@
 
 
     <!-- Input donde se guarda el id seleccionado -->
-
-
-  
-  <!-- Modal -->
-  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          ...
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
 
 
     <script src="assets/js/vendor-all.min.js"></script>
@@ -330,13 +350,13 @@
         const today = new Date();
 
         // Primer día del mes actual
-        const primerDia = new Date(today.getFullYear(), today.getMonth(), 1);
+        // const primerDia = new Date(today.getFullYear(), today.getMonth(), 1);
         // Último día del mes actual
-        const ultimoDia = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+        // const ultimoDia = new Date(today.getFullYear(), today.getMonth() + 1, 0);
 
-        const formato = (date) => date.toISOString().split('T')[0];
-        inputFecha.min = formato(primerDia);
-        inputFecha.max = formato(ultimoDia);
+        // const formato = (date) => date.toISOString().split('T')[0];
+        // inputFecha.min = formato(primerDia);
+        // inputFecha.max = formato(ultimoDia);
 
         async function cargarCausacionContable(id, view) {
    
