@@ -102,9 +102,9 @@
                                 <span>Support</span>
                             </a> -->
                             <button onclick="logout()" class="dropdown-item">
-								<i data-feather="power"></i>
-								<span>Logout</span>
-							</button>
+                                <i data-feather="power"></i>
+                                <span>Logout</span>
+                            </button>
                         </div>
                     </li>
                 </ul>
@@ -112,7 +112,7 @@
             <div class="ml-auto">
                 <ul class="list-unstyled">
                     <li class="dropdown pc-h-item">
-                       
+
                         <!-- <div class="dropdown-menu dropdown-menu-right pc-h-dropdown drp-search">
                             <form class="px-3">
                                 <div class="form-group mb-0 d-flex align-items-center">
@@ -140,16 +140,16 @@
                                 <i data-feather="user"></i>
                                 <span>Mi perfil</span>
                             </a>
-                         
+
                             <!-- <a href="#!" class="dropdown-item">
                                 <i data-feather="life-buoy"></i>
                                 <span>Support</span>
                             </a> -->
-                        
+
                             <button onclick="logout()" class="dropdown-item">
-								<i data-feather="power"></i>
-								<span>Logout</span>
-							</button>
+                                <i data-feather="power"></i>
+                                <span>Logout</span>
+                            </button>
                         </div>
                     </li>
                 </ul>
@@ -171,7 +171,9 @@
                                 <p class="m-b-10">Causaciones Contables | </p>
                             </div>
                             <ul class="breadcrumb">
-                                <li class="breadcrumb-item"><div onclick="back()">Registro</div></li>
+                                <li class="breadcrumb-item">
+                                    <div onclick="back()">Registro</div>
+                                </li>
                                 <!--li class="breadcrumb-item">Sample Page</li-->
                             </ul>
                         </div>
@@ -186,120 +188,96 @@
                     <div class="card">
                         <div class="card-header">
                             <h5>Registrar: Causacion Contable # <span id="id_unico_top">1</span></h5>
-                            
+
                         </div>
                         <div class="card-body">
                             <div class="container mt-5">
-                                    <div class="row">
-                                                                              <!-- ID NIT -->
-                                        <div class="form-group col-12">
-                                            <label for="id_nit">ID NIT</label>
-                                            <input type="text" class="form-control" id="nit" required>
-                                            <input type="hidden" id="id_nit">
-                                            <div class="invalid-feedback">
-                                                NIT No encontrado: Si desea ingresarlo debe comunicarse con el administrador del sistema
-                                            </div>
-                                            <div class="valid-feedback">
-                                                NIT. <span style="text-transform: uppercase;" id="nit_text"></span>
-                                            </div>
+                                <div class="row">
+                                    <!-- ID NIT -->
+                                    <div class="form-group col-12">
+                                        <label for="id_nit">ID NIT</label>
+                                        <input type="text" class="form-control" id="nit" required>
+                                        <input type="hidden" id="id_nit">
+                                        <div class="invalid-feedback">
+                                            NIT No encontrado: Si desea ingresarlo debe comunicarse con el administrador
+                                            del sistema
                                         </div>
-
-                                       
-                                        <!-- Fecha Manual -->
-                                        <div class="form-group col-12">
-                                            <label for="fecha_manual">Fecha Manual</label>
-                                            <input type="date" class="form-control" id="fecha_manual" value="" required>
+                                        <div class="valid-feedback">
+                                            NIT. <span style="text-transform: uppercase;" id="nit_text"></span>
                                         </div>
-
-                                         
-                                        <!-- Valor -->
-                                        <div class="form-group col-12">
-                                            <label for="valor">Valor</label>
-                                            <input type="text" class="form-control" id="valor" required>
-                                        </div>
-
-                                        <!-- Concepto -->
-                                        <div class="form-group col-12">
-                                            <label for="concepto">Concepto</label>
-                                            <textarea class="form-control" name="concepto" rows="4"
-                                                id="concepto"></textarea>
-                                            <p id="conceptoError"></p>
-                                        </div>
-                                       
-
-                                        <div class="col-md-6 form-group">
-                                            <label  for="extra"><strong>Centro de costos:</strong></label>
-                                            <select id="extra" class="form-control">
-                                                <option value="" disabled selected>Seleccione un centro de costos</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label><strong>Descripción:</strong></label>
-                                            <p id="descripcionText" class="border p-3 bg-light centrocostos_description">Selecciona un código para ver la descripción.</p>
-                                        </div>
-
-                                        
-                                        <input type="hidden" id="id_unico"> 
-
-
-                                        <div class="col mb-3">
-                                            <label for="inputCuentaSeleccionada" class="form-label">Código y nombre de la cuenta contable seleccionada:</label>
-                                            <div class="input-group">
-                                                <input type="text" id="inputCuentaSeleccionada" class="form-control" placeholder="Código" disabled>
-                                                <input type="hidden" id="finalEnviadoCuentaSeleccionada">
-                                                <input type="hidden" id="id_cuenta">
-                                                <button class="btn btn-outline-secondary" type="button" data-bs-toggle="modal" data-bs-target="#modalBuscarCuenta">
-                                                   🔍
-                                                </button>
-                                            </div>
-                                        </div>
-
-
-                                         <!-- Modal de búsqueda de cuenta -->
-                                        <div class="modal fade" id="modalBuscarCuenta" tabindex="-1" aria-labelledby="modalLabelCuenta" aria-hidden="true">
-                                            <div class="modal-dialog modal-lg">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="modalLabelCuenta">Buscar Cuenta Contable</h5>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <div class="mb-3">
-                                                            <div class="row">
-                                                                <div class="col-6">
-                                                                    <label for="f_cuenta" class="form-label">Cuenta:</label>
-                                                                    <input type="text" id="f_cuenta" class="form-control" placeholder="Número de cuenta">
-                                                                </div>
-                                                                <div class="col-6" style="margin-top: -10px;">
-                                                                    <label for="f_nombre" class="form-label mt-2">Nombre:</label>
-                                                                    <input type="text" id="f_nombre" class="form-control" placeholder="Nombre de la cuenta">
-                                                                </div>
-                                                                <div class="col-12 text-right d-flex justify-content-end">
-                                                                    <button class="btn btn-primary mt-3" onclick="buscarCuenta()">Buscar</button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                        <div id="resultadosCuenta" class="mt-4"></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        
-
-                                        <!-- Submit Button -->
-                                        <div class="col-12" style="margin-top: 40px;">
-                                            <button type="button" id="btn_guardar"
-                                                class="btn_acciones btn btn-primary btn-block">Guardar esta causación contable</button>
-                                        </div>
-
-                                        <div class="col-12" style="margin-top: 40px;">
-                                            <button type="button" id="btn_editar"
-                                                class="btn_acciones btn btn-primary btn-block">Editar esta causación contable</button>
-                                        </div>
-
-                                        
                                     </div>
+
+
+                                    <!-- Fecha Manual -->
+                                    <div class="form-group col-12">
+                                        <label for="fecha_manual">Fecha Manual</label>
+                                        <input type="date" class="form-control" id="fecha_manual" value="" required>
+                                    </div>
+
+
+                                    <!-- Valor -->
+                                    <div class="form-group col-12">
+                                        <label for="valor">Valor</label>
+                                        <input type="text" class="form-control" id="valor" required>
+                                    </div>
+
+                                    <!-- Concepto -->
+                                    <div class="form-group col-12">
+                                        <label for="concepto">Concepto</label>
+                                        <textarea class="form-control" name="concepto" rows="4"
+                                            id="concepto"></textarea>
+                                        <p id="conceptoError"></p>
+                                    </div>
+
+
+                                    <div class="col-md-6 form-group">
+                                        <label for="extra"><strong>Centro de costos:</strong></label>
+                                        <select id="extra" class="form-control">
+                                            <option value="" disabled selected>Seleccione un centro de costos</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label><strong>Descripción:</strong></label>
+                                        <p id="descripcionText" class="border p-3 bg-light centrocostos_description">
+                                            Selecciona un código para ver la descripción.</p>
+                                    </div>
+
+
+                                    <input type="hidden" id="id_unico">
+
+
+                                    <div class="col mb-3">
+                                        <label for="inputCuentaSeleccionada" class="form-label">Código y nombre de la
+                                            cuenta contable seleccionada:</label>
+                                        <div class="input-group">
+                                            <input type="text" id="inputCuentaSeleccionada" class="form-control"
+                                                placeholder="Código" disabled>
+                                            <input type="hidden" id="finalEnviadoCuentaSeleccionada">
+                                            <input type="hidden" id="id_cuenta">
+                                            <button class="btn btn-outline-secondary" type="button" id="abrirModal">
+                                                🔍
+                                            </button>
+                                        </div>
+                                    </div>
+
+
+
+
+                                    <!-- Submit Button -->
+                                    <div class="col-12" style="margin-top: 40px;">
+                                        <button type="button" id="btn_guardar"
+                                            class="btn_acciones btn btn-primary btn-block">Guardar esta causación
+                                            contable</button>
+                                    </div>
+
+                                    <div class="col-12" style="margin-top: 40px;">
+                                        <button type="button" id="btn_editar"
+                                            class="btn_acciones btn btn-primary btn-block">Editar esta causación
+                                            contable</button>
+                                    </div>
+
+
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -311,6 +289,59 @@
     </div>
     <!-- [ Main Content ] end -->
     </div>
+
+
+
+    <!-- Botón para abrir el modal -->
+    <button type="button" class="btn btn-primary" style="position: fixed; bottom: 20px; right: 20px;">
+        Abrir Modal
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="miModal" tabindex="-1" aria-labelledby="miModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalBuscarCuenta">Buscar Cuenta Contable</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <style>
+                    #resultadosCuenta {
+                        position: relative;
+                        overflow: scroll;
+                        max-height: 400px;
+                        max-width: 100%;
+                    }
+                    }
+                </style>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <div class="row">
+                            <div class="col-6">
+                                <label for="f_cuenta" class="form-label">Cuenta:</label>
+                                <input type="text" id="f_cuenta" class="form-control" placeholder="Número de cuenta">
+                            </div>
+                            <div class="col-6" style="margin-top: -10px;">
+                                <label for="f_nombre" class="form-label mt-2">Nombre:</label>
+                                <input type="text" id="f_nombre" class="form-control" placeholder="Nombre de la cuenta">
+                            </div>
+                            <div class="col-12 text-right d-flex justify-content-end">
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="resultadosCuenta" class="mt-4"></div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" onclick="buscarCuenta()">Buscar</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 
 
     <!-- Input donde se guarda el id seleccionado -->
@@ -330,10 +361,14 @@
         // https://webhook.site/d98cac13-dd5d-4b2e-b2d5-905ac9e7390f
         // https://pipedream.com/
         // https://pepito.free.beeceptor.com
-        
-        
-        // 
-        </script>
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const miModal = new bootstrap.Modal(document.getElementById('miModal'));
+            document.getElementById('abrirModal').addEventListener('click', function () {
+                miModal.show();
+            });
+        });
+    </script>
     <link rel="stylesheet" href="assets/fonts/font-awsome-pro/css/pro.min.css">
     <link rel="stylesheet" href="assets/fonts/feather.css">
     <link rel="stylesheet" href="assets/fonts/fontawesome.css">
@@ -343,9 +378,9 @@
     <script src="assets/js/constantes.js"></script>
     <script src="assets/js/causacionescontables/inicio.js"></script>
     <script src="assets/js/logout.js"></script>
-    
+
     <script>
-        
+
         const inputFecha = document.getElementById('fecha_manual');
         const today = new Date();
 
@@ -359,7 +394,7 @@
         // inputFecha.max = formato(ultimoDia);
 
         async function cargarCausacionContable(id, view) {
-   
+
             try {
                 const response = await fetch(`${host}/causacionContable/${id}`, {
                     headers: {
@@ -390,7 +425,7 @@
                     }
                 }
 
-                if(view == 'true') {
+                if (view == 'true') {
                     document.querySelectorAll("input, select, textarea").forEach(el => {
                         el.disabled = true;
                     });
@@ -398,10 +433,10 @@
                     document.getElementById("id_unico_top").textContent = data.id
                 }
 
-                if(view == "edit") {
+                if (view == "edit") {
                     document.getElementById("id_unico_top").textContent = data.id
                 }
-                
+
 
             } catch (error) {
                 console.error("Error:", error);
@@ -409,41 +444,41 @@
             }
         }
 
-    // Ejemplo de uso automático al cargar la página
-    document.addEventListener("DOMContentLoaded", function () {
-        const queryParams = new URLSearchParams(window.location.search);
-        const view = queryParams.get("view")
-        if(view == "create") {
-            document.getElementById("btn_editar").hidden = true; 
-            document.getElementById("btn_guardar").hidden = false;
-        } 
-
-        if(view == "true") {
-            const id = queryParams.get("id");
-            cargarCausacionContable(id, view)
-            if(id == null) {
-                history.back();
-            }
-            document.getElementById("btn_editar").hidden = true; 
-            document.getElementById("btn_guardar").hidden = true; 
-        }
-        
-        if(view == "edit") {
-            const id = queryParams.get("id");
-            cargarCausacionContable(id, view)
-            if(id == null) {
-                history.back();
+        // Ejemplo de uso automático al cargar la página
+        document.addEventListener("DOMContentLoaded", function () {
+            const queryParams = new URLSearchParams(window.location.search);
+            const view = queryParams.get("view")
+            if (view == "create") {
+                document.getElementById("btn_editar").hidden = true;
+                document.getElementById("btn_guardar").hidden = false;
             }
 
+            if (view == "true") {
+                const id = queryParams.get("id");
+                cargarCausacionContable(id, view)
+                if (id == null) {
+                    history.back();
+                }
+                document.getElementById("btn_editar").hidden = true;
+                document.getElementById("btn_guardar").hidden = true;
+            }
 
-            document.getElementById("btn_guardar").hidden = true; 
-            document.getElementById("btn_editar").hidden = false;
-        }
+            if (view == "edit") {
+                const id = queryParams.get("id");
+                cargarCausacionContable(id, view)
+                if (id == null) {
+                    history.back();
+                }
 
 
-    });
+                document.getElementById("btn_guardar").hidden = true;
+                document.getElementById("btn_editar").hidden = false;
+            }
 
-   
+
+        });
+
+
     </script>
 </body>
 

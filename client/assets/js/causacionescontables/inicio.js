@@ -344,12 +344,12 @@ const mostrarResultadosCuenta = (data) => {
     Object.values(data).forEach(item => {
         tabla += `
             <tr>
-                <td>${item.id}</td>
-                <td>${item.cuenta}</td>
-                <td>${item.nombre}</td>
                 <td>
-                    <button class="btn btn-sm btn-primary" onclick="seleccionarCuenta('${item.id}', '${item.cuenta}', '${item.nombre}')">Agregar</button>
+                    on class="btn btn-sm btn-primary" onclick="seleccionarCuenta('${item.id}', '${item.cuenta}', '${item.nombre}')">Agregar</button>
                 </td>
+                <td>${item.cuenta}</td>
+                <td>${item.id}</td>
+                    <td>${item.nombre}</td>
             </tr>
         `;
     });
