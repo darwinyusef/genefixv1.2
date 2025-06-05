@@ -345,7 +345,7 @@ const mostrarResultadosCuenta = (data) => {
         tabla += `
             <tr>
                 <td>
-                    on class="btn btn-sm btn-primary" onclick="seleccionarCuenta('${item.id}', '${item.cuenta}', '${item.nombre}')">Agregar</button>
+                    <button id="item.id" class="btn btn-sm btn-primary" onclick="seleccionarCuenta('${item.id}', '${item.cuenta}', '${item.nombre}')">Agregar</button>
                 </td>
                 <td>${item.cuenta}</td>
                 <td>${item.id}</td>
@@ -363,8 +363,8 @@ const seleccionarCuenta = (id, cuenta, nombre) => {
     document.getElementById('inputCuentaSeleccionada').value = `${id} - ${cuenta} - ${nombre}`;
     document.getElementById('finalEnviadoCuentaSeleccionada').value = cuenta;
     finalEnviadoCuentaSeleccionada
-    const modal = bootstrap.Modal.getInstance(document.getElementById('modalBuscarCuenta'));
-    modal.hide();
+    const miModal = new bootstrap.Modal(document.getElementById('miModal'));
+    miModal.hide();
 };
 
 

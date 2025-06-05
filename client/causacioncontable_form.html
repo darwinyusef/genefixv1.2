@@ -292,18 +292,13 @@
 
 
 
-    <!-- Botón para abrir el modal -->
-    <button type="button" class="btn btn-primary" style="position: fixed; bottom: 20px; right: 20px;">
-        Abrir Modal
-    </button>
-
     <!-- Modal -->
     <div class="modal fade" id="miModal" tabindex="-1" aria-labelledby="miModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog  modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="modalBuscarCuenta">Buscar Cuenta Contable</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                    <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button> -->
                 </div>
                 <style>
                     #resultadosCuenta {
@@ -311,7 +306,6 @@
                         overflow: scroll;
                         max-height: 400px;
                         max-width: 100%;
-                    }
                     }
                 </style>
                 <div class="modal-body">
@@ -334,8 +328,8 @@
                     <div id="resultadosCuenta" class="mt-4"></div>
                 </div>
                 <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="close" data-bs-dismiss="modal">Cerrar</button>
                     <button class="btn btn-primary" onclick="buscarCuenta()">Buscar</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                 </div>
             </div>
         </div>
@@ -366,6 +360,9 @@
             const miModal = new bootstrap.Modal(document.getElementById('miModal'));
             document.getElementById('abrirModal').addEventListener('click', function () {
                 miModal.show();
+            });
+            document.getElementById('close').addEventListener('click', function () {
+                miModal.hide();
             });
         });
     </script>
