@@ -139,7 +139,7 @@ async function listadoCentroCostos() {
 
     data.forEach(cat => {
         if (cat.descripcion && cat.tipo && agrupadas.hasOwnProperty(cat.tipo)) {
-     agrupadas[cat.tipo].push(cat);
+            agrupadas[cat.tipo].push(cat);
         }
     });
 
@@ -152,7 +152,7 @@ async function listadoCentroCostos() {
 
         const hijos = agrupadas[principal.nombre];
         if (hijos && hijos.length > 0) {
-          hijos.forEach(hijo => {
+            hijos.forEach(hijo => {
                 const option = document.createElement('option');
                 option.value = hijo.codigo;
                 option.textContent = `${hijo.codigo} - ${hijo.nombre}`;
@@ -344,12 +344,12 @@ const mostrarResultadosCuenta = (data) => {
     Object.values(data).forEach(item => {
         tabla += `
             <tr>
-                <td>
-	          <button id="item.id" class="btn btn-sm btn-primary" data-dismiss="modal"  onclick="seleccionarCuenta('${item.id}', '${item.cuenta}', '${item.nombre}');">Agregar</button>
-                </td>
-                <td>${item.cuenta}</td>
                 <td>${item.id}</td>
-                    <td>${item.nombre}</td>
+                <td>${item.cuenta}</td>
+                <td>${item.nombre}</td>
+                <td>
+                    <button class="btn btn-sm btn-primary" onclick="seleccionarCuenta('${item.id}', '${item.cuenta}', '${item.nombre}')">Agregar</button>
+                </td>
             </tr>
         `;
     });
@@ -363,6 +363,13 @@ const seleccionarCuenta = (id, cuenta, nombre) => {
     document.getElementById('inputCuentaSeleccionada').value = `${id} - ${cuenta} - ${nombre}`;
     document.getElementById('finalEnviadoCuentaSeleccionada').value = cuenta;
     finalEnviadoCuentaSeleccionada
-    const miModal = new bootstrap.Modal(document.getElementById('miModal'));
-    miModal.hide();
+    const modal = bootstrap.Modal.getInstance(document.getElementById('modalBuscarCuenta'));
+    modal.hide();
 };
+
+
+
+
+
+
+

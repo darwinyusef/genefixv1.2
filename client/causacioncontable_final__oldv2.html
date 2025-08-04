@@ -303,7 +303,7 @@
                             <div class="row">
                                 <div class="col-md-12 homecausation">
                                     <button id="finalizarTodo" type="button" class="btn btn-primary text-center">
-                                        Cerrar causaciones disponibles<span id="total2"
+                                        Cerrar definitivamente el mes<span id="total2"
                                             class="badge badge-light">0</span>
                                     </button>
                                 </div>
@@ -450,7 +450,7 @@
                     if (data.ms == 'ok') {
                         mostrarAlerta("Archivo enviado exitosamente.", "success");
                         setTimeout(() => {
-                            window.location.href = "causacioncontable_new.html";
+                            window.location.reload();
 
                         }, 3000)
                     } else {

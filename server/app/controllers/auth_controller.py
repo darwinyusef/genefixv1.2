@@ -45,7 +45,7 @@ def get_all_token_data(token: TokenResponse) -> dict:
     return payload
 
 # Ruta de login usando JSON response_model=TokenResponse,
-@router.post("/login", tags=["Auth"],  status_code=status.HTTP_200_OK)
+@router.post("/logina", tags=["Auth"],  status_code=status.HTTP_200_OK)
 async def login(login_data: LoginRequest, response: Response, db: Session = Depends(get_db)):
 
     db_user = db.query(User).filter(User.username == login_data.username).first()
@@ -100,6 +100,58 @@ async def login(login_data: LoginRequest, response: Response, db: Session = Depe
         "token_type": "bearer",
         "user": login_data
     })
+
+
+@router.post("/login", tags=["Auth"], status_code=status.HTTP_200_OK)
+async def login(login_data: LoginRequest, response: Response, db: Session = Depends(get_db)):
+
+    db_user = db.query(User).filter(User.username == login_data.username).first()
+
+    if not db_user or not verify_password(login_data.password, db_user.password):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Credenciales incorrectas",
+        )
+
+    if db_user.rol == "inactive":
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Usuario inactivo",
+        )
+
+    csrf_token = get_csrf_token(login_data, db_user, db)
+
+    user_info = {
+        "id": db_user.id,
+        "name": db_user.name,
+        "email": db_user.email,
+        "username": db_user.username,
+        "rol": db_user.rol,
+        "approval_token": csrf_token,
+        "api": os.getenv("API_VERSION")
+    }
+
+    response.set_cookie("csrf_token", csrf_token, httponly=True, samesite="Lax")
+
+    payload = {
+        "sub": str(db_user.id),
+        "user_data": user_info,
+    }
+
+    token = create_access_token(payload)
+
+    return JSONResponse(
+        content={
+            "ms": "active_csrf_token",
+            "access_token": token,
+            "token_type": "bearer",
+            "user": user_info
+        }
+    )
+
+
+
+
     
 # firma administrativa para obtener permisos de movimientos 
 def get_csrf_token(login_data, db_user: User, db):

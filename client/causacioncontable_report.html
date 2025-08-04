@@ -275,6 +275,15 @@
                                 <option value="marzo">Marzo</option>
                                 <option value="abril">Abril</option>
                                 <option value="mayo" selected>Mayo</option>
+				<option value="junio" selected>Junio</option>
+				<option value="julio" selected>Julio</option> 
+				<option value="agosto" selected>Agosto</option>
+				<option value="septiembre" selected>Septiembre</option>
+				<option value="octubre" selected>Octubre</option>
+				<option value="noviembre" selected>Noviembre</option>
+				<option value="diciembre" selected>Diciembre</option>
+
+
                                 <!-- Agrega más meses si es necesario -->
                             </select>
 
@@ -352,7 +361,7 @@
                 .then(data => {
                     const tbody = document.querySelector("#data-table tbody");
                     tbody.innerHTML = "";
-
+		    console.log(data);
                     data.data.forEach(item => {
                         const fecha = new Date(item.begranda);
                         const formato = String(fecha.getDate()).padStart(2, '0') + "/" +

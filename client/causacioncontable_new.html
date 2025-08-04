@@ -43,9 +43,12 @@
         }
 
         .buttons_menu {
-            position: absolute;
-            top: 20px;
-            right: 20px;
+            display: flex;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+	    gap:10px;
+	    margin-bottom: 20px;
         }
 
         .card-body ul .ellipsis {
@@ -68,6 +71,10 @@
         .clearbadge {
             zoom: 0.7;
         }
+
+	.card-title {
+	   margin-bottom: 5px;
+	}
 
         @media (max-width: 768px) {
             .buttons_menu {
@@ -287,7 +294,12 @@
                             <h5>Habilitar Listado de causaciones <button type="button"
                                     class="btn btn-primary clearbadge">
                                     Usted ha creado <span id="total" class="badge badge-light">0</span>
-                                </button> <a href="causacioncontable_form.html?view=create" type="button"
+                                </button> 
+				<a href="causacioncontable_final.html" style="border: 1px solid red; background-color: red;" type="button"
+                                    class="btn btn-primary clearbadge"> cerrar otras causaciones
+                                </a>
+
+				<a href="causacioncontable_form.html?view=create" type="button"
                                     class="btn btn-secondary clearbadge"> Crear Nuevo Registro
                                 </a>
 
@@ -304,10 +316,10 @@
                                             class="badge badge-light">0</span>
                                     </button>
 
-                                    <a href="causacioncontable_final.html" type="button"
+                                    <!--a href="causacioncontable_final.html" type="button"
                                         class="btn btn-primary text-center">
                                         Cerrar el mes
-                                    </a>
+                                    </a-->
                                 </div>
                             </div>
 
@@ -405,17 +417,17 @@
                     cardBody.innerHTML = `
                         <div class="card-body">
                             <h5 class="card-title">Registro contable <strong style="text-transform: uppercase;">${item.estado} </strong></h5>
-                            <ul>
-                                <li>NIT: ${item.nit}</li>
-                                <li>Fecha: ${mejorarFormatoFecha(item.fecha)}</li>
-                                <li>Valor: ${item.valor}</li>
-                                <li class="ellipsis">Concepto: ${item.concepto}</li>
-                            </ul>
                             <div class="buttons_menu">
                                 <a href="causacioncontable_form.html?id=${item.id}&view=true" class="btn btn-success clearbadge" title="Ver">👁‍🗨</a>
                                 <a href="causacioncontable_form.html?id=${item.id}&view=edit" class="btn btn-info clearbadge" title="Editar">✍🏻</a>
                                 <button data-id="${item.id}" class="btn btn-danger clear clearbadge" title="Eliminar">❌</button>
                             </div>
+			    <ul>
+                                <li>NIT: ${item.nit}</li>
+                                <li>Fecha: ${mejorarFormatoFecha(item.fecha)}</li>
+                                <li>Valor: ${item.valor}</li>
+                                <li class="ellipsis">Concepto: ${item.concepto}</li>
+                            </ul>
                         </div>
                         `;
 
