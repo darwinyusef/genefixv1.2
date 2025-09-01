@@ -10,7 +10,7 @@ import json
 class CausacionRepository:
 
     @staticmethod
-    async def enviar_causaciones_a_api(documentos: List[CausacionDTO], causaciones,  token: str, db: Session):
+    async def enviar_causaciones_a_api(documentos: List[CausacionDTO], causaciones, token: str, db: Session):
         url = f"http://begranda.com/equilibrium2/public/api/document?key={token}"
 
         try:
@@ -30,7 +30,8 @@ class CausacionRepository:
                     ).first()
 
                     if causacion:
-                        causacion.report_begranda = json.dumps(response.json())
+                        report_str = json.dumps(response.json())
+                        causacion.report_begranda = report_str[:250] 
                         causacion.begranda = datetime.now()
 
                 db.commit()

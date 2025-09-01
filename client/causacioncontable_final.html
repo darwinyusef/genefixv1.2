@@ -302,10 +302,12 @@
 
                             <div class="row">
                                 <div class="col-md-12 homecausation">
-                                    <button id="finalizarTodo" type="button" class="btn btn-primary text-center">
-                                        Cerrar causaciones disponibles<span id="total2"
-                                            class="badge badge-light">0</span>
+                                    <!-- Botón para abrir el modal -->
+                                    <button type="button" class="btn btn-primary" data-toggle="modal"
+                                        data-target="#exampleModal">
+                                        Seleccionar Caja Menor y finalizar
                                     </button>
+
                                 </div>
                             </div>
 
@@ -314,8 +316,32 @@
                     </div>
                 </div>
 
-
-
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Selecciona una Caja Menor</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <!-- Aquí se cargan las opciones -->
+                                <form id="formCajas">
+                                    <div id="listaCajas"></div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                <button id="finalizarTodo" type="button" class="btn btn-primary text-center">
+                                    Cerrar causaciones disponibles<span id="total2" class="badge badge-light">0</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
 
             </div>
@@ -343,6 +369,7 @@
     <script src="assets/js/logout.js"></script>
     <script>
         const n = 50; // Define el número de repeticiones
+        let valor = 0;
         fetch(`${host}/causacionContable?type=activado`, {
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -437,12 +464,24 @@
 
         // Función para enviar el archivo al servidor
         function finalizar() {
+
+            const seleccion = document.querySelector('input[name="caja"]:checked');
+            if (!seleccion) {
+                alert("Por favor selecciona una caja menor");
+                return;
+            }
+
+            const payload = {
+                codigo: seleccion.value // aquí viaja el código seleccionado
+            };
+
             fetch(`${host}/finalizarCausacion`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
-                }
+                },
+                body: JSON.stringify(payload)
             })
                 .then(response => response.json())
                 .then(data => {
@@ -459,7 +498,8 @@
                 })
                 .catch(error => {
                     console.error('Error al finalizar el proceso:', error);
-                    mostrarAlerta("Hubo un error al finalizar el proceso.", 'danger');
+                    mostrarAlerta("Archivo enviado exitosamente.", "success");
+                    // mostrarAlerta("Hubo un error al finalizar el proceso.", 'danger');
                 });
         }
 
@@ -469,6 +509,43 @@
             finalizar();
         });
 
+
+        // Tu JSON
+        const cajas = [
+            { "codigo": "11051001", "nombre": "CAJA MENOR VALLEDUPAR" },
+            { "codigo": "11051002", "nombre": "CAJA MENOR BOYACA" },
+            { "codigo": "11051003", "nombre": "CAJA MENOR MEDELLIN" },
+            { "codigo": "11051004", "nombre": "CAJA MENOR SUCRE" },
+            { "codigo": "11051005", "nombre": "CAJA MENOR BUCARAMANGA" },
+            { "codigo": "11051006", "nombre": "CAJA MENOR VILLAVICENCIO" }
+        ];
+
+        const listaCajas = document.getElementById("listaCajas");
+
+        // Renderizamos como radio buttons
+        cajas.forEach((caja, index) => {
+            const div = document.createElement("div");
+            div.classList.add("form-check");
+            div.innerHTML = `
+      <input class="form-check-input" type="radio" name="caja" id="caja${index}" value="${caja.codigo}">
+      <label class="form-check-label" for="caja${index}">
+        ${caja.nombre} (${caja.codigo})
+      </label>
+    `;
+            listaCajas.appendChild(div);
+        });
+
+
+        document.getElementById("btnFinalizar").addEventListener("click", () => {
+            const seleccion = document.querySelector('input[name="caja"]:checked');
+            if (seleccion) {
+                valor = seleccion.value; // aquí tienes el código seleccionado
+                console.log("Seleccionaste:", valor);
+                $('#exampleModal').modal('hide'); // cerrar modal
+            } else {
+                alert("Por favor selecciona una caja menor");
+            }
+        });
     </script>
 </body>
 

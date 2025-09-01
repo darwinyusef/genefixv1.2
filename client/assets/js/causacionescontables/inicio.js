@@ -178,6 +178,7 @@ document.getElementById("btn_guardar").addEventListener("click", async (e) => {
         validarCampo('valor', 'El valor es obligatorio', 'num') &
         validarCampo('concepto', 'El concepto es obligatorio') &
         validarCampo('extra', 'El extra es obligatorio');
+        validarCampo('id_cuenta', 'La cuenta es obligatoria')
 
     if (!camposValidos) {
         console.log("Hay errores en el formulario.");
@@ -201,6 +202,7 @@ document.getElementById("btn_editar").addEventListener("click", async (e) => {
         validarCampo('valor', 'El valor es obligatorio', 'num') &
         validarCampo('concepto', 'El concepto es obligatorio') &
         validarCampo('extra', 'El extra es obligatorio');
+	validarCampo('id_cuenta', 'La cuenta es obligatoria')
 
     if (!camposValidos) {
         console.log("Hay errores en el formulario.");
@@ -208,6 +210,7 @@ document.getElementById("btn_editar").addEventListener("click", async (e) => {
     }
 
     datos = levantarData()
+	console.log(datos, "desde editar");
     console.log("Datos listos para enviar:", datos);
     actualizarDatos(datos, id_unico);
 
@@ -226,7 +229,7 @@ function levantarData() {
         nit: document.getElementById("nit").value.trim(),
         fecha: obtenerFechaActual().trim(),
         fecha_manual: document.getElementById("fecha_manual").value.trim(),
-        id_cuenta: 6068094,
+        id_cuenta: document.getElementById("id_cuenta").value.trim(),
         valor: valor,
         tipo: 1,
         concepto: document.getElementById("concepto").value.trim(),
@@ -283,7 +286,7 @@ function actualizarDatos(datos, id) {
             mensaje = "La causación se ha editado correctamente.";
             mostrarAlerta(mensaje, "success");
             setTimeout(() => {
-                window.location.href = "causacioncontable_new.html"
+//                window.location.href = "causacioncontable_new.html"
             }, 5000)
         })
         .catch((e) => {
