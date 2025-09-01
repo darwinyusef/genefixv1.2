@@ -11,7 +11,7 @@ from app.shemas.shema_send_causacion import CausacionDTO, CausacionIDs, Causacio
 from app.repositories.causacion_repository import CausacionRepository
 
 from app.config.config import decode_token, get_current_user 
-from app.config.mail import AWS_BUCKET_NAME, AWS_S3_URL, s3_client
+from app.config.upload_files import upload_file_helper
 from datetime import datetime, timezone
 from app.logs.logs import logger
 import uuid
@@ -124,7 +124,6 @@ def create_causacion(causacion: CausacionContableCreate, db: Session = Depends(g
     db.add(db_causacion)
     db.commit()
     db.refresh(db_causacion)
-    # print(db_causacion.id)
     return db_causacion
 
 # 🤓 ♦♣♠
@@ -150,21 +149,6 @@ def increment_counter(db):
     except ValueError:
         raise HTTPException(status_code=500, detail="El valor del contador no es un entero válido")
    
-# 🤓 ♦♣♠ 
-async def upload_file_helper(file: UploadFile):
-    try:
-        contents = await file.read()
-        file_extension = file.filename.split(".")[-1] if "." in file.filename else ""
-        unique_id = str(uuid.uuid4())
-        file_key = f"{unique_id}_{datetime.now().day}{datetime.now().month}.{file_extension}"
-        s3_client.put_object(Bucket=AWS_BUCKET_NAME, Key=file_key, Body=contents)
-        public_url = f"{AWS_S3_URL}/{AWS_BUCKET_NAME}/{file_key}"
-        return  public_url
-    except Exception as e:
-        logger.error("/activarCausacion: Error al subir el archivo", extra={"ms": "HTTP_401_UNAUTHORIZED", "detail": f"Error al subir el archivo: {str(e)}"})
-        raise HTTPException(status_code=500, detail=f"Error al subir el archivo: {str(e)}")
-
-
 
 # 🤓 ♦♣♠
 @router.post("/finalizarCausacion")
