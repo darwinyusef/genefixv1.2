@@ -1,9 +1,10 @@
 from typing import List
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from fastapi import File, UploadFile, Form
 from fastapi.responses import JSONResponse
 from mailtrap import MailtrapClient
 from jinja2 import Environment, FileSystemLoader
+from app.logs.logs import logger
 import httpx
 import boto3
 import uuid
@@ -46,7 +47,8 @@ async def upload_file(file: UploadFile = File(...)):
         public_url = f"{AWS_S3_URL}/{AWS_BUCKET_NAME}/{file_key}"
         return JSONResponse(content={"filename": file.filename, "upload_code": unique_id, "url": public_url})
     except Exception as e:
-        return JSONResponse(content={"error": str(e)}, status_code=500)
+        logger.error(f"Error al subir archivo: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail=f"Error al subir el archivo: {e}")
     
 
 # Configuración de Jinja2

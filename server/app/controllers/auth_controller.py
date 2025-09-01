@@ -7,7 +7,7 @@ from app.config.config import get_current_user, generate_csrf_token, hash_passwo
 from app.config.database import get_db
 from app.models import User
 from sqlalchemy.orm import Session
-
+from app.logs.logs import logger
 from datetime import datetime, timedelta, timezone
 from dotenv import load_dotenv
 load_dotenv() 
@@ -106,7 +106,7 @@ async def login(login_data: LoginRequest, response: Response, db: Session = Depe
 async def login(login_data: LoginRequest, response: Response, db: Session = Depends(get_db)):
 
     db_user = db.query(User).filter(User.username == login_data.username).first()
-
+   
     if not db_user or not verify_password(login_data.password, db_user.password):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -114,6 +114,7 @@ async def login(login_data: LoginRequest, response: Response, db: Session = Depe
         )
 
     if db_user.rol == "inactive":
+        logger.error("HTTP_401_UNAUTHORIZED", extra={"ms": "HTTP_401_UNAUTHORIZED", "detail": login_data})
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Usuario inactivo",

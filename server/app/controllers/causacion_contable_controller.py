@@ -9,15 +9,11 @@ from app.shemas.shema_causacion_contable import CausacionContableCreate, Causaci
 from app.models import Configuration as ConfigurationModel
 from app.shemas.shema_send_causacion import CausacionDTO, CausacionIDs, CausacionDTOEnding, CausacionDTOClose
 from app.repositories.causacion_repository import CausacionRepository
-from app.config.logs import setup_logging
-import logging
 
-# Se recomienda configurar el logger una sola vez en el punto de entrada de la aplicación
-# y luego obtener la instancia del logger por su nombre en los módulos.
-logger = logging.getLogger('my_app_logger')
 from app.config.config import decode_token, get_current_user 
 from app.config.mail import AWS_BUCKET_NAME, AWS_S3_URL, s3_client
 from datetime import datetime, timezone
+from app.logs.logs import logger
 import uuid
 
 from dotenv import load_dotenv
@@ -165,6 +161,7 @@ async def upload_file_helper(file: UploadFile):
         public_url = f"{AWS_S3_URL}/{AWS_BUCKET_NAME}/{file_key}"
         return  public_url
     except Exception as e:
+        logger.error("/activarCausacion: Error al subir el archivo", extra={"ms": "HTTP_401_UNAUTHORIZED", "detail": f"Error al subir el archivo: {str(e)}"})
         raise HTTPException(status_code=500, detail=f"Error al subir el archivo: {str(e)}")
 
 
@@ -230,6 +227,7 @@ async def read_causacion_and_update(db: Session = Depends(get_db), token: dict =
         logger.error(f"Error al finalizar la causación contable: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Error al finalizar la causación contable: {str(e)}")
 
+
 async def credito_causacion_contable(
     documentos: List[CausacionDTOEnding], 
     db: Session = Depends(get_db), 
@@ -270,50 +268,64 @@ async def credito_causacion_contable(
         logger.error(f"Error al crear la causación contable de crédito: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Error al crear la causación contable de crédito: {str(e)}")
 
+
 # 🤓 ♦♣♠
 @router.post("/activarCausacion")
 async def read_causacion_and_update(db: Session = Depends(get_db), token: dict = Depends(get_current_user), file: UploadFile = File(...)):
-    tockendecode = decode_token(token)
-    causaciones = db.query(CausacionContableModel).filter(
-        CausacionContableModel.estado == "entregado",
-        CausacionContableModel.user_id == tockendecode["sub"]
-    ).all()
-    if causaciones == 0:
-        return { "status_code": status.HTTP_204_NO_CONTENT, "content":0 }
+    try:
+        tockendecode = decode_token(token)
+        causaciones = db.query(CausacionContableModel).filter(
+            CausacionContableModel.estado == "entregado",
+            CausacionContableModel.user_id == tockendecode["sub"]
+        ).all()
+        if causaciones == 0:
+            return { "status_code": status.HTTP_204_NO_CONTENT, "content": 0 }
 
-    # Cambiamos el estado a "finalizado" y actualizamos los campos del documento
-    _, codigo_documento = increment_counter(db)
-    public_url = await upload_file_helper(file)
+        # Cambiamos el estado a "finalizado" y actualizamos los campos del documento
+        _, codigo_documento = increment_counter(db)
+        public_url = await upload_file_helper(file)
 
-    for causacion in causaciones:
-        causacion.estado = "activado"
-        causacion.id_documento = str(codigo_documento)
-        causacion.documento_referencia = public_url
-        
-    db.commit()
-    # print(causaciones)
-    return { "ms": "ok", "description": "Desea enviar más causaciones o desea cerrar las actividades de este mes" }
-      
+        for causacion in causaciones:
+            causacion.estado = "activado"
+            causacion.id_documento = str(codigo_documento)
+            causacion.documento_referencia = public_url
+
+        db.commit()
+        return { "ms": "ok", "description": "Desea enviar más causaciones o desea cerrar las actividades de este mes" }
+    except Exception as e:
+        logger.error(f"Error en /activarCausacion: {str(e)}", exc_info=True)
+        raise HTTPException(status_code=500, detail=f"Error en /activarCausacion: {str(e)}")
+    
+    
 # 🤓 ♦♣♠    
 @router.put("/causacionContable/{id}", response_model=CausacionContable)
 def update_causacion(id: int, causacion: CausacionContableUpdate, db: Session = Depends(get_db), token: dict = Depends(get_current_user)):
-    db_causacion = db.query(CausacionContableModel).filter(CausacionContableModel.id == id).first()
-    if db_causacion is None:
-        raise HTTPException(status_code=404, detail="Causación no encontrada")
-    
-    for key, value in causacion.dict(exclude_unset=True).items():
-        setattr(db_causacion, key, value)
-    
-    db.commit()
-    db.refresh(db_causacion)
-    return db_causacion
+    try:
+        db_causacion = db.query(CausacionContableModel).filter(CausacionContableModel.id == id).first()
+        if db_causacion is None:
+            raise HTTPException(status_code=404, detail="Causación no encontrada")
+
+        for key, value in causacion.dict(exclude_unset=True).items():
+            setattr(db_causacion, key, value)
+
+        db.commit()
+        db.refresh(db_causacion)
+        return db_causacion
+    except Exception as e:
+        logger.error(f"Error al actualizar causación con id {id}: {str(e)}", exc_info=True)
+        raise HTTPException(status_code=500, detail=f"Error al actualizar causación: {str(e)}")
+
 
 @router.delete("/causacionContable/{id}", response_model=CausacionContable)
 def delete_causacion(id: int, db: Session = Depends(get_db), token: dict = Depends(get_current_user)):
-    db_causacion = db.query(CausacionContableModel).filter(CausacionContableModel.id == id).first()
-    if db_causacion is None:
-        raise HTTPException(status_code=404, detail="Causación no encontrada")
-    
-    db.delete(db_causacion)
-    db.commit()
-    return db_causacion
+    try:
+        db_causacion = db.query(CausacionContableModel).filter(CausacionContableModel.id == id).first()
+        if db_causacion is None:
+            raise HTTPException(status_code=404, detail="Causación no encontrada")
+
+        db.delete(db_causacion)
+        db.commit()
+        return db_causacion
+    except Exception as e:
+        logger.error(f"Error al eliminar causación con id {id}: {str(e)}", exc_info=True)
+        raise HTTPException(status_code=500, detail=f"Error al eliminar causación: {str(e)}")
