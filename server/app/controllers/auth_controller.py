@@ -106,7 +106,6 @@ async def login(login_data: LoginRequest, response: Response, db: Session = Depe
 async def login(login_data: LoginRequest, response: Response, db: Session = Depends(get_db)):
 
     db_user = db.query(User).filter(User.username == login_data.username).first()
-   
     if not db_user or not verify_password(login_data.password, db_user.password):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
