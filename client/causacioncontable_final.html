@@ -335,7 +335,7 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                                <button id="finalizarTodo" type="button" class="btn btn-primary text-center">
+                                <button id="finalizarTodo" type="button" class="btn btn-primary text-center" data-dismiss="modal">
                                     Cerrar causaciones disponibles<span id="total2" class="badge badge-light">0</span>
                                 </button>
                             </div>
@@ -378,6 +378,7 @@
         })
             .then(response => response.json())
             .then(data => {
+                console.log(data);
                 if (data.content == 0) {
                     mostrarAlerta(`Actualmente no cuenta con causaciones a finalizar se volvera al inicio`, "danger");
                     setTimeout(() => {

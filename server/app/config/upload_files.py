@@ -1,5 +1,3 @@
-import tempfile
-import os
 import uuid
 from datetime import datetime
 from fastapi import UploadFile, HTTPException
@@ -8,23 +6,18 @@ from app.logs.logs import logger
 
 async def upload_file_helper(file: UploadFile):
     try:
-        # Crear un archivo temporal
-        suffix = "." + (file.filename.split(".")[-1] if "." in file.filename else "")
-        with tempfile.NamedTemporaryFile(delete=False, suffix=suffix) as tmp:
-            contents = await file.read()
-            tmp.write(contents)
-            tmp_path = tmp.name
+        # Leer el contenido del archivo (en bytes)
+        contents = await file.read()
 
-        # Leer el archivo temporal para subirlo a S3
-        with open(tmp_path, "rb") as f:
-            file_extension = file.filename.split(".")[-1] if "." in file.filename else ""
-            unique_id = str(uuid.uuid4())
-            file_key = f"{unique_id}_{datetime.now().day}{datetime.now().month}.{file_extension}"
-            s3_client.put_object(Bucket=AWS_BUCKET_NAME, Key=file_key, Body=f)
-            logger.info("Archivo subido correctamente", extra={"ms": "upload_file_helper", "file_key": file_key})
+        # Generar un nombre único
+        file_extension = file.filename.split(".")[-1] if "." in file.filename else ""
+        unique_id = str(uuid.uuid4())
+        file_key = f"{unique_id}_{datetime.now().day}{datetime.now().month}.{file_extension}"
 
-        # Eliminar archivo temporal
-        # os.remove(tmp_path)
+        # Subir directamente los bytes a S3
+        s3_client.put_object(Bucket=AWS_BUCKET_NAME, Key=file_key, Body=contents)
+
+        logger.info("Archivo subido correctamente", extra={"ms": "upload_file_helper", "file_key": file_key})
 
         public_url = f"{AWS_S3_URL}/{AWS_BUCKET_NAME}/{file_key}"
         return public_url
