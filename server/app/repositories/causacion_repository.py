@@ -5,6 +5,7 @@ from app.models import CausacionContable as CausacionContableModel
 from app.shemas.shema_send_causacion import CausacionDTO, CausacionIDs
 from datetime import datetime
 from typing import List
+from app.logs.logs import logger
 import json
 
 class CausacionRepository:
@@ -33,7 +34,8 @@ class CausacionRepository:
                         report_str = json.dumps(response.json())
                         causacion.report_begranda = report_str[:250] 
                         causacion.begranda = datetime.now()
-
+                    else: 
+                        logger.error(f"Error al crear en begranda la causación contable de crédito: { report_str}")
                 db.commit()
                  
                 return {

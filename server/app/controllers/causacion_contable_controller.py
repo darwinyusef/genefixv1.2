@@ -1,11 +1,10 @@
 from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, status, Query
-from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 from sqlalchemy import extract
 from app.config.database import get_db
 from app.models import CausacionContable as CausacionContableModel
-from app.shemas.shema_causacion_contable import CausacionContableCreate, CausacionContableUpdate, CausacionContable
+from app.shemas.shema_causacion_contable import CausacionContableCreate, CausacionContableUpdate, CausacionContable, FinCausacionModel
 from app.models import Configuration as ConfigurationModel
 from app.shemas.shema_send_causacion import CausacionDTO, CausacionIDs, CausacionDTOEnding, CausacionDTOClose
 from app.repositories.causacion_repository import CausacionRepository
@@ -152,7 +151,7 @@ def increment_counter(db):
 
 # 🤓 ♦♣♠
 @router.post("/finalizarCausacion")
-async def read_causacion_and_update(db: Session = Depends(get_db), token: dict = Depends(get_current_user)):
+async def read_causacion_and_update(data: FinCausacionModel, db: Session = Depends(get_db), token: dict = Depends(get_current_user)):
     try:
         tockendecode = decode_token(token)
         causaciones = db.query(CausacionContableModel).filter(
@@ -168,15 +167,17 @@ async def read_causacion_and_update(db: Session = Depends(get_db), token: dict =
 
         documentos = []
         idCausaciones = []
-        
-        nuevo = await credito_causacion_contable(causaciones, db, token)
+        idcuenta = int(data.id_cuenta)
+        nuevo = await credito_causacion_contable(idcuenta, causaciones, db, token)
         if not nuevo:   
             logger.error("Error al crear la causación de crédito", extra={"causaciones": causaciones})
             raise HTTPException(status_code=500, detail="Error al crear la causación de crédito")
         
         
+       
         for causacion in causaciones:
-            causacion.estado = "finalizado" 
+            causacion.estado = "finalizado"
+            causacion.id_cuenta = idcuenta
             idCausaciones.append(CausacionIDs(id=causacion.id))
             documentos.append(CausacionDTO(
                 id_documento=causacion.id_documento,
@@ -184,7 +185,7 @@ async def read_causacion_and_update(db: Session = Depends(get_db), token: dict =
                 id_nit=causacion.id_nit,
                 fecha=str(causacion.fecha),
                 fecha_manual=str(causacion.fecha_manual),
-                id_cuenta="6074984",#causacion.id_cuenta,
+                id_cuenta=idcuenta,
                 valor=str(causacion.valor),
                 tipo=1,
                 concepto=causacion.concepto,
@@ -195,7 +196,7 @@ async def read_causacion_and_update(db: Session = Depends(get_db), token: dict =
         
         documentos.append(nuevo)
         idCausaciones.append(CausacionIDs(id=nuevo.id_documento))
-        # print(len(documentos), len(idCausaciones))
+        #print(len(documentos), len(idCausaciones))
         
         db.commit()
         # Enviamos a API externa
@@ -204,7 +205,7 @@ async def read_causacion_and_update(db: Session = Depends(get_db), token: dict =
             logger.error("Error al enviar las causaciones a la API externa", extra={"documentos": documentos, "idCausaciones": idCausaciones})
             raise HTTPException(status_code=500, detail="Error al enviar las causaciones a la API externa")
         
-        print(resultado_envio)
+        # print(resultado_envio)
         
         return { "ms": "ok", "description": "Desea enviar más causaciones o desea cerrar las actividades de este mes", "res_begranda": resultado_envio, "credito": "true" }
     except Exception as e:
@@ -213,6 +214,7 @@ async def read_causacion_and_update(db: Session = Depends(get_db), token: dict =
 
 
 async def credito_causacion_contable(
+    id_cuenta: int,
     documentos: List[CausacionDTOEnding], 
     db: Session = Depends(get_db), 
     token: dict = Depends(get_current_user)
@@ -232,13 +234,13 @@ async def credito_causacion_contable(
                 nit=base.nit,
                 fecha=fecha_formateada.isoformat() if isinstance(fecha_formateada, datetime) else str(fecha_formateada),
                 fecha_manual=base.fecha_manual.isoformat() if isinstance(base.fecha_manual, datetime) else str(base.fecha_manual),
-                id_cuenta="6074984",
+                id_cuenta=id_cuenta,
                 valor=total_valor,
                 tipo=1,
                 concepto="LEGALIZACIÓN DE CAJA MENOR",
                 documento_referencia=str(base.documento_referencia),
                 token=base.token,
-                extra="1002001",
+                extra=base.extra,
                 user_id=tockendecode["sub"],
                 estado="finalizado",
             )

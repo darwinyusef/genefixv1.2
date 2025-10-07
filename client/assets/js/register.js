@@ -100,7 +100,6 @@ if (formulario) {
 
                 if (response.ok) {                  
                     localStorage.setItem("registrado", "ok")
-                    debugger; 
                     window.location.href = "index.html"; 
 
                 } else {
