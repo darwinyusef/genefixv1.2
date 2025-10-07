@@ -246,7 +246,7 @@
                                     <input type="hidden" id="id_unico">
 
 
-                                    <div class="col mb-3">
+                                    <!--div class="col mb-3">
                                         <label for="inputCuentaSeleccionada" class="form-label">Código y nombre de la
                                             cuenta contable seleccionada:</label>
                                         <div class="input-group">
@@ -258,8 +258,51 @@
                                                 🔍
                                             </button>
                                         </div>
-                                    </div>
-
+                                    </div-->
+    <div class="col mt-3">
+        
+        <select class="form-control" id="id_cuenta">
+            <option selected disabled>Seleccione una opción</option>
+            <option value="5135">5135 - SERVICIOS</option>
+            <option value="513505">513505 - ASEO Y VIGILANCIA</option>
+            <option value="513515">513515 - ASISTENCIA TECNICA</option>
+            <option value="513525">513525 - ACUEDUCTO Y ALCANTARILLADO</option>
+            <option value="513530">513530 - ENERGIA ELECTRICA</option>
+            <option value="513535">513535 - TELEFONO</option>
+            <option value="513536">513536 - INTERNET</option>
+            <option value="513550">513550 - TRANSPORTE</option>
+            <option value="515505">515505 - ALOJAMIENTO Y MANUTENCION</option>
+            <option value="515515">515515 - PASAJES AEREOS</option>
+            <option value="515520">515520 - PASAJES TERRESTRES</option>
+            <option value="5235">5235 - SERVICIOS</option>
+            <option value="523505">523505 - ASEO Y VIGILANCIA</option>
+            <option value="523515">523515 - ASISTENCIA TECNICA</option>
+            <option value="523525">523525 - ACUEDUCTO Y ALCANTARILLADO</option>
+            <option value="523530">523530 - ENERGIA ELECTRICA</option>
+            <option value="523535">523535 - TELEFONO</option>
+            <option value="523536">523536 - INTERNET</option>
+            <option value="523550">523550 - TRANSPORTE</option>
+            <option value="523560">523560 - PROPAGANDA Y PUBLICIDAD</option>
+            <option value="5245">5245 - MANTENIMIENTO Y REPARACIONES</option>
+            <option value="524510">524510 - CONSTRUCCIONES Y EDIFICACIONES</option>
+            <option value="524515">524515 - MAQUINARIA Y EQUIPO</option>
+            <option value="524520">524520 - EQUIPO DE OFICINA</option>
+            <option value="524525">524525 - EQUIPO DE COMPUTACION Y COMUNICACION</option>
+            <option value="524530">524530 - EQUIPO MEDICO - CIENTIFICO</option>
+            <option value="524540">524540 - FLOTA Y EQUIPO DE TRANSPORTE</option>
+            <option value="5250">5250 - ADECUACION E INSTALACION</option>
+            <option value="525005">525005 - INSTALACIONES ELECTRICAS</option>
+            <option value="525010">525010 - ARREGLOS ORNAMENTALES</option>
+            <option value="525015">525015 - REPARACIONES LOCATIVAS</option>
+            <option value="5255">5255 - GASTOS DE VIAJE</option>
+            <option value="525505">525505 - ALOJAMIENTO Y MANUTENCION</option>
+            <option value="525515">525515 - PASAJES AEREOS</option>
+            <option value="525520">525520 - PASAJES TERRESTRES</option>
+            <option value="525530">525530 - PEAJES</option>
+            <option value="7335">7335 - SERVICIOS</option>
+            <option value="733550">733550 - TRANSPORTE</option>
+        </select>
+    </div>
 
 
 
@@ -311,14 +354,15 @@
                 <div class="modal-body">
                     <div class="mb-3">
                         <div class="row">
-                            <div class="col-6">
+                            <!--<div class="col-6">
                                 <label for="f_cuenta" class="form-label">Cuenta:</label>
                                 <input type="text" id="f_cuenta" class="form-control" placeholder="Número de cuenta">
                             </div>
                             <div class="col-6" style="margin-top: -10px;">
                                 <label for="f_nombre" class="form-label mt-2">Nombre:</label>
                                 <input type="text" id="f_nombre" class="form-control" placeholder="Nombre de la cuenta">
-                            </div>
+                            </div>-->
+			    <div class="col-12 mt-3">
                             <div class="col-12 text-right d-flex justify-content-end">
 
                             </div>
@@ -356,7 +400,7 @@
         // https://pipedream.com/
         // https://pepito.free.beeceptor.com
 
-        document.addEventListener('DOMContentLoaded', function () {
+        /*document.addEventListener('DOMContentLoaded', function () {
             const miModal = new bootstrap.Modal(document.getElementById('miModal'));
             document.getElementById('abrirModal').addEventListener('click', function () {
                 miModal.show();
@@ -364,13 +408,13 @@
             document.getElementById('close').addEventListener('click', function () {
                 miModal.hide();
             });
-        });
+        });*/
     </script>
     <link rel="stylesheet" href="assets/fonts/font-awsome-pro/css/pro.min.css">
     <link rel="stylesheet" href="assets/fonts/feather.css">
     <link rel="stylesheet" href="assets/fonts/fontawesome.css">
     <link rel="stylesheet" href="assets/css/customizer.css">
-    <script type="text/javascript" src="assets/js/causacionescontables/causacioncontable.js"></script>
+<!--    <script type="text/javascript" src="assets/js/causacionescontables/causacioncontable.js"></script> -->
     <script src="assets/js/actions.js"></script>
     <script src="assets/js/constantes.js"></script>
     <script src="assets/js/causacionescontables/inicio.js"></script>
@@ -380,7 +424,7 @@
 
         const inputFecha = document.getElementById('fecha_manual');
         const today = new Date();
-
+	let allExtra = [];
         // Primer día del mes actual
         // const primerDia = new Date(today.getFullYear(), today.getMonth(), 1);
         // Último día del mes actual
@@ -390,8 +434,17 @@
         // inputFecha.min = formato(primerDia);
         // inputFecha.max = formato(ultimoDia);
 
-        async function cargarCausacionContable(id, view) {
+	async function centrocostoall() {
+	    try {
+              const response = await fetch('assets/js/causacionescontables/centroCostos.json');
+              allExtra = await response.json();
+            } catch(e) {
+              console.log(e);
+            }
+       } centrocostoall()
 
+
+        async function cargarCausacionContable(id, view) {
             try {
                 const response = await fetch(`${host}/causacionContable/${id}`, {
                     headers: {
@@ -404,7 +457,8 @@
                 }
 
                 const data = await response.json();
-
+		console.log(data);
+                
                 // Asignar datos al formulario
                 document.getElementById("id_nit").value = data.id_nit || "";
                 document.getElementById("nit").value = data.nit || "";
@@ -412,15 +466,32 @@
                 document.getElementById("valor").value = data.valor || "";
                 document.getElementById("concepto").value = data.concepto || "";
                 document.getElementById("id_unico").value = data.id || "";
+		document.getElementById("id_cuenta").value = data.id_cuenta || "";
                 // Opcional: si "extra" y descripción vienen en la respuesta
+		console.log(data)
                 if (data.extra) {
                     document.getElementById("extra").value = data.extra;
                     const resultado = allExtra.find(item => item.codigo === data.extra);
-
+		    
                     if (resultado) {
-                        document.getElementById("descripcionText").textContent = resultado.descripcion;
+			document.getElementById("descripcionText").textContent = resultado.descripcion;
                     }
                 }
+
+
+const selectCuenta = document.getElementById("id_cuenta");
+const idCuenta = data.id_cuenta?.toString(); // por si viene como número
+
+const option = [...selectCuenta.options].find(opt => opt.value === idCuenta);
+
+if (option) {
+  selectCuenta.value = idCuenta;
+} else {
+  // Si no existe, agregarla al select para que se muestre
+  const nuevaOption = new Option(`${idCuenta} - (CUENTA NO LISTADA)`, idCuenta, true, true);
+  selectCuenta.add(nuevaOption);
+}		
+
 
                 if (view == 'true') {
                     document.querySelectorAll("input, select, textarea").forEach(el => {
@@ -437,7 +508,6 @@
 
             } catch (error) {
                 console.error("Error:", error);
-                alert("No se pudo cargar la información de causación contable.");
             }
         }
 

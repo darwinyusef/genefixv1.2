@@ -139,7 +139,7 @@ async function listadoCentroCostos() {
 
     data.forEach(cat => {
         if (cat.descripcion && cat.tipo && agrupadas.hasOwnProperty(cat.tipo)) {
-     agrupadas[cat.tipo].push(cat);
+            agrupadas[cat.tipo].push(cat);
         }
     });
 
@@ -152,7 +152,7 @@ async function listadoCentroCostos() {
 
         const hijos = agrupadas[principal.nombre];
         if (hijos && hijos.length > 0) {
-          hijos.forEach(hijo => {
+            hijos.forEach(hijo => {
                 const option = document.createElement('option');
                 option.value = hijo.codigo;
                 option.textContent = `${hijo.codigo} - ${hijo.nombre}`;
@@ -178,7 +178,6 @@ document.getElementById("btn_guardar").addEventListener("click", async (e) => {
         validarCampo('valor', 'El valor es obligatorio', 'num') &
         validarCampo('concepto', 'El concepto es obligatorio') &
         validarCampo('extra', 'El extra es obligatorio');
-        validarCampo('id_cuenta', 'La cuenta es obligatoria')
 
     if (!camposValidos) {
         console.log("Hay errores en el formulario.");
@@ -202,7 +201,6 @@ document.getElementById("btn_editar").addEventListener("click", async (e) => {
         validarCampo('valor', 'El valor es obligatorio', 'num') &
         validarCampo('concepto', 'El concepto es obligatorio') &
         validarCampo('extra', 'El extra es obligatorio');
-	validarCampo('id_cuenta', 'La cuenta es obligatoria')
 
     if (!camposValidos) {
         console.log("Hay errores en el formulario.");
@@ -210,7 +208,6 @@ document.getElementById("btn_editar").addEventListener("click", async (e) => {
     }
 
     datos = levantarData()
-	console.log(datos, "desde editar");
     console.log("Datos listos para enviar:", datos);
     actualizarDatos(datos, id_unico);
 
@@ -229,7 +226,7 @@ function levantarData() {
         nit: document.getElementById("nit").value.trim(),
         fecha: obtenerFechaActual().trim(),
         fecha_manual: document.getElementById("fecha_manual").value.trim(),
-        id_cuenta: document.getElementById("id_cuenta").value.trim(),
+        id_cuenta: 6068094,
         valor: valor,
         tipo: 1,
         concepto: document.getElementById("concepto").value.trim(),
@@ -286,7 +283,7 @@ function actualizarDatos(datos, id) {
             mensaje = "La causación se ha editado correctamente.";
             mostrarAlerta(mensaje, "success");
             setTimeout(() => {
-//                window.location.href = "causacioncontable_new.html"
+                window.location.href = "causacioncontable_new.html"
             }, 5000)
         })
         .catch((e) => {
@@ -347,12 +344,12 @@ const mostrarResultadosCuenta = (data) => {
     Object.values(data).forEach(item => {
         tabla += `
             <tr>
-                <td>
-	          <button id="item.id" class="btn btn-sm btn-primary" data-dismiss="modal"  onclick="seleccionarCuenta('${item.id}', '${item.cuenta}', '${item.nombre}');">Agregar</button>
-                </td>
-                <td>${item.cuenta}</td>
                 <td>${item.id}</td>
-                    <td>${item.nombre}</td>
+                <td>${item.cuenta}</td>
+                <td>${item.nombre}</td>
+                <td>
+                    <button class="btn btn-sm btn-primary" onclick="seleccionarCuenta('${item.id}', '${item.cuenta}', '${item.nombre}')">Agregar</button>
+                </td>
             </tr>
         `;
     });
@@ -366,6 +363,13 @@ const seleccionarCuenta = (id, cuenta, nombre) => {
     document.getElementById('inputCuentaSeleccionada').value = `${id} - ${cuenta} - ${nombre}`;
     document.getElementById('finalEnviadoCuentaSeleccionada').value = cuenta;
     finalEnviadoCuentaSeleccionada
-    const miModal = new bootstrap.Modal(document.getElementById('miModal'));
-    miModal.hide();
+    const modal = bootstrap.Modal.getInstance(document.getElementById('modalBuscarCuenta'));
+    modal.hide();
 };
+
+
+
+
+
+
+

@@ -8,8 +8,17 @@ function mostrarAlerta(mensaje, tipo) {
     setTimeout(() => {
         alerta.classList.remove('fade-in');
         alerta.classList.add('fade-out');
-        alerta.addClassList.remove('alert-success', 'alert-danger', 'alert-warning', 'alert-info', 'alert-primary', 'alert-secondary', 'alert-light', 'alert-dark');
-        alerta.addEventListener('animationend', () => {
+        alerta.classList.remove(
+			  'alert-success',
+			  'alert-danger',
+			  'alert-warning',
+			  'alert-info',
+			  'alert-primary',
+			  'alert-secondary',
+			  'alert-light',
+			  'alert-dark'
+			);
+		alerta.addEventListener('animationend', () => {
             alerta.style.display = 'none';
             alerta.classList.remove('fade-out');
         }, { once: true });

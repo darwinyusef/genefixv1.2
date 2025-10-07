@@ -1,4 +1,6 @@
-from pydantic import BaseModel
+from datetime import datetime
+from decimal import Decimal
+from pydantic import BaseModel, field_serializer
 
 
 class CausacionIDs(BaseModel):
@@ -16,3 +18,54 @@ class CausacionDTO(BaseModel):
     documento_referencia: str
     token: str | None
     extra: str
+    
+    model_config = {
+        "from_attributes": True  # 👈 reemplaza orm_mode en v2
+    }
+    
+class CausacionDTOEnding(BaseModel):
+    id_documento: int
+    id_comprobante: int
+    id_nit: int
+    nit: int
+    fecha: str
+    fecha_manual: str
+    id_cuenta: int
+    valor: str
+    tipo: int
+    concepto: str
+    documento_referencia: str
+    token: str | None
+    extra: str
+    
+    model_config = {
+        "from_attributes": True  # 👈 reemplaza orm_mode en v2
+    }
+    
+class CausacionDTOClose(BaseModel):
+    id_documento: int
+    id_comprobante: int
+    id_nit: int
+    fecha: datetime
+    fecha_manual: datetime
+    id_cuenta: int
+    valor: float
+    tipo: int
+    concepto: str
+    documento_referencia: str
+    token: str | None
+    extra: str
+    
+    model_config = {
+        "from_attributes": True  # 👈 reemplaza orm_mode en v2
+    }
+
+      # 👇 Serializadores para JSON
+    @field_serializer("fecha", "fecha_manual")
+    def serialize_dt(self, v: datetime, _info):
+        return v.isoformat()
+
+    @field_serializer("valor")
+    def serialize_decimal(self, v: Decimal, _info):
+        return str(v)
+    

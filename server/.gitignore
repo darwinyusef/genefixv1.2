@@ -1,6 +1,11 @@
 venv
-_pycache_
+__pycache__
 .env
 */.env
 env
 .env
+
+*__pycache__
+app/__pycache__
+logs
+*.log
