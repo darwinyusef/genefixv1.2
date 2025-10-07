@@ -1,9 +1,10 @@
 from typing import List
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from fastapi import File, UploadFile, Form
 from fastapi.responses import JSONResponse
 from mailtrap import MailtrapClient
 from jinja2 import Environment, FileSystemLoader
+from app.logs.logs import logger
 import httpx
 import boto3
 import uuid
@@ -34,20 +35,7 @@ s3_client = boto3.client(
     aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
     region_name=AWS_DEFAULT_REGION
 )
-
-# @router.post("/uploadfile/", tags=['Send'])
-async def upload_file(file: UploadFile = File(...)):
-    try:
-        contents = await file.read()
-        file_extension = file.filename.split(".")[-1] if "." in file.filename else ""
-        unique_id = str(uuid.uuid4())
-        file_key = f"{unique_id}_{datetime.datetime.now().day}{datetime.datetime.now().month}.{file_extension}"
-        s3_client.put_object(Bucket=AWS_BUCKET_NAME, Key=file_key, Body=contents)
-        public_url = f"{AWS_S3_URL}/{AWS_BUCKET_NAME}/{file_key}"
-        return JSONResponse(content={"filename": file.filename, "upload_code": unique_id, "url": public_url})
-    except Exception as e:
-        return JSONResponse(content={"error": str(e)}, status_code=500)
-    
+   
 
 # Configuración de Jinja2
 TEMPLATE_PATH = "templates"

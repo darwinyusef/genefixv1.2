@@ -4,3 +4,8 @@ __pycache__
 */.env
 env
 .env
+
+*__pycache__
+app/__pycache__
+logs
+*.log

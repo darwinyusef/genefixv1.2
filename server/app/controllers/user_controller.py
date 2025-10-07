@@ -58,8 +58,8 @@ def activate_user(user: UserRolActive, db: Session = Depends(get_db), token: dic
 
 
 # Editar usuario
-@router.put("/users/{user_id}", tags=["Users"], response_model=UserOut)
-def update_user(user_id: int, user_update: UserUpdate, db: Session = Depends(get_db), token: dict = Depends(get_current_user)):
+@router.put("/usersa/{user_id}", tags=["Users"], response_model=UserOut)
+def update_user2(user_id: int, user_update: UserUpdate, db: Session = Depends(get_db), token: dict = Depends(get_current_user)):
     tockendecode = decode_token(token)
     db_user = db.query(User).filter(User.id == tockendecode['sub']).first()
     if tockendecode['user_data']["rol"] != "admin":
@@ -72,6 +72,25 @@ def update_user(user_id: int, user_update: UserUpdate, db: Session = Depends(get
         setattr(db_user, key, value)
     db_user.updated_at = datetime.now(timezone.utc)
 
+    db.commit()
+    db.refresh(db_user)
+    return db_user
+
+@router.put("/users/{user_id}", tags=["Users"], response_model=UserOut)
+def update_user(
+    user_id: int,
+    user_update: UserUpdate,
+    db: Session = Depends(get_db)
+):
+    db_user = db.query(User).filter(User.id == user_id).first()
+
+    if not db_user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    for key, value in user_update.model_dump(exclude_unset=True).items():
+        setattr(db_user, key, value)
+
+    db_user.updated_at = datetime.now(timezone.utc)
     db.commit()
     db.refresh(db_user)
     return db_user

@@ -22,7 +22,11 @@ ACCESS_TOKEN_EXPIRE_MINUTES = os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES")
 # Se define el esquema de seguridad
 
 # Instancia de FastAPI
-app = FastAPI()
+app = FastAPI(
+    docs_url="/genefix-dc",       # Swagger UI aquí
+    redoc_url=None,               # Opcional: desactiva ReDoc si no lo usás
+    openapi_url="/genefix-openapi.json"  # También podés cambiar la ruta del OpenAPI schema
+)
 
 # Gestar Configuracion OpenAPI
 app.openapi = lambda: custom_openapi(app)
@@ -30,7 +34,7 @@ app.openapi = lambda: custom_openapi(app)
 # CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Restringe esto en producción
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
