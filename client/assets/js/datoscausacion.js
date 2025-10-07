@@ -1,5 +1,6 @@
 
-const API_URL = `https://begranda.com/equilibrium2/public/api/account?eq-auxiliar=1&key=${tocken}`;
+const user_fin = JSON.parse(localStorage.getItem("user"))
+const API_URL = `https://begranda.com/equilibrium2/public/api/account?eq-auxiliar=1&key=${user_fin.begranda_app}`;
 
 let finalCajas = [];
 
@@ -13,13 +14,13 @@ const cajas = [
 ];
 
 async function cargarCuentasCache() {
-    const cache = localStorage.getItem("cuentasCache");
+    const cache = localStorage.getItem("cuentas_cache");
     if (cache) {
         try {
             return JSON.parse(cache);
         } catch (err) {
             console.warn("⚠️ Cache corrupto, recargando...", err);
-            localStorage.removeItem("cuentasCache");
+            localStorage.removeItem("cuentas_cache");
         }
     }
 
@@ -29,7 +30,7 @@ async function cargarCuentasCache() {
         const data = await response.json();
 
         const cuentas = Array.isArray(data.data) ? data.data : Object.values(data.data);
-        localStorage.setItem("cuentasCache", JSON.stringify(cuentas));
+        localStorage.setItem("cuentas_cache", JSON.stringify(cuentas));
 
         return cuentas;
     } catch (error) {
@@ -55,5 +56,7 @@ async function validarCajas(cajas, cuentas) {
     const cuentas = await cargarCuentasCache();
     finalCajas = await validarCajas(cajas, cuentas);
 
-    console.log("✅ Resultado final:", finalCajas);
+    // CÓDIGO CON console.table()
+    console.warn("✅ Resultado final:");
+    console.table(finalCajas);
 })();

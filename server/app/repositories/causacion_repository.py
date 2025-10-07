@@ -9,10 +9,10 @@ from app.logs.logs import logger
 import json
 
 class CausacionRepository:
-
+#http://begranda.com/
     @staticmethod
     async def enviar_causaciones_a_api(documentos: List[CausacionDTO], causaciones, token: str, db: Session):
-        url = f"http://begranda.com/equilibrium2/public/api/document?key={token}"
+        url = f"equilibrium2/public/api/document?key={token}"
 
         try:
             async with httpx.AsyncClient() as client:

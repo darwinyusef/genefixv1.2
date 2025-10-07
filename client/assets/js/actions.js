@@ -1,3 +1,6 @@
+const us = JSON.parse(localStorage.getItem("user"));
+
+
 function mostrarAlerta(mensaje, tipo) {
     const alerta = document.getElementById('alerta');
     alerta.textContent = mensaje;
@@ -9,16 +12,16 @@ function mostrarAlerta(mensaje, tipo) {
         alerta.classList.remove('fade-in');
         alerta.classList.add('fade-out');
         alerta.classList.remove(
-			  'alert-success',
-			  'alert-danger',
-			  'alert-warning',
-			  'alert-info',
-			  'alert-primary',
-			  'alert-secondary',
-			  'alert-light',
-			  'alert-dark'
-			);
-		alerta.addEventListener('animationend', () => {
+            'alert-success',
+            'alert-danger',
+            'alert-warning',
+            'alert-info',
+            'alert-primary',
+            'alert-secondary',
+            'alert-light',
+            'alert-dark'
+        );
+        alerta.addEventListener('animationend', () => {
             alerta.style.display = 'none';
             alerta.classList.remove('fade-out');
         }, { once: true });
@@ -100,19 +103,18 @@ fetch('assets/js/menu.json') // Cambiá la ruta si es diferente
     .then(data => {
 
         const navbar = document.getElementById('pc-navbar');
+        if (us) {
+            data.menu.forEach(item => {
+                if (us.rol == "user" && item.rol == "user") {
+                    activationROl(item, navbar)
+                }
 
-        const us = JSON.parse(localStorage.getItem("user"));
+                if (us.rol == "admin") {
+                    activationROl(item, navbar)
+                }
 
-        data.menu.forEach(item => {
-            if(us.rol == "user" && item.rol == "user") {
-                activationROl(item, navbar)
-            } 
-
-            if(us.rol == "admin") {
-                activationROl(item, navbar)
-            }
-
-        });
+            });
+        }
     })
     .catch(error => {
         console.error('Error cargando el menú:', error);
@@ -121,12 +123,13 @@ fetch('assets/js/menu.json') // Cambiá la ruta si es diferente
 
 
 function defineTopRol() {
-    const us = JSON.parse(localStorage.getItem("user"));
     document.querySelector(".pc-head-link .user-name").textContent = us.name
-    document.querySelector(".pc-head-link .user-desc").textContent = us.rol == "admin" ? "Administrador" : "Usuario" 
+    document.querySelector(".pc-head-link .user-desc").textContent = us.rol == "admin" ? "Administrador" : "Usuario"
 }
 
-defineTopRol()  
+if (us) {
+    defineTopRol()
+}
 
 
 function back() {

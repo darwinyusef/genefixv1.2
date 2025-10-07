@@ -395,7 +395,6 @@
 
     <script src="assets/js/constantes.js"></script>
     <script src="assets/js/actions.js"></script>
-    <script src="assets/js/datoscausacion.js"></script>
     <script src="assets/js/logout.js"></script>
 
     <!-- PDF.js desde CDN -->
@@ -415,7 +414,7 @@
         })
             .then(response => response.json())
             .then(data => {
-                console.log(data);
+                // console.log(data);
                 if (data.status_code == 204) {
                     document.getElementById('enviarArchivoModal').hidden = true;
                     document.getElementById('primera').hidden = false;
@@ -566,7 +565,7 @@
             }
 
             for (let pair of formData.entries()) {
-                console.log(pair[0], pair[1].name, pair[1].type, pair[1].size);
+                console.warn(pair[0], pair[1].name, pair[1].type, pair[1].size);
             }
             fetch(`${host}/activarCausacion`, {
                 method: 'POST',
@@ -577,7 +576,7 @@
             })
                 .then(response => response.json())
                 .then(data => {
-                    console.log(data)
+                    // console.log(data)
                     // Manejar la respuesta del servidor
                     if (data.ms == 'ok') {
                         mostrarAlerta("Archivo enviado exitosamente.", "success");

@@ -21,7 +21,7 @@ inputNit.addEventListener('input', async function () {
                     // No encontrado
                     this.classList.remove('is-valid');
                     this.classList.add('is-invalid');
-                    console.log('NIT no encontrado: Si desea ingresarlo debe comunicarse con el administrador del sistema');
+                    console.warn('NIT no encontrado: Si desea ingresarlo debe comunicarse con el administrador del sistema');
                 }
 
             } else {
@@ -79,7 +79,7 @@ function validarCampo(id, mensaje, tipo = 'text') {
         valor = parseFloat(numeroEntero).toFixed(2)
     }
 
-    console.log(valor);
+    // console.log(valor);
     if (valor === "" || (tipo === 'num' && isNaN(valor))) {
         campo.classList.add('is-invalid');
 
@@ -164,12 +164,12 @@ document.getElementById("btn_guardar").addEventListener("click", async (e) => {
         validarCampo('extra', 'El extra es obligatorio');
 
     if (!camposValidos) {
-        console.log("Hay errores en el formulario.");
+        console.warn("Hay errores en el formulario.");
         return;
     }
     
     datos = levantarData()
-    console.log("Datos listos para enviar:", datos);
+    console.warn("Datos listos para enviar:", datos);
     enviarDatos(datos);
 
 })
@@ -187,12 +187,12 @@ document.getElementById("btn_editar").addEventListener("click", async (e) => {
         validarCampo('extra', 'El extra es obligatorio');
 
     if (!camposValidos) {
-        console.log("Hay errores en el formulario.");
+        console.warn("Hay errores en el formulario.");
         return;
     }
     
     datos = levantarData()
-    console.log("Datos listos para enviar:", datos);
+    console.warn("Datos listos para enviar:", datos);
     actualizarDatos(datos, id_unico);
 
 })
@@ -244,7 +244,7 @@ function enviarDatos(datos) {
             })
             .catch((e) => {
                 mostrarAlerta("Error en la petición id: " + e, "danger");
-                console.log(e)
+                console.error(e)
             });
 }
 
@@ -272,7 +272,7 @@ function actualizarDatos(datos, id) {
             })
             .catch((e) => {
                 mostrarAlerta("Error en la petición id: " + e, "danger");
-                console.log(e)
+                console.error(e)
             });
 }
 
