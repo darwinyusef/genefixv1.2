@@ -373,6 +373,7 @@
     <script src="assets/js/constantes.js"></script>
     <script src="assets/js/actions.js"></script>
     <script src="assets/js/datoscausacion.js"></script>
+    
     <script src="assets/js/logout.js"></script>
     <script>
         const n = 50; // Define el número de repeticiones
@@ -385,7 +386,7 @@
         })
             .then(response => response.json())
             .then(data => {
-                console.log(data);
+                // console.log(data);
                 if (data.content == 0) {
                     mostrarAlerta(`Actualmente no cuenta con causaciones a finalizar se volvera al inicio`, "danger");
                     setTimeout(() => {
@@ -473,13 +474,13 @@
             const codigoSeleccionado = valorSeleccionado;
 
             let cuentas = [];
-            const cache = localStorage.getItem("cuentasCache");
+            const cache = localStorage.getItem("cuentas_cache");
             if (cache) {
                 try {
                     cuentas = JSON.parse(cache);
                 } catch (e) {
                     console.warn("Cache corrupto, recargando...");
-                    localStorage.removeItem("cuentasCache");
+                    localStorage.removeItem("cuentas_cache");
                     cuentas = await cargarCuentasCache();
                 }
             } else {

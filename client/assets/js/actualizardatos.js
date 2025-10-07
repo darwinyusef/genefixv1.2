@@ -15,7 +15,7 @@ const enviarDatos = async (datos) => {
         if (response.ok && response.status === 200) {
             const data = await response.json();
             if (data.status == "success") {
-                console.log('Respuesta del servidor:', data.data);
+                console.warn('Respuesta del servidor:', data.data);
             } else {
                 console.error('Error en la respuesta del servidor');
             }

@@ -266,22 +266,23 @@
                             <input type="text" id="nit" value="123456"> -->
 
                             <label for="anio">Año:</label>
-                            <input type="number" id="anio" value="2025" min="2000" max="2099">
+                            <input type="number" id="anio" value="" min="1930" max="2099">
 
                             <label for="mes">Mes:</label>
                             <select id="mes">
+                                <option disabled selected value="">Seleccione...</option>
                                 <option value="enero">Enero</option>
                                 <option value="febrero">Febrero</option>
                                 <option value="marzo">Marzo</option>
                                 <option value="abril">Abril</option>
-                                <option value="mayo" selected>Mayo</option>
-				<option value="junio" selected>Junio</option>
-				<option value="julio" selected>Julio</option> 
-				<option value="agosto" selected>Agosto</option>
-				<option value="septiembre" selected>Septiembre</option>
-				<option value="octubre" selected>Octubre</option>
-				<option value="noviembre" selected>Noviembre</option>
-				<option value="diciembre" selected>Diciembre</option>
+                                <option value="mayo">Mayo</option>
+                                <option value="junio">Junio</option>
+                                <option value="julio">Julio</option>
+                                <option value="agosto">Agosto</option>
+                                <option value="septiembre">Septiembre</option>
+                                <option value="octubre">Octubre</option>
+                                <option value="noviembre">Noviembre</option>
+                                <option value="diciembre">Diciembre</option>
 
 
                                 <!-- Agrega más meses si es necesario -->
@@ -297,7 +298,8 @@
                                         <th>Valor</th>
                                         <th>Cuenta</th>
                                         <th>Estado Begranda</th>
-                                        <th>Extra</th>
+                                        <th>ID Cuenta</th>
+                                        <th>Tipo Cuenta</th>
                                         <th>Documento</th>
                                         <th>Concepto</th>
                                     </tr>
@@ -344,14 +346,29 @@
 
     <script>
         let skip = 0;
-        const limit = 10;
+        const limit = 100;
 
         function loadData() {
-            // const nit = document.getElementById("nit").value;
             const anio = document.getElementById("anio").value;
             const mes = document.getElementById("mes").value;
 
-            fetch(`${host}/causacionesFinalContables?type=finalizado&skip=${skip}&limit=${limit}&anio=${anio}&mes=${mes}`, {
+            const params = new URLSearchParams({
+                type: "finalizado",
+                skip: skip,
+                limit: limit,
+            });
+
+            if (anio) {
+                params.append('anio', anio);
+            }
+
+            if (mes) {
+                params.append('mes', mes);
+            }
+
+            const url = `${host}/causacionesFinalContables?${params.toString()}`;
+
+            fetch(url, {
                 headers: {
                     "accept": "application/json",
                     "Authorization": "Bearer " + token
@@ -361,8 +378,8 @@
                 .then(data => {
                     const tbody = document.querySelector("#data-table tbody");
                     tbody.innerHTML = "";
-		    console.log(data);
                     data.data.forEach(item => {
+                        //console.log(item)
                         const fecha = new Date(item.begranda);
                         const formato = String(fecha.getDate()).padStart(2, '0') + "/" +
                             String(fecha.getMonth() + 1).padStart(2, '0') + "/" +
@@ -370,19 +387,30 @@
                             String(fecha.getHours()).padStart(2, '0') + ":" +
                             String(fecha.getMinutes()).padStart(2, '0');
                         const reporte = JSON.parse(item.report_begranda);
+
+                        const finextra = item.extra;
+                        // 1. Eliminar los prefijos de forma segura
+                        const sinPrefijos = finextra
+                            // Elimina "Id de la cuenta: "
+                            .replace("Id de la cuenta: ", "")
+                            // Elimina " Tipo de la cuenta: " (nota el espacio inicial para no afectar el punto y coma)
+                            .replace(" Tipo de la cuenta: ", "");
+
+                        console.log();
                         const row = `
-            <tr>
-              <td>${item.id}</td>
-              <td>${new Date(item.fecha).toLocaleDateString()}</td>
-              <td>${item.valor}</td>
-              <td>${item.id_cuenta}</td>
-              <td>${formato} - ${reporte.message} </td>
-              <td>${item.extra}</td>
-              <td><a href="${item.documento_referencia}" target="_blank">PDF</a></td>
-              <td>${typeof item.concepto === 'string' && item.concepto.length > 100
+                            <tr>
+                            <td>${item.id}</td>
+                            <td>${new Date(item.fecha).toLocaleDateString()}</td>
+                            <td>${item.valor}</td>
+                            <td>${item.id_cuenta}</td>
+                            <td>${formato} - ${reporte ? reporte.message : ""} </td>
+                            <td>${sinPrefijos.split(";")[0]}</td>
+                            <td>${sinPrefijos.split(";")[1]}</td>
+                            <td><a href="${item.documento_referencia}" target="_blank">PDF</a></td>
+                            <td>${typeof item.concepto === 'string' && item.concepto.length > 100
                                 ? item.concepto.substring(0, 100) + "..."
                                 : item.concepto}</td>
-            </tr>`;
+                            </tr>`;
                         tbody.insertAdjacentHTML("beforeend", row);
                     });
 
@@ -504,18 +532,15 @@
         `;
         document.head.appendChild(style);
 
-        // Ejemplo de uso con tu JSON:
         const jsonData = [
             { "anio": "2025", "mes": "febrero" },
-            { "anio": "2025", "mes": "marzo" },
-            { "anio": "2025", "mes": "abril" }, // Agregué un ejemplo más
         ];
 
         const picker = JsonMonthYearPicker(jsonData, (selected) => {
-            console.log("Mes/Año seleccionado (JSON):", selected);
+            console.warn("Mes/Año seleccionado (JSON):", selected);
         });
 
-        console.log(picker);
+        // console.log(picker);
 
         document.body.appendChild(picker);
 

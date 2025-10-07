@@ -33,7 +33,7 @@ document.getElementById('btn_login').addEventListener('click', async () => {
                 return
             }
             if (!response.ok) {
-                console.log(response);
+                // console.log(response);
 
                 if(response.statusText == "Unauthorized") {
                     alert('Actualmente este usuario no ha sido activado y no tiene permisos de ingreso');
@@ -46,7 +46,7 @@ document.getElementById('btn_login').addEventListener('click', async () => {
             const data = await response.json();
             
             localStorage.setItem('access_token', data.access_token);
-            console.log('Token guardado en localStorage:', data.access_token);
+            // console.log('Token guardado en localStorage:', data.access_token);
             
             // Aquí, guardamos los datos del usuario en localStorage
             localStorage.setItem('user', JSON.stringify(data.user));

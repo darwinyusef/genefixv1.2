@@ -467,7 +467,7 @@
                     const response = await fetch('assets/js/causacionescontables/centroCostos.json');
                     allExtra = await response.json();
                 } catch (e) {
-                    console.log(e);
+                    console.error(e);
                 }
             } centrocostoall()
 

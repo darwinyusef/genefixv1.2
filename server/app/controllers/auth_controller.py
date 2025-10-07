@@ -78,7 +78,8 @@ async def login(login_data: LoginRequest, response: Response, db: Session = Depe
         "rol": db_user.rol,
         "password": None,
         "approval_token": csrf_token,
-        "api": os.getenv("API_VERSION")
+        "api": os.getenv("API_VERSION"),
+        "begranda_app": os.getenv("TOKEN_BEGRANDA")
     }
     
     if "password" in login_data:
@@ -128,7 +129,8 @@ async def login(login_data: LoginRequest, response: Response, db: Session = Depe
         "username": db_user.username,
         "rol": db_user.rol,
         "approval_token": csrf_token,
-        "api": os.getenv("API_VERSION")
+        "api": os.getenv("API_VERSION"),
+        "begranda_app": os.getenv("TOKEN_BEGRANDA")
     }
 
     response.set_cookie("csrf_token", csrf_token, httponly=True, samesite="Lax")

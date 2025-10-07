@@ -57,40 +57,53 @@ def read_causacion(type: str = Query("entregado"), db: Session = Depends(get_db)
     return causaciones
 
 
-# 🤓 ♦♣♠
 @router.get("/causacionesFinalContables")
 def read_causacion(
-    type: str = Query("finalizado"),  
-    skip: int = Query(0, ge=0),
-    limit: int = Query(10, ge=1), 
-    nit: Optional[int] = Query(None),
-    anio: Optional[str] = Query(None),
-    mes: Optional[str] = Query(None),
+    type: str = Query("finalizado", description="Estado de la causación a buscar."), 
+    skip: int = Query(0, ge=0, description="Número de registros a omitir (offset)."),
+    limit: int = Query(10, ge=1, description="Número máximo de registros a devolver."), 
+    nit: Optional[int] = Query(None, description="Filtrar por número de identificación (NIT)."),
+    anio: Optional[str] = Query(None, description="Filtrar por año."),
+    mes: Optional[str] = Query(None, description="Filtrar por mes (en texto)."),
     db: Session = Depends(get_db), 
     token: dict = Depends(get_current_user)
     ):
+    
     tockendecode = decode_token(token)
+    user_id = tockendecode.get("sub")
+    
     query = db.query(CausacionContableModel).filter(
         CausacionContableModel.estado == type,
-        CausacionContableModel.user_id == tockendecode["sub"]
+        CausacionContableModel.user_id == user_id
     )
-    
+
     if anio and mes:
-        query = query.filter(
-                        extract('year', CausacionContableModel.fecha) == int(anio),
-                        extract('month', CausacionContableModel.fecha) == int(convertir_mes_a_numero(mes))
-                        )
-    
+        try:
+            mes_numero = convertir_mes_a_numero(mes)
+            query = query.filter(
+                extract('year', CausacionContableModel.fecha) == int(anio),
+                extract('month', CausacionContableModel.fecha) == int(mes_numero)
+            )
+        except ValueError:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f"El valor '{mes}' no es un mes válido."
+            )
+
     if nit: 
-        query = query.filter(
-                        CausacionContableModel.nit == nit
-                        )
-        
-    total = query.count()
+        query = query.filter(CausacionContableModel.nit == nit)
+    
+    total = query.count() 
     resultados = query.offset(skip).limit(limit).all()
     
     if total == 0:
-        return { "status_code": status.HTTP_204_NO_CONTENT, "content":0 }
+        return { 
+            "total": 0, 
+            "data": [],
+            "skip": skip,
+            "limit": limit
+        }
+    
     return {
         "total": total,
         "data": resultados,
