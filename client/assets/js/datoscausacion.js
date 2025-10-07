@@ -1,5 +1,5 @@
 
-const API_URL = "https://begranda.com/equilibrium2/public/api/account?eq-auxiliar=1&key=spHAKxLMBdPeBi4yZjKTidii8GTC35xEe4516e191c316c73f2bc668f9a1bfb8cI4mvtpOeVkU2TzuBVtGhpdsigIVyO6VG";
+const API_URL = `https://begranda.com/equilibrium2/public/api/account?eq-auxiliar=1&key=${tocken}`;
 
 let finalCajas = [];
 

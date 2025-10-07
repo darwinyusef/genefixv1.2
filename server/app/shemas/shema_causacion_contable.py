@@ -38,7 +38,6 @@ class CausacionContable(CausacionContableBase):
     class Config:
         from_attributes = True
 
-
 class FinCausacionModel(BaseModel):
     id_cuenta: int
     

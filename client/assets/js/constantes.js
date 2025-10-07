@@ -2,8 +2,6 @@
 const host = "http://localhost:8000/api/v1"
 // const host = "http://190.90.5.243/api/v1"
 const token = localStorage.getItem("access_token");
-const apibegrandaAllcuentas = "https://begranda.com/equilibrium2/public/api/account?eq-auxiliar=1&key=spHAKxLMBdPeBi4yZjKTidii8GTC35xEe4516e191c316c73f2bc668f9a1bfb8cI4mvtpOeVkU2TzuBVtGhpdsigIVyO6VG"
-
 
 fetch(`${host}/profile`, {
         headers: {
