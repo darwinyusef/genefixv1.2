@@ -126,7 +126,7 @@ function validarConcepto() {
     }
 }
 
-async function listadoCentroCostos() {
+/* async function listadoCentroCostos__old() {
     const response = await fetch('assets/js/causacionescontables/centroCostos.json');
     const data = await response.json();
 
@@ -167,7 +167,52 @@ async function listadoCentroCostos() {
     });
 
 
-} listadoCentroCostos()
+} listadoCentroCostos()*/
+
+async function listadoCentroCostos() {
+    const response = await fetch('assets/js/causacionescontables/centroCostos.json');
+    const data = await response.json();
+
+    // Categorías principales sin descripción
+    const categoriasPrincipales = data.filter(cat => cat.descripcion === "");
+
+    // Agrupar hijos por categoría principal
+    const agrupadas = Object.fromEntries(
+        categoriasPrincipales.map(p => [p.nombre, []])
+    );
+
+    data.forEach(cat => {
+        if (cat.tipo && agrupadas.hasOwnProperty(cat.tipo)) {
+            agrupadas[cat.tipo].push(cat);
+        }
+    });
+
+    const select = document.getElementById('extra');
+    select.innerHTML = ''; // limpia antes de llenar
+
+    // Crear un listado plano de opciones
+    for (const principal of categoriasPrincipales) {
+        const hijos = agrupadas[principal.nombre] || [];
+        hijos.forEach(hijo => {
+            const option = document.createElement('option');
+            option.value = hijo.codigo;
+            option.textContent = `${hijo.codigo} - ${principal.nombre} / ${hijo.nombre}`;
+            select.appendChild(option);
+        });
+    }
+    // Mostrar descripción al cambiar selección
+    select.addEventListener('change', function (e) {
+        const seleccionado = data.find(item => item.codigo === e.target.value);
+        descripcion.textContent = seleccionado
+            ? seleccionado.descripcion || 'Descripción no disponible.'
+            : 'Descripción no disponible.';
+    });
+}
+
+listadoCentroCostos();
+
+
+
 
 document.getElementById("btn_guardar").addEventListener("click", async (e) => {
     e.preventDefault();
@@ -178,7 +223,7 @@ document.getElementById("btn_guardar").addEventListener("click", async (e) => {
         validarCampo('valor', 'El valor es obligatorio', 'num') &
         validarCampo('concepto', 'El concepto es obligatorio') &
         validarCampo('extra', 'El extra es obligatorio');
-        validarCampo('id_cuenta', 'La cuenta es obligatoria')
+    validarCampo('id_cuenta', 'La cuenta es obligatoria')
 
     if (!camposValidos) {
         console.log("Hay errores en el formulario.");
@@ -202,7 +247,7 @@ document.getElementById("btn_editar").addEventListener("click", async (e) => {
         validarCampo('valor', 'El valor es obligatorio', 'num') &
         validarCampo('concepto', 'El concepto es obligatorio') &
         validarCampo('extra', 'El extra es obligatorio');
-	validarCampo('id_cuenta', 'La cuenta es obligatoria')
+    validarCampo('id_cuenta', 'La cuenta es obligatoria')
 
     if (!camposValidos) {
         console.log("Hay errores en el formulario.");
@@ -210,7 +255,7 @@ document.getElementById("btn_editar").addEventListener("click", async (e) => {
     }
 
     datos = levantarData()
-	console.log(datos, "desde editar");
+    console.log(datos, "desde editar");
     console.log("Datos listos para enviar:", datos);
     actualizarDatos(datos, id_unico);
 
@@ -229,13 +274,13 @@ function levantarData() {
         nit: document.getElementById("nit").value.trim(),
         fecha: obtenerFechaActual().trim(),
         fecha_manual: document.getElementById("fecha_manual").value.trim(),
-        id_cuenta: document.getElementById("id_cuenta").value.trim(),
+        id_cuenta: 0, // este es el id de la cuenta va vacio para que al cerrarse se genere
         valor: valor,
         tipo: 1,
         concepto: document.getElementById("concepto").value.trim(),
         documento_referencia: null, // aqui va la url del archivo
         token: null,
-        extra: document.getElementById("extra").value.trim() // aqui van los centros de costos
+        extra: "Id de la cuenta: " + document.getElementById("extra").value.trim() + "; Tipo de la cuenta: " + document.getElementById("id_cuenta").value.trim()// aqui van los centros de costos
     };
     return datos
 }
@@ -286,7 +331,7 @@ function actualizarDatos(datos, id) {
             mensaje = "La causación se ha editado correctamente.";
             mostrarAlerta(mensaje, "success");
             setTimeout(() => {
-//                window.location.href = "causacioncontable_new.html"
+                //                window.location.href = "causacioncontable_new.html"
             }, 5000)
         })
         .catch((e) => {
@@ -369,3 +414,5 @@ const seleccionarCuenta = (id, cuenta, nombre) => {
     const miModal = new bootstrap.Modal(document.getElementById('miModal'));
     miModal.hide();
 };
+
+

@@ -67,7 +67,7 @@
         }
 
         .clearbadge {
-            zoom: 0.6;
+            zoom: 1;
         }
 
         @media (max-width: 768px) {
@@ -288,67 +288,74 @@
                 <div class="col-sm-12">
                     <div class="card">
                         <div class="card-header">
-                            <h5>Habilitar Listado de causaciones <button type="button"
-                                    class="btn btn-primary clearbadge">
+                            <div>
+                                <h5>Habilitar Listado de causaciones</h5>
+                                <br>
+
+                                <button type="button" class="btn btn-primary clearbadge">
                                     Usted ha creado <span id="total" class="badge badge-light">0</span>
-                                </button> <a href="causacioncontable_form.html?view=create" type="button"
+                                </button>
+
+
+                                <a href="causacioncontable_form.html?view=create" type="button"
                                     class="btn btn-secondary clearbadge"> Crear Nuevo Registro
                                 </a>
+                            </div>
 
-                            </h5>
+                            <div class="card-body">
+                                <div class="row" id="contenedor-cards"></div>
+
+                                <div class="row">
+                                    <div class="col-md-12 homecausation">
+                                        <!-- Botón para abrir el modal -->
+                                        <button type="button" class="btn btn-primary" data-toggle="modal"
+                                            data-target="#exampleModal">
+                                            Seleccionar Caja Menor y finalizar
+                                        </button>
+
+                                    </div>
+                                </div>
+
+
+                            </div>
                         </div>
-                        <div class="card-body">
-                            <div class="row" id="contenedor-cards"></div>
+                    </div>
 
-                            <div class="row">
-                                <div class="col-md-12 homecausation">
-                                    <!-- Botón para abrir el modal -->
-                                    <button type="button" class="btn btn-primary" data-toggle="modal"
-                                        data-target="#exampleModal">
-                                        Seleccionar Caja Menor y finalizar
+                    <!-- Modal -->
+                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Selecciona una Caja Menor</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                                        <span aria-hidden="true">&times;</span>
                                     </button>
-
+                                </div>
+                                <div class="modal-body">
+                                    <!-- Aquí se cargan las opciones -->
+                                    <form id="formCajas">
+                                        <div id="listaCajas"></div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                    <button id="finalizarTodo" type="button" class="btn btn-primary text-center"
+                                        data-dismiss="modal">
+                                        Cerrar causaciones disponibles<span id="total2"
+                                            class="badge badge-light">0</span>
+                                    </button>
                                 </div>
                             </div>
-
-
                         </div>
                     </div>
+
+
                 </div>
-
-                <!-- Modal -->
-                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-                    aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">Selecciona una Caja Menor</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <!-- Aquí se cargan las opciones -->
-                                <form id="formCajas">
-                                    <div id="listaCajas"></div>
-                                </form>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                                <button id="finalizarTodo" type="button" class="btn btn-primary text-center" data-dismiss="modal">
-                                    Cerrar causaciones disponibles<span id="total2" class="badge badge-light">0</span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
+                <!-- [ Main Content ] end -->
             </div>
-            <!-- [ Main Content ] end -->
         </div>
-    </div>
-    <!-- [ Main Content ] end -->
+        <!-- [ Main Content ] end -->
     </div>
 
     <!-- Warning Section Ends -->
@@ -462,19 +469,31 @@
             }
         });
 
+        async function finalizar(valorSeleccionado) {
+            const codigoSeleccionado = valorSeleccionado;
 
-        // Función para enviar el archivo al servidor
-        function finalizar() {
-
-            const seleccion = document.querySelector('input[name="caja"]:checked');
-            if (!seleccion) {
-                alert("Por favor selecciona una caja menor");
-                return;
+            let cuentas = [];
+            const cache = localStorage.getItem("cuentasCache");
+            if (cache) {
+                try {
+                    cuentas = JSON.parse(cache);
+                } catch (e) {
+                    console.warn("Cache corrupto, recargando...");
+                    localStorage.removeItem("cuentasCache");
+                    cuentas = await cargarCuentasCache();
+                }
+            } else {
+                cuentas = await cargarCuentasCache();
             }
 
-            const payload = {
-                codigo: seleccion.value // aquí viaja el código seleccionado
-            };
+            // caja seleccionada existe
+            const existe = cuentas.some(c => c.cuenta === codigoSeleccionado);
+            if (!existe) {
+                mostrarAlerta(`⚠️ El código disponible en el sistema ${codigoSeleccionado} no existe.`, "danger");
+                throw new Error(`La caja ${codigoSeleccionado} no existe — proceso detenido.`);
+            }
+
+            const payload = { id_cuenta: codigoSeleccionado };
 
             fetch(`${host}/finalizarCausacion`, {
                 method: 'POST',
@@ -486,40 +505,35 @@
             })
                 .then(response => response.json())
                 .then(data => {
-                    // Manejar la respuesta del servidor
                     if (data.ms == 'ok') {
                         mostrarAlerta("Archivo enviado exitosamente.", "success");
                         setTimeout(() => {
                             window.location.href = "causacioncontable_new.html";
-
-                        }, 3000)
+                        }, 3000);
                     } else {
                         mostrarAlerta("Error al finalizar el proceso.", "danger");
                     }
                 })
                 .catch(error => {
                     console.error('Error al finalizar el proceso:', error);
-                    mostrarAlerta("Archivo enviado exitosamente.", "success");
-                    // mostrarAlerta("Hubo un error al finalizar el proceso.", 'danger');
+                    mostrarAlerta("Hubo un error al finalizar el proceso.", 'danger');
                 });
         }
 
 
         document.getElementById('finalizarTodo').addEventListener('click', (ev) => {
             ev.preventDefault();
-            finalizar();
+            const seleccion = document.querySelector('input[name="caja"]:checked');
+
+            if (seleccion) {
+                const idLista = listaCajas.id;
+                const valorSeleccionado = seleccion.value;
+                finalizar(valorSeleccionado);
+            } else {
+                alert("Por favor selecciona una caja antes de continuar.");
+            }
+
         });
-
-
-        // Tu JSON
-        const cajas = [
-            { "codigo": "11051001", "nombre": "CAJA MENOR VALLEDUPAR" },
-            { "codigo": "11051002", "nombre": "CAJA MENOR BOYACA" },
-            { "codigo": "11051003", "nombre": "CAJA MENOR MEDELLIN" },
-            { "codigo": "11051004", "nombre": "CAJA MENOR SUCRE" },
-            { "codigo": "11051005", "nombre": "CAJA MENOR BUCARAMANGA" },
-            { "codigo": "11051006", "nombre": "CAJA MENOR VILLAVICENCIO" }
-        ];
 
         const listaCajas = document.getElementById("listaCajas");
 
@@ -537,7 +551,7 @@
         });
 
 
-        document.getElementById("btnFinalizar").addEventListener("click", () => {
+        /* document.getElementById("btnFinalizar").addEventListener("click", () => {
             const seleccion = document.querySelector('input[name="caja"]:checked');
             if (seleccion) {
                 valor = seleccion.value; // aquí tienes el código seleccionado
@@ -546,7 +560,7 @@
             } else {
                 alert("Por favor selecciona una caja menor");
             }
-        });
+        });*/
     </script>
 </body>
 
