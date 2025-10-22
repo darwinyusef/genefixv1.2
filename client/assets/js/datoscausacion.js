@@ -5,12 +5,12 @@ const API_URL = `https://begranda.com/equilibrium2/public/api/account?eq-auxilia
 let finalCajas = [];
 
 const cajas = [
-    { "codigo": "11051001", "nombre": "CAJA MENOR VALLEDUPAR" },
-    { "codigo": "11051002", "nombre": "CAJA MENOR BOYACA" },
-    { "codigo": "11051003", "nombre": "CAJA MENOR MEDELLIN" },
-    { "codigo": "11051004", "nombre": "CAJA MENOR SUCRE" },
-    { "codigo": "11051005", "nombre": "CAJA MENOR BUCARAMANGA" },
-    { "codigo": "11051006", "nombre": "CAJA MENOR VILLAVICENCIO" }
+    { "id": 6070857, "codigo": "11051001", "nombre": "CAJA MENOR VALLEDUPAR" },
+    { "id": 6070884, "codigo": "11051002", "nombre": "CAJA MENOR BOYACA" },
+    { "id": 6070888, "codigo": "11051003", "nombre": "CAJA MENOR MEDELLIN" },
+    { "id": 6070906, "codigo": "11051004", "nombre": "CAJA MENOR SUCRE" },
+    { "id": 6070920, "codigo": "11051005", "nombre": "CAJA MENOR BUCARAMANGA" },
+    { "id": 6070921, "codigo": "11051006", "nombre": "CAJA MENOR VILLAVICENCIO" }
 ];
 
 async function cargarCuentasCache() {

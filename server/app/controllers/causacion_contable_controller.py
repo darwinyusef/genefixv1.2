@@ -1,3 +1,4 @@
+from decimal import Decimal
 from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, status, Query
 from sqlalchemy.orm import Session
@@ -118,17 +119,17 @@ def create_causacion(causacion: CausacionContableCreate, db: Session = Depends(g
     fecha_formateada = dateNow()
     db_causacion = CausacionContableModel(
         id_documento=None,
-        id_comprobante=2,
+        id_comprobante=13, #50 13
         id_nit=causacion.id_nit,
         nit=causacion.nit,
         fecha=fecha_formateada,
         fecha_manual=causacion.fecha_manual,
-        id_cuenta=causacion.id_cuenta,
+        id_cuenta=causacion.id_cuenta, # id_cuenta=6068094,
         valor=causacion.valor,
         tipo=1,
         concepto=causacion.concepto,
         documento_referencia=None,
-        token=None,
+        token="",
         extra=causacion.extra,
         user_id=tockendecode["sub"],
         estado="entregado",
@@ -181,38 +182,35 @@ async def read_causacion_and_update(data: FinCausacionModel, db: Session = Depen
         documentos = []
         idCausaciones = []
         idcuenta = int(data.id_cuenta)
+        
         nuevo = await credito_causacion_contable(idcuenta, causaciones, db, token)
         if not nuevo:   
-            logger.error("Error al crear la causación de crédito", extra={"causaciones": causaciones})
-            raise HTTPException(status_code=500, detail="Error al crear la causación de crédito")
+           logger.error("Error al crear la causación de crédito", extra={"causaciones": causaciones})
+           raise HTTPException(status_code=500, detail="Error al crear la causación de crédito")
         
-        
-       
         for causacion in causaciones:
             causacion.estado = "finalizado"
             causacion.id_cuenta = idcuenta
             idCausaciones.append(CausacionIDs(id=causacion.id))
             documentos.append(CausacionDTO(
-                id_documento=causacion.id_documento,
-                id_comprobante=causacion.id_comprobante,
+                id_documento=int(causacion.id_documento),
+                id_comprobante=13, #50 nota de contabilidad #18 public/api/proof
                 id_nit=causacion.id_nit,
-                fecha=str(causacion.fecha),
-                fecha_manual=str(causacion.fecha_manual),
-                id_cuenta=idcuenta,
-                valor=str(causacion.valor),
-                tipo=1,
+                fecha=causacion.fecha.isoformat() if isinstance(causacion.fecha, datetime) else str(causacion.fecha),
+                fecha_manual=causacion.fecha_manual.isoformat() if isinstance(causacion.fecha_manual, datetime) else str(causacion.fecha_manual),
+                id_cuenta=idcuenta, # id_cuenta=6068094,# 
+                valor=Decimal(str(causacion.valor)),
+                tipo=0,
                 concepto=causacion.concepto,
                 documento_referencia=str(causacion.documento_referencia),
                 token="",
                 extra=str(causacion.extra)
             ))
         
+        
         documentos.append(nuevo)
         idCausaciones.append(CausacionIDs(id=nuevo.id_documento))
-        #print(len(documentos), len(idCausaciones))
-        
         db.commit()
-        # Enviamos a API externa
         resultado_envio = await CausacionRepository.enviar_causaciones_a_api(documentos, idCausaciones, token=tokenbegranda, db=db)
         if not resultado_envio:
             logger.error("Error al enviar las causaciones a la API externa", extra={"documentos": documentos, "idCausaciones": idCausaciones})
@@ -239,20 +237,20 @@ async def credito_causacion_contable(
         if documentos: 
             total_valor = sum(float(d.valor) for d in documentos)    
             base = documentos[0]
-
+            _, codigo_documento = increment_counter(db)
             nuevo = CausacionContableModel(
-                id_documento=base.id_documento,   
-                id_comprobante=18,
-                id_nit=248,
+                id_documento=codigo_documento,   
+                id_comprobante=13,  #50 EGRESO (PAGOS DE FACTURAS) #2 public/api/proof
+                id_nit=1,
                 nit=base.nit,
                 fecha=fecha_formateada.isoformat() if isinstance(fecha_formateada, datetime) else str(fecha_formateada),
                 fecha_manual=base.fecha_manual.isoformat() if isinstance(base.fecha_manual, datetime) else str(base.fecha_manual),
-                id_cuenta=id_cuenta,
-                valor=total_valor,
+                id_cuenta=id_cuenta, #id_cuenta=6068094,
+                valor=Decimal(total_valor),
                 tipo=1,
                 concepto="LEGALIZACIÓN DE CAJA MENOR",
                 documento_referencia=str(base.documento_referencia),
-                token=base.token,
+                token="",
                 extra=base.extra,
                 user_id=tockendecode["sub"],
                 estado="finalizado",
@@ -260,8 +258,10 @@ async def credito_causacion_contable(
             db.add(nuevo)
             db.commit()
             db.refresh(nuevo)
-
-        return CausacionDTOClose.model_validate(nuevo)
+       
+        dto = CausacionDTOClose.model_validate(nuevo, from_attributes=True)
+        return dto
+        
     
     except Exception as e:
         logger.error(f"Error al crear la causación contable de crédito: {str(e)}")

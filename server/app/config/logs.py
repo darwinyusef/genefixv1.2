@@ -9,10 +9,8 @@ class SizedTimedRotatingFileHandler(RotatingFileHandler):
             self.stream.close()
             self.stream = None
         
-        # Fecha para el archivo rotado (año-mes-día_hora-minuto-segundo)
         current_time = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
         
-        # Nuevo nombre para el archivo rotado con fecha
         rollover_name = f"{self.baseFilename}.{current_time}"
         
         # Renombrar archivo actual si existe

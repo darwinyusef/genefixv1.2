@@ -30,7 +30,7 @@ class CausacionContable(Base):
     id = Column(Integer, primary_key=True, index=True)
     id_documento = Column(String, nullable=True)
     id_comprobante = Column(Integer, nullable=False)
-    id_nit = Column(Integer, nullable=True)
+    id_nit = Column(String, nullable=True)
     nit = Column(Integer, nullable=False)
     fecha = Column(DateTime, nullable=False, default=datetime.utcnow)
     fecha_manual = Column(DateTime, nullable=True)

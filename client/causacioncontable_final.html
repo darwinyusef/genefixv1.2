@@ -472,7 +472,7 @@
 
         async function finalizar(valorSeleccionado) {
             const codigoSeleccionado = valorSeleccionado;
-
+           
             let cuentas = [];
             const cache = localStorage.getItem("cuentas_cache");
             if (cache) {
@@ -486,11 +486,14 @@
             } else {
                 cuentas = await cargarCuentasCache();
             }
-
+            console.log(codigoSeleccionado);
             // caja seleccionada existe
-            const existe = cuentas.some(c => c.cuenta === codigoSeleccionado);
+            const existe = cuentas.find(c =>
+                String(c.id) === codigoSeleccionado || String(c.cuenta) === codigoSeleccionado
+            );
+            
             if (!existe) {
-                mostrarAlerta(`⚠️ El código disponible en el sistema ${codigoSeleccionado} no existe.`, "danger");
+                mostrarAlerta(`⚠️ El id de cuenta disponible en el sistema ${codigoSeleccionado} no existe.`, "danger");
                 throw new Error(`La caja ${codigoSeleccionado} no existe — proceso detenido.`);
             }
 
@@ -543,9 +546,9 @@
             const div = document.createElement("div");
             div.classList.add("form-check");
             div.innerHTML = `
-      <input class="form-check-input" type="radio" name="caja" id="caja${index}" value="${caja.codigo}">
+      <input class="form-check-input" type="radio" name="caja" id="caja${index}" value="${caja.id}">
       <label class="form-check-label" for="caja${index}">
-        ${caja.nombre} (${caja.codigo})
+       (${caja.codigo}) - ${caja.nombre} 
       </label>
     `;
             listaCajas.appendChild(div);
