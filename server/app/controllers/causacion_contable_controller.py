@@ -183,7 +183,10 @@ async def read_causacion_and_update(data: FinCausacionModel, db: Session = Depen
         idCausaciones = []
         idcuenta = int(data.id_cuenta)
         
-        nuevo = await credito_causacion_contable(idcuenta, causaciones, db, token)
+        # Incrementamos el counter UNA sola vez aquí al momento del cierre
+        _, codigo_documento = increment_counter(db)
+        
+        nuevo = await credito_causacion_contable(idcuenta, causaciones, db, token, int(codigo_documento))
         if not nuevo:   
            logger.error("Error al crear la causación de crédito", extra={"causaciones": causaciones})
            raise HTTPException(status_code=500, detail="Error al crear la causación de crédito")
@@ -191,9 +194,10 @@ async def read_causacion_and_update(data: FinCausacionModel, db: Session = Depen
         for causacion in causaciones:
             causacion.estado = "finalizado"
             causacion.id_cuenta = idcuenta
+            causacion.id_documento = int(codigo_documento)
             idCausaciones.append(CausacionIDs(id=causacion.id))
             documentos.append(CausacionDTO(
-                id_documento=int(causacion.id_documento),
+                id_documento=causacion.id_documento,
                 id_comprobante=13, #50 nota de contabilidad #18 public/api/proof
                 id_nit=causacion.id_nit,
                 fecha=causacion.fecha.isoformat() if isinstance(causacion.fecha, datetime) else str(causacion.fecha),
@@ -228,7 +232,8 @@ async def credito_causacion_contable(
     id_cuenta: int,
     documentos: List[CausacionDTOEnding], 
     db: Session = Depends(get_db), 
-    token: dict = Depends(get_current_user)
+    token: dict = Depends(get_current_user),
+    codigo_documento: int = None
 ):
     try:
         tockendecode = decode_token(token)
@@ -237,7 +242,6 @@ async def credito_causacion_contable(
         if documentos: 
             total_valor = sum(float(d.valor) for d in documentos)    
             base = documentos[0]
-            _, codigo_documento = increment_counter(db)
             nuevo = CausacionContableModel(
                 id_documento=codigo_documento,   
                 id_comprobante=13,  #50 EGRESO (PAGOS DE FACTURAS) #2 public/api/proof
@@ -280,13 +284,11 @@ async def read_causacion_and_update(db: Session = Depends(get_db), token: dict =
         if causaciones == 0:
             return { "status_code": status.HTTP_204_NO_CONTENT, "content": 0 }
 
-        # Cambiamos el estado a "finalizado" y actualizamos los campos del documento
-        _, codigo_documento = increment_counter(db)
+        
         public_url = await upload_file_helper(file)
 
         for causacion in causaciones:
             causacion.estado = "activado"
-            causacion.id_documento = str(codigo_documento)
             causacion.documento_referencia = public_url
 
         db.commit()

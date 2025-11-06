@@ -1,7 +1,8 @@
 // Validar el NIT al escribir 
 const inputNit = document.getElementById('nit');
-const API_KEY = "ybb0jhtlcug4Dhbpi6CEP7Up68LriYcPc4209786b008c6327dbe47644f133aadVlJUB0iK5VXzg0CIM8JNNHfU7EoHzU2X"
-
+const user_fin = JSON.parse(localStorage.getItem("user"))
+const API_KEY = user_fin.begranda_app;
+console.log(API_KEY);
 
 inputNit.addEventListener('input', async function () {
     const valor = this.value;
@@ -9,7 +10,7 @@ inputNit.addEventListener('input', async function () {
     // Validar solo si tiene 6 caracteres
     if (valor.length > 2) {
         try {
-            const response = await fetch(`http://begranda.com/equilibrium2/public/api/nits?key=${API_KEY}&f-nit_1=123&eq-nit_1=${valor}`);
+            const response = await fetch(`http://begranda.com/equilibrium2/public/api/nits?key=${API_KEY}&eq-nit_1=${valor}`);
             const result = await response.json();
             if (result.status == "success") {
                 if (result.data.length > 0) {

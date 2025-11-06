@@ -250,7 +250,7 @@
                                         <label for="inputCuentaSeleccionada" class="form-label">Código y nombre del
                                             <strong>tipo de cuenta</strong> seleccionado:</label>
                                         <select class="form-control" id="id_cuenta">
-                                            <option selected disabled>Seleccione una opción...</option>
+                                            <option selected disabled>SELECCIONE UNA OPCIÓN...</option>
                                             <option value="5135 - SERVICIOS">5135 - SERVICIOS</option>
                                             <option value="513505 - ASEO Y VIGILANCIA">513505 - ASEO Y VIGILANCIA
                                             </option>
@@ -451,12 +451,13 @@
                 try {
                     const response = await fetch('assets/js/causacionescontables/centroCostos.json');
                     const allExtra = await response.json();
-                    const select = document.getElementById("centroCostos");
-                    select.innerHTML = '<option value="" disabled selected>Seleccione un centro de costos...</option>';
+
+                    const select = document.getElementById("extra");
+                    select.innerHTML = '<option value="" disabled selected>SELECCIONE UN CENTRO DE COSTOS...</option>';
 
                     allExtra.forEach(item => {
                         const option = document.createElement("option");
-                        option.value = item.codigo; 
+                        option.value = item.codigo;
                         option.textContent = item.nombre;
                         select.appendChild(option);
                     });
@@ -464,7 +465,8 @@
                 } catch (e) {
                     console.error("Error cargando centros de costos:", e);
                 }
-            } centrocostoall();
+            }
+            centrocostoall();
 
 
             async function cargarCausacionContable(id, view) {
