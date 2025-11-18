@@ -247,72 +247,10 @@
 
 
                                     <div class="col mt-3">
-                                        <label for="inputCuentaSeleccionada" class="form-label">Código y nombre del
-                                            <strong>tipo de cuenta</strong> seleccionado:</label>
+                                        <label for="inputCuentaSeleccionada" class="form-label">
+                                            <strong>Cuenta contable de la causación</strong> seleccionada:</label>
                                         <select class="form-control" id="id_cuenta">
                                             <option selected disabled>SELECCIONE UNA OPCIÓN...</option>
-                                            <option value="5135 - SERVICIOS">5135 - SERVICIOS</option>
-                                            <option value="513505 - ASEO Y VIGILANCIA">513505 - ASEO Y VIGILANCIA
-                                            </option>
-                                            <option value="513515 - ASISTENCIA TECNICA">513515 - ASISTENCIA TECNICA
-                                            </option>
-                                            <option value="513525 - ACUEDUCTO Y ALCANTARILLADO">513525 - ACUEDUCTO Y
-                                                ALCANTARILLADO</option>
-                                            <option value="513530 - ENERGIA ELECTRICA">513530 - ENERGIA ELECTRICA
-                                            </option>
-                                            <option value="513535 - TELEFONO">513535 - TELEFONO</option>
-                                            <option value="513536 - INTERNET">513536 - INTERNET</option>
-                                            <option value="513550 - TRANSPORTE">513550 - TRANSPORTE</option>
-                                            <option value="515505 - ALOJAMIENTO Y MANUTENCION">515505 - ALOJAMIENTO
-                                                Y MANUTENCION</option>
-                                            <option value="515515 - PASAJES AEREOS">515515 - PASAJES AEREOS</option>
-                                            <option value="515520 - PASAJES TERRESTRES">515520 - PASAJES TERRESTRES
-                                            </option>
-                                            <option value="5235 - SERVICIOS">5235 - SERVICIOS</option>
-                                            <option value="523505 - ASEO Y VIGILANCIA">523505 - ASEO Y VIGILANCIA
-                                            </option>
-                                            <option value="523515 - ASISTENCIA TECNICA">523515 - ASISTENCIA TECNICA
-                                            </option>
-                                            <option value="523525 - ACUEDUCTO Y ALCANTARILLADO">523525 - ACUEDUCTO Y
-                                                ALCANTARILLADO</option>
-                                            <option value="523530 - ENERGIA ELECTRICA">523530 - ENERGIA ELECTRICA
-                                            </option>
-                                            <option value="523535 - TELEFONO">523535 - TELEFONO</option>
-                                            <option value="523536 - INTERNET">523536 - INTERNET</option>
-                                            <option value="523550 - TRANSPORTE">523550 - TRANSPORTE</option>
-                                            <option value="523560 - PROPAGANDA Y PUBLICIDAD">523560 - PROPAGANDA Y
-                                                PUBLICIDAD</option>
-                                            <option value="5245 - MANTENIMIENTO Y REPARACIONES">5245 - MANTENIMIENTO
-                                                Y REPARACIONES</option>
-                                            <option value="524510 - CONSTRUCCIONES Y EDIFICACIONES">524510 -
-                                                CONSTRUCCIONES Y EDIFICACIONES</option>
-                                            <option value="524515 - MAQUINARIA Y EQUIPO">524515 - MAQUINARIA Y
-                                                EQUIPO</option>
-                                            <option value="524520 - EQUIPO DE OFICINA">524520 - EQUIPO DE OFICINA
-                                            </option>
-                                            <option value="524525 - EQUIPO DE COMPUTACION Y COMUNICACION">524525 -
-                                                EQUIPO DE COMPUTACION Y COMUNICACION</option>
-                                            <option value="524530 - EQUIPO MEDICO - CIENTIFICO">524530 - EQUIPO
-                                                MEDICO - CIENTIFICO</option>
-                                            <option value="524540 - FLOTA Y EQUIPO DE TRANSPORTE">524540 - FLOTA Y
-                                                EQUIPO DE TRANSPORTE</option>
-                                            <option value="5250 - ADECUACION E INSTALACION">5250 - ADECUACION E
-                                                INSTALACION</option>
-                                            <option value="525005 - INSTALACIONES ELECTRICAS">525005 - INSTALACIONES
-                                                ELECTRICAS</option>
-                                            <option value="525010 - ARREGLOS ORNAMENTALES">525010 - ARREGLOS
-                                                ORNAMENTALES</option>
-                                            <option value="525015 - REPARACIONES LOCATIVAS">525015 - REPARACIONES
-                                                LOCATIVAS</option>
-                                            <option value="5255 - GASTOS DE VIAJE">5255 - GASTOS DE VIAJE</option>
-                                            <option value="525505 - ALOJAMIENTO Y MANUTENCION">525505 - ALOJAMIENTO
-                                                Y MANUTENCION</option>
-                                            <option value="525515 - PASAJES AEREOS">525515 - PASAJES AEREOS</option>
-                                            <option value="525520 - PASAJES TERRESTRES">525520 - PASAJES TERRESTRES
-                                            </option>
-                                            <option value="525530 - PEAJES">525530 - PEAJES</option>
-                                            <option value="7335 - SERVICIOS">7335 - SERVICIOS</option>
-                                            <option value="733550 - TRANSPORTE">733550 - TRANSPORTE</option>
                                         </select>
                                     </div>
 
@@ -434,18 +372,89 @@
         <script src="assets/js/logout.js"></script>
 
         <script>
+            fetch('assets/js/causacionescontables/cuentas_contables.json')
+                .then(res => res.json())
+                .then(data => {
+                    const select = document.getElementById('id_cuenta');
+                    const cacheStr = localStorage.getItem('cuentas_cache');
+                    let cache = [];
+
+                    if (cacheStr) {
+                        console.log('✅ Cache encontrada en localStorage.');
+                        try {
+                            cache = JSON.parse(cacheStr);
+                        } catch (e) {
+                            console.warn('⚠️ cache JSON inválido:', e);
+                        }
+
+                        const idsValidos = new Set(
+                            cache
+                                .map(c => c && c.id != null ? String(c.id) : null)
+                                .filter(Boolean)
+                        );
+
+                        const idsPadreEnCache = new Set(
+                            cache
+                                .map(c => c && c.id_padre != null ? String(c.id_padre) : null)
+                                .filter(Boolean)
+                        );
+                        idsValidos.add("6070875");
+                        idsValidos.add("6070932");
+
+                        data.forEach(item => {
+                            const id = item.id != null ? String(item.id) : null;
+                            const idPadre = item.id_padre != null ? String(item.id_padre) : null;
+
+                            // Si no hay cache definido, mostramos todo
+                            if (idsValidos.size === 0 && idsPadreEnCache.size === 0) {
+                                const option = document.createElement('option');
+                                option.value = id;
+                                option.textContent = `${item.cuenta} - ${item.nombre}`;
+                                select.appendChild(option);
+                                return;
+                            }
+
+                            const condicionIncluye =
+                                (id && idsValidos.has(id)) ||
+                                (idPadre && idsValidos.has(idPadre)) ||
+                                (id && idsPadreEnCache.has(id)) ||
+                                (idPadre && idsPadreEnCache.has(idPadre));
+
+                            if (condicionIncluye) {
+                                const option = document.createElement('option');
+                                option.value = id;
+                                option.textContent = `${item.cuenta} - ${item.nombre}`;
+                                select.appendChild(option);
+                            } else {
+                                console.log(`⚠️ Omitido ${id} — no coincide con cache (ni id ni id_padre)`);
+                            }
+                        });
+                    } else {
+                        console.log('❌ Cache no encontrada en localStorage.');
+                        // 🧩 Si no hay cache, cargar desde el JSON local y guardarlo
+                        fetch('assets/js/causacionescontables/cuentas_contables.json')
+                            .then(res => res.json())
+                            .then(data => {
+                                localStorage.setItem('cuentas_cache', JSON.stringify(data));
+                                cache = data;
+                                data.forEach(item => {
+                                    const option = document.createElement('option');
+                                    option.value = item.id;
+                                    option.textContent = `${item.cuenta} - ${item.nombre}`;
+                                    select.appendChild(option);
+                                });
+                            })
+                            .catch(err => console.error('❌ Error cargando JSON:', err));
+                    }
+
+                })
+                .catch(err => console.error('Error cargando JSON:', err));
+        </script>
+        <script>
 
             const inputFecha = document.getElementById('fecha_manual');
             const today = new Date();
             let allExtra = [];
-            // Primer día del mes actual
-            // const primerDia = new Date(today.getFullYear(), today.getMonth(), 1);
-            // Último día del mes actual
-            // const ultimoDia = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-
-            // const formato = (date) => date.toISOString().split('T')[0];
-            // inputFecha.min = formato(primerDia);
-            // inputFecha.max = formato(ultimoDia);
 
             async function centrocostoall() {
                 try {
@@ -491,7 +500,6 @@
                     document.getElementById("concepto").value = data.concepto || "";
                     document.getElementById("id_unico").value = data.id || "";
                     document.getElementById("id_cuenta").value = data.id_cuenta || "";
-                    // Opcional: si "extra" y descripción vienen en la respuesta
 
                     if (data.extra) {
                         document.getElementById("extra").value = data.extra;
@@ -511,7 +519,6 @@
                     if (option) {
                         selectCuenta.value = idCuenta;
                     } else {
-                        // Si no existe, agregarla al select para que se muestre
                         const nuevaOption = new Option(`${idCuenta} - (CUENTA NO LISTADA)`, idCuenta, true, true);
                         selectCuenta.add(nuevaOption);
                     }
@@ -560,8 +567,6 @@
                     if (id == null) {
                         history.back();
                     }
-
-
                     document.getElementById("btn_guardar").hidden = true;
                     document.getElementById("btn_editar").hidden = false;
                 }

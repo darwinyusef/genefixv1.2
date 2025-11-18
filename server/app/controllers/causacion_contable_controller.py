@@ -119,14 +119,14 @@ def create_causacion(causacion: CausacionContableCreate, db: Session = Depends(g
     fecha_formateada = dateNow()
     db_causacion = CausacionContableModel(
         id_documento=None,
-        id_comprobante=13, #50 13
+        id_comprobante=28,
         id_nit=causacion.id_nit,
         nit=causacion.nit,
         fecha=fecha_formateada,
         fecha_manual=causacion.fecha_manual,
         id_cuenta=causacion.id_cuenta, # id_cuenta=6068094,
         valor=causacion.valor,
-        tipo=1,
+        tipo=0,
         concepto=causacion.concepto,
         documento_referencia=None,
         token="",
@@ -193,16 +193,16 @@ async def read_causacion_and_update(data: FinCausacionModel, db: Session = Depen
         
         for causacion in causaciones:
             causacion.estado = "finalizado"
-            causacion.id_cuenta = idcuenta
+            # causacion.id_cuenta = idcuenta
             causacion.id_documento = int(codigo_documento)
             idCausaciones.append(CausacionIDs(id=causacion.id))
             documentos.append(CausacionDTO(
                 id_documento=causacion.id_documento,
-                id_comprobante=13, #50 nota de contabilidad #18 public/api/proof
+                id_comprobante=28, #50 nota de contabilidad #18 public/api/proof
                 id_nit=causacion.id_nit,
                 fecha=causacion.fecha.isoformat() if isinstance(causacion.fecha, datetime) else str(causacion.fecha),
                 fecha_manual=causacion.fecha_manual.isoformat() if isinstance(causacion.fecha_manual, datetime) else str(causacion.fecha_manual),
-                id_cuenta=idcuenta, # id_cuenta=6068094,# 
+                id_cuenta=causacion.idcuenta, # id_cuenta=6068094 para desarrollo
                 valor=Decimal(str(causacion.valor)),
                 tipo=0,
                 concepto=causacion.concepto,
@@ -218,15 +218,36 @@ async def read_causacion_and_update(data: FinCausacionModel, db: Session = Depen
         resultado_envio = await CausacionRepository.enviar_causaciones_a_api(documentos, idCausaciones, token=tokenbegranda, db=db)
         if not resultado_envio:
             logger.error("Error al enviar las causaciones a la API externa", extra={"documentos": documentos, "idCausaciones": idCausaciones})
-            raise HTTPException(status_code=500, detail="Error al enviar las causaciones a la API externa")
+            raise HTTPException(status_code=500, detail="Causacion: Error al enviar las causaciones a la API externa")
         
         # print(resultado_envio)
         
         return { "ms": "ok", "description": "Desea enviar más causaciones o desea cerrar las actividades de este mes", "res_begranda": resultado_envio, "credito": "true" }
     except Exception as e:
-        logger.error(f"Error al finalizar la causación contable: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"Error al finalizar la causación contable: {str(e)}")
+        logger.error(f"Causacion: Error al finalizar la causación contable: {str(e)}")
 
+        try:
+            credito = db.query(CausacionContableModel).filter(
+                CausacionContableModel.id_documento == codigo_documento,
+                CausacionContableModel.tipo == 1  # tipo 1 = crédito
+            ).first()
+            if credito:
+                db.delete(credito)
+                db.commit()
+                logger.warning(f"🧹 Causación de crédito con documento {codigo_documento} eliminada por error.")
+        except Exception as cleanup_error:
+            logger.error(f"No se pudo eliminar la causación de crédito fallida: {cleanup_error}")
+
+        try:
+            for causacion in causaciones:
+                causacion.estado = "activado"
+            db.commit()
+            logger.info("🔄 Causaciones revertidas a estado 'activado' tras el error.")
+        except Exception as revert_error:
+            logger.error(f"No se pudo revertir las causaciones: {revert_error}")
+            db.rollback()
+
+        raise HTTPException(status_code=500, detail=f"Causacion: Error al finalizar la causación contable: {str(e)}")
 
 async def credito_causacion_contable(
     id_cuenta: int,
@@ -244,7 +265,7 @@ async def credito_causacion_contable(
             base = documentos[0]
             nuevo = CausacionContableModel(
                 id_documento=codigo_documento,   
-                id_comprobante=13,  #50 EGRESO (PAGOS DE FACTURAS) #2 public/api/proof
+                id_comprobante=28,  #50 EGRESO (PAGOS DE FACTURAS) #2 public/api/proof
                 id_nit=1,
                 nit=base.nit,
                 fecha=fecha_formateada.isoformat() if isinstance(fecha_formateada, datetime) else str(fecha_formateada),

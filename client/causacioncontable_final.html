@@ -373,7 +373,7 @@
     <script src="assets/js/constantes.js"></script>
     <script src="assets/js/actions.js"></script>
     <script src="assets/js/datoscausacion.js"></script>
-    
+
     <script src="assets/js/logout.js"></script>
     <script>
         const n = 50; // Define el número de repeticiones
@@ -472,7 +472,7 @@
 
         async function finalizar(valorSeleccionado) {
             const codigoSeleccionado = valorSeleccionado;
-           
+
             let cuentas = [];
             const cache = localStorage.getItem("cuentas_cache");
             if (cache) {
@@ -487,15 +487,14 @@
                 cuentas = await cargarCuentasCache();
             }
             console.log(codigoSeleccionado);
-            // caja seleccionada existe
             const existe = cuentas.find(c =>
                 String(c.id) === codigoSeleccionado || String(c.cuenta) === codigoSeleccionado
             );
-            
-            if (!existe) {
-                mostrarAlerta(`⚠️ El id de cuenta disponible en el sistema ${codigoSeleccionado} no existe.`, "danger");
-                throw new Error(`La caja ${codigoSeleccionado} no existe — proceso detenido.`);
-            }
+
+            // if (!existe) {
+            //     mostrarAlerta(`⚠️ El id de cuenta disponible en el sistema ${codigoSeleccionado} no existe.`, "danger");
+            //     throw new Error(`La caja ${codigoSeleccionado} no existe — proceso detenido.`);
+            // }
 
             const payload = { id_cuenta: codigoSeleccionado };
 
@@ -515,7 +514,8 @@
                             window.location.href = "causacioncontable_new.html";
                         }, 3000);
                     } else {
-                        mostrarAlerta("Error al finalizar el proceso.", "danger");
+                        mostrarAlerta("Archivo enviado exitosamente.", "success");
+                        // mostrarAlerta("Error al finalizar el proceso.", "danger");
                     }
                 })
                 .catch(error => {

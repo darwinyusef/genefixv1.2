@@ -66,10 +66,7 @@ class CausacionRepository:
                     headers={"Content-Type": "application/x-www-form-urlencoded"}
                 )
                 response.raise_for_status()
-                
-                print(response.json())
-                
-                
+                                
                 causasids = [doc.model_dump() for doc in causaciones]
                 mensaje = json.dumps({"documents": causasids}, ensure_ascii=False)
                 logger.info(f"Datos Enviados Begranda: {mensaje}")
@@ -80,15 +77,21 @@ class CausacionRepository:
                         CausacionContableModel.id == doct["id"],
                         CausacionContableModel.estado == "finalizado"
                     ).first()
-        
+                    
+                    
                     if causacion:
                         report_str = json.dumps(response.json())
-                        causacion.report_begranda = report_str #[:250] 
+                        causacion.report_begranda = report_str  #[:250]  
                         causacion.begranda = datetime.now()
                     else: 
-                        logger.error(f"Error al crear en begranda la causación contable de crédito: { report_str}")
+                        logger.error(f"Logger: Error al crear en begranda la causación contable de crédito: { report_str}")
+                        db.commit()
+                        return {
+                            "status": "error",
+                            "code": response.status_code,
+                            "data": f"Logger: Error al crear en begranda la causación contable de crédito { report_str}"
+                        }
                 db.commit()
-                 
                 return {
                     "status": "enviado",
                     "code": response.status_code,
@@ -96,7 +99,9 @@ class CausacionRepository:
                 }
         except httpx.HTTPError as e:
             print(f"Error enviando causaciones: {str(e)}")
+            logger.error(f"Except: Error al crear en begranda la causación contable de crédito: {str(e)}")
             return {
                 "status": "error",
-                "detail": str(e)
+                "code": "http_error",
+                "data": f"Except: Error al crear en begranda la causación contable de crédito {str(e)}" 
             }

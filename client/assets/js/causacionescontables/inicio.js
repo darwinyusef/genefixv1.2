@@ -2,7 +2,6 @@
 const inputNit = document.getElementById('nit');
 const user_fin = JSON.parse(localStorage.getItem("user"))
 const API_KEY = user_fin.begranda_app;
-console.log(API_KEY);
 
 inputNit.addEventListener('input', async function () {
     const valor = this.value;
@@ -225,7 +224,7 @@ document.getElementById("btn_guardar").addEventListener("click", async (e) => {
         validarCampo('valor', 'El valor es obligatorio', 'num') &
         validarCampo('concepto', 'El concepto es obligatorio') &
         validarCampo('extra', 'El extra es obligatorio');
-    validarCampo('id_cuenta', 'La cuenta es obligatoria')
+        validarCampo('id_cuenta', 'La cuenta es obligatoria')
 
     if (!camposValidos) {
         console.warn("Hay errores en el formulario.");
@@ -249,7 +248,7 @@ document.getElementById("btn_editar").addEventListener("click", async (e) => {
         validarCampo('valor', 'El valor es obligatorio', 'num') &
         validarCampo('concepto', 'El concepto es obligatorio') &
         validarCampo('extra', 'El extra es obligatorio');
-    validarCampo('id_cuenta', 'La cuenta es obligatoria')
+        validarCampo('id_cuenta', 'La cuenta es obligatoria')
 
     if (!camposValidos) {
         console.errors("Hay errores en el formulario.");
@@ -276,13 +275,13 @@ function levantarData() {
         nit: document.getElementById("nit").value.trim(),
         fecha: obtenerFechaActual().trim(),
         fecha_manual: document.getElementById("fecha_manual").value.trim(),
-        id_cuenta: 0, // este es el id de la cuenta va vacio para que al cerrarse se genere
+        id_cuenta: document.getElementById("id_cuenta").value.trim(), // este es el id de la cuenta va vacio para que al cerrarse se genere
         valor: valor,
-        tipo: 1,
+        tipo: 0,
         concepto: document.getElementById("concepto").value.trim(),
         documento_referencia: null, // aqui va la url del archivo
         token: null,
-        extra: "Id de la cuenta: " + document.getElementById("extra").value.trim() + "; Tipo de la cuenta: " + document.getElementById("id_cuenta").value.trim()// aqui van los centros de costos
+        extra: "Id de la cuenta: " + document.getElementById("extra").value.trim() // aqui van los centros de costos
     };
     return datos
 }
