@@ -166,13 +166,14 @@ def increment_counter(db):
 # 🤓 ♦♣♠
 @router.post("/finalizarCausacion")
 async def read_causacion_and_update(data: FinCausacionModel, db: Session = Depends(get_db), token: dict = Depends(get_current_user)):
+    codigo_documento = None
     try:
         tockendecode = decode_token(token)
         causaciones = db.query(CausacionContableModel).filter(
             CausacionContableModel.estado == "activado",
             CausacionContableModel.user_id == tockendecode["sub"]
         ).all()
-        if not causaciones: 
+        if not causaciones:
             return {
                 "status_code": status.HTTP_204_NO_CONTENT,
                 "message": "No se encontraron causaciones activas para este usuario",
@@ -182,15 +183,15 @@ async def read_causacion_and_update(data: FinCausacionModel, db: Session = Depen
         documentos = []
         idCausaciones = []
         idcuenta = int(data.id_cuenta)
-        
+
         # Incrementamos el counter UNA sola vez aquí al momento del cierre
         _, codigo_documento = increment_counter(db)
-        
+
         nuevo = await credito_causacion_contable(idcuenta, causaciones, db, token, int(codigo_documento))
-        if not nuevo:   
+        if not nuevo:
            logger.error("Error al crear la causación de crédito", extra={"causaciones": causaciones})
            raise HTTPException(status_code=500, detail="Error al crear la causación de crédito")
-        
+
         for causacion in causaciones:
             causacion.estado = "finalizado"
             # causacion.id_cuenta = idcuenta
@@ -202,7 +203,7 @@ async def read_causacion_and_update(data: FinCausacionModel, db: Session = Depen
                 id_nit=causacion.id_nit,
                 fecha=causacion.fecha.isoformat() if isinstance(causacion.fecha, datetime) else str(causacion.fecha),
                 fecha_manual=causacion.fecha_manual.isoformat() if isinstance(causacion.fecha_manual, datetime) else str(causacion.fecha_manual),
-                id_cuenta=causacion.idcuenta, # id_cuenta=6068094 para desarrollo
+                id_cuenta=causacion.id_cuenta, # id_cuenta=6068094 para desarrollo
                 valor=Decimal(str(causacion.valor)),
                 tipo=0,
                 concepto=causacion.concepto,
@@ -210,61 +211,60 @@ async def read_causacion_and_update(data: FinCausacionModel, db: Session = Depen
                 token="",
                 extra=str(causacion.extra)
             ))
-        
-        
+
+
         documentos.append(nuevo)
         idCausaciones.append(CausacionIDs(id=nuevo.id_documento))
-        db.commit()
+
+        # IMPORTANTE: Primero enviamos a la API externa, LUEGO hacemos commit
+        # Esto garantiza que si falla el envío, no se guardan datos incorrectos
         resultado_envio = await CausacionRepository.enviar_causaciones_a_api(documentos, idCausaciones, token=tokenbegranda, db=db)
-        if not resultado_envio:
-            logger.error("Error al enviar las causaciones a la API externa", extra={"documentos": documentos, "idCausaciones": idCausaciones})
+        if not resultado_envio or resultado_envio.get("status") == "error":
+            logger.error("Error al enviar las causaciones a la API externa", extra={"documentos": documentos, "idCausaciones": idCausaciones, "resultado": resultado_envio})
             raise HTTPException(status_code=500, detail="Causacion: Error al enviar las causaciones a la API externa")
-        
-        # print(resultado_envio)
-        
+
+        # Solo si el envío fue exitoso, hacemos commit
+        db.commit()
+
         return { "ms": "ok", "description": "Desea enviar más causaciones o desea cerrar las actividades de este mes", "res_begranda": resultado_envio, "credito": "true" }
     except Exception as e:
         logger.error(f"Causacion: Error al finalizar la causación contable: {str(e)}")
+        # Rollback automático de todos los cambios pendientes
+        db.rollback()
 
         try:
-            credito = db.query(CausacionContableModel).filter(
-                CausacionContableModel.id_documento == codigo_documento,
-                CausacionContableModel.tipo == 1  # tipo 1 = crédito
-            ).first()
-            if credito:
-                db.delete(credito)
-                db.commit()
-                logger.warning(f"🧹 Causación de crédito con documento {codigo_documento} eliminada por error.")
+            # Eliminar la causación de crédito si se creó
+            if codigo_documento:
+                credito = db.query(CausacionContableModel).filter(
+                    CausacionContableModel.id_documento == codigo_documento,
+                    CausacionContableModel.tipo == 1  # tipo 1 = crédito
+                ).first()
+                if credito:
+                    db.delete(credito)
+                    db.commit()
+                    logger.warning(f"🧹 Causación de crédito con documento {codigo_documento} eliminada por error.")
         except Exception as cleanup_error:
             logger.error(f"No se pudo eliminar la causación de crédito fallida: {cleanup_error}")
-
-        try:
-            for causacion in causaciones:
-                causacion.estado = "activado"
-            db.commit()
-            logger.info("🔄 Causaciones revertidas a estado 'activado' tras el error.")
-        except Exception as revert_error:
-            logger.error(f"No se pudo revertir las causaciones: {revert_error}")
             db.rollback()
 
         raise HTTPException(status_code=500, detail=f"Causacion: Error al finalizar la causación contable: {str(e)}")
 
 async def credito_causacion_contable(
     id_cuenta: int,
-    documentos: List[CausacionDTOEnding], 
-    db: Session = Depends(get_db), 
+    documentos: List[CausacionDTOEnding],
+    db: Session = Depends(get_db),
     token: dict = Depends(get_current_user),
     codigo_documento: int = None
 ):
     try:
         tockendecode = decode_token(token)
         fecha_formateada = dateNow()
-        
-        if documentos: 
-            total_valor = sum(float(d.valor) for d in documentos)    
+
+        if documentos:
+            total_valor = sum(float(d.valor) for d in documentos)
             base = documentos[0]
             nuevo = CausacionContableModel(
-                id_documento=codigo_documento,   
+                id_documento=codigo_documento,
                 id_comprobante=28,  #50 EGRESO (PAGOS DE FACTURAS) #2 public/api/proof
                 id_nit=1,
                 nit=base.nit,
@@ -281,13 +281,14 @@ async def credito_causacion_contable(
                 estado="finalizado",
             )
             db.add(nuevo)
-            db.commit()
+            # NO hacemos commit aquí, se hará en la función llamadora después de enviar a la API
+            db.flush()  # Esto sincroniza con la BD pero no hace commit, permite obtener el ID
             db.refresh(nuevo)
-       
+
         dto = CausacionDTOClose.model_validate(nuevo, from_attributes=True)
         return dto
-        
-    
+
+
     except Exception as e:
         logger.error(f"Error al crear la causación contable de crédito: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Error al crear la causación contable de crédito: {str(e)}")
