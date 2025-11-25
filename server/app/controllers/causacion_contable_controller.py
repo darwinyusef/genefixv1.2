@@ -202,7 +202,7 @@ async def read_causacion_and_update(data: FinCausacionModel, db: Session = Depen
                 id_nit=causacion.id_nit,
                 fecha=causacion.fecha.isoformat() if isinstance(causacion.fecha, datetime) else str(causacion.fecha),
                 fecha_manual=causacion.fecha_manual.isoformat() if isinstance(causacion.fecha_manual, datetime) else str(causacion.fecha_manual),
-                id_cuenta=causacion.idcuenta, # id_cuenta=6068094 para desarrollo
+                id_cuenta=causacion.id_cuenta, # id_cuenta=6068094 para desarrollo
                 valor=Decimal(str(causacion.valor)),
                 tipo=0,
                 concepto=causacion.concepto,
