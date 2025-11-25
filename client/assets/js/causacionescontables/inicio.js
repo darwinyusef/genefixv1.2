@@ -126,49 +126,6 @@ function validarConcepto() {
     }
 }
 
-/* async function listadoCentroCostos__old() {
-    const response = await fetch('assets/js/causacionescontables/centroCostos.json');
-    const data = await response.json();
-
-    const categoriasPrincipales = data.filter(cat => cat.descripcion === "");
-
-    const agrupadas = {};
-    categoriasPrincipales.forEach(p => {
-        agrupadas[p.nombre] = [];
-    });
-
-    data.forEach(cat => {
-        if (cat.descripcion && cat.tipo && agrupadas.hasOwnProperty(cat.tipo)) {
-     agrupadas[cat.tipo].push(cat);
-        }
-    });
-
-    const select = document.getElementById('extra');
-    const descripcion = document.getElementById('descripcionText');
-
-    for (const principal of categoriasPrincipales) {
-        const optgroup = document.createElement('optgroup');
-        optgroup.label = principal.nombre;
-
-        const hijos = agrupadas[principal.nombre];
-        if (hijos && hijos.length > 0) {
-          hijos.forEach(hijo => {
-                const option = document.createElement('option');
-                option.value = hijo.codigo;
-                option.textContent = `${hijo.codigo} - ${hijo.nombre}`;
-                optgroup.appendChild(option);
-            });
-            select.appendChild(optgroup);
-        }
-    }
-    select.addEventListener('change', function (e) {
-        const seleccionado = data.find(item => item.codigo === e.target.value);
-        descripcion.textContent = seleccionado ? seleccionado.descripcion : 'Descripción no disponible.';
-    });
-
-
-} listadoCentroCostos()*/
-
 async function listadoCentroCostos() {
     const select = document.getElementById('extra');
     const descripcion = document.getElementById('descripcionText');
@@ -281,7 +238,7 @@ function levantarData() {
         concepto: document.getElementById("concepto").value.trim(),
         documento_referencia: null, // aqui va la url del archivo
         token: null,
-        extra: "Id de la cuenta: " + document.getElementById("extra").value.trim() // aqui van los centros de costos
+        extra: document.getElementById("extra").value.trim() // aqui van los centros de costos
     };
     return datos
 }
