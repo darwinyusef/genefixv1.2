@@ -26,7 +26,7 @@ function mostrarAlerta(mensaje, tipo) {
             alerta.classList.remove('fade-out');
         }, { once: true });
 
-    }, 7000); // 7 segundos
+    }, 4000); // 4 segundos
 }
 
 

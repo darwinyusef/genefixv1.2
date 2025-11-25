@@ -17,7 +17,7 @@ $(document).ready(function() {
                 stroke: {
                     curve: 'straight',
                 },
-                colors: ["#7267EF"],
+                colors: ["#c53764"],
                 series: [{
                     name: "Desktops",
                     data: [10, 41, 35, 51, 49, 62, 69, 91, 148]
@@ -98,7 +98,7 @@ $(document).ready(function() {
                 dataLabels: {
                     enabled: false
                 },
-                colors: ["#0e9e4a", "#7267EF", "#EA4D4D"],
+                colors: ["#0e9e4a", "#c53764", "#EA4D4D"],
                 stroke: {
                     show: true,
                     width: 2,
@@ -154,7 +154,7 @@ $(document).ready(function() {
                         },
                     }
                 },
-                colors: ["#7267EF", "#0e9e4a"],
+                colors: ["#c53764", "#0e9e4a"],
                 dataLabels: {
                     enabled: true,
                     offsetX: -6,
@@ -192,7 +192,7 @@ $(document).ready(function() {
                 },
                 labels: ['Team A', 'Team B', 'Team C', 'Team D', 'Team E'],
                 series: [44, 55, 13, 43, 22],
-                colors: ["#7267EF", "#0e9e4a", "#3ec9d6", "#ffa21d", "#EA4D4D"],
+                colors: ["#c53764", "#0e9e4a", "#3ec9d6", "#ffa21d", "#EA4D4D"],
                 legend: {
                     show: true,
                     position: 'bottom',
@@ -225,7 +225,7 @@ $(document).ready(function() {
                     type: 'donut',
                 },
                 series: [44, 55, 41, 17, 15],
-                colors: ["#7267EF", "#0e9e4a", "#3ec9d6", "#ffa21d", "#EA4D4D"],
+                colors: ["#c53764", "#0e9e4a", "#3ec9d6", "#ffa21d", "#EA4D4D"],
                 legend: {
                     show: true,
                     position: 'bottom',

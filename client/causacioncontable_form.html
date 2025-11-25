@@ -287,293 +287,463 @@
 
     <!-- Modal -->
     <div class="modal fade" id="miModal" tabindex="-1" aria-labelledby="miModalLabel" aria-hidden="true">
-        <div class="modal-dialog  modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalBuscarCuenta">Buscar Cuenta Contable</h5>
-                    <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button> -->
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content shadow-lg border-0">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title d-flex align-items-center" id="modalBuscarCuenta">
+                        <i data-feather="search" class="mr-2"></i>
+                        Buscar Cuenta Contable
+                    </h5>
+                    <button type="button" class="close text-white" data-bs-dismiss="modal" aria-label="Cerrar">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
-                <style>
-                    #resultadosCuenta {
-                        position: relative;
-                        overflow: scroll;
-                        max-height: 400px;
-                        max-width: 100%;
-                    }
-                </style>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <div class="row">
-                            <!--<div class="col-6">
-                                <label for="f_cuenta" class="form-label">Cuenta:</label>
-                                <input type="text" id="f_cuenta" class="form-control" placeholder="Número de cuenta">
-                            </div>
-                            <div class="col-6" style="margin-top: -10px;">
-                                <label for="f_nombre" class="form-label mt-2">Nombre:</label>
-                                <input type="text" id="f_nombre" class="form-control" placeholder="Nombre de la cuenta">
-                            </div>-->
-                            <div class="col-12 mt-3">
-                                <div class="col-12 text-right d-flex justify-content-end">
-
+                <div class="modal-body p-4">
+                    <div class="mb-4">
+                        <p class="text-muted">
+                            <i data-feather="info" class="mr-1" style="width: 16px; height: 16px;"></i>
+                            Busque y seleccione la cuenta contable que desea utilizar
+                        </p>
+                        <div class="search-box mb-3">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text bg-light">
+                                        <i data-feather="filter" style="width: 18px; height: 18px;"></i>
+                                    </span>
                                 </div>
+                                <input type="text" id="searchInput" class="form-control"
+                                    placeholder="Filtrar por nombre o número de cuenta...">
                             </div>
                         </div>
+                    </div>
 
-                        <div id="resultadosCuenta" class="mt-4"></div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" id="close"
-                            data-bs-dismiss="modal">Cerrar</button>
-                        <button class="btn btn-primary" onclick="buscarCuenta()">Buscar</button>
-                    </div>
+                    <div id="resultadosCuenta" class="results-container"></div>
+                </div>
+                <div class="modal-footer bg-light">
+                    <button type="button" class="btn btn-secondary" id="close" data-bs-dismiss="modal">
+                        <i data-feather="x" style="width: 16px; height: 16px;"></i>
+                        Cerrar
+                    </button>
+                    <button class="btn btn-primary" onclick="buscarCuenta()">
+                        <i data-feather="search" style="width: 16px; height: 16px;"></i>
+                        Buscar
+                    </button>
                 </div>
             </div>
         </div>
+    </div>
+
+    <style>
+        /* Estilos mejorados para el modal de búsqueda de cuenta contable */
+        #miModal .modal-content {
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        #miModal .modal-header {
+            border-bottom: none;
+            padding: 1.5rem;
+        }
+
+        #miModal .modal-footer {
+            border-top: none;
+            padding: 1.5rem;
+        }
+
+        #miModal #resultadosCuenta {
+            position: relative;
+            overflow-y: auto;
+            max-height: 450px;
+            max-width: 100%;
+            padding-right: 10px;
+        }
+
+        #miModal #resultadosCuenta::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        #miModal #resultadosCuenta::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        #miModal #resultadosCuenta::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+
+        #miModal #resultadosCuenta::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        #miModal .search-box .input-group-text {
+            border: 1px solid #ced4da;
+            border-right: none;
+        }
+
+        #miModal #searchInput {
+            border-left: none;
+        }
+
+        #miModal #searchInput:focus {
+            box-shadow: none;
+            border-color: #4099ff;
+        }
+
+        #miModal .search-box .input-group:focus-within .input-group-text {
+            border-color: #4099ff;
+        }
+
+        #miModal .modal-footer .btn {
+            padding: 0.6rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        #miModal .modal-footer .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Estilos para las filas de resultados */
+        #miModal .cuenta-item {
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        #miModal .cuenta-item:hover {
+            border-color: #4099ff;
+            background-color: #f8f9fa;
+            transform: translateX(5px);
+        }
+
+        #miModal .cuenta-item.selected {
+            border-color: #4099ff;
+            background-color: #eff6ff;
+        }
+    </style>
 
 
 
 
-        <!-- Input donde se guarda el id seleccionado -->
+    <!-- Input donde se guarda el id seleccionado -->
 
 
-        <script src="assets/js/vendor-all.min.js"></script>
-        <script src="assets/js/plugins/bootstrap.min.js"></script>
-        <script src="assets/js/plugins/feather.min.js"></script>
-        <script src="assets/js/pcoded.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
-        <script src="assets/js/plugins/clipboard.min.js"></script>
-        <script src="assets/js/uikit.min.js"></script>
+    <script src="assets/js/vendor-all.min.js"></script>
+    <script src="assets/js/plugins/bootstrap.min.js"></script>
+    <script src="assets/js/plugins/feather.min.js"></script>
+    <script src="assets/js/pcoded.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+    <script src="assets/js/plugins/clipboard.min.js"></script>
+    <script src="assets/js/uikit.min.js"></script>
 
-        <script src="assets/js/plugins/apexcharts.min.js"></script>
+    <script src="assets/js/plugins/apexcharts.min.js"></script>
 
-        <script>
-            // https://webhook.site/d98cac13-dd5d-4b2e-b2d5-905ac9e7390f
-            // https://pipedream.com/
-            // https://pepito.free.beeceptor.com
+    <script>
+        // https://webhook.site/d98cac13-dd5d-4b2e-b2d5-905ac9e7390f
+        // https://pipedream.com/
+        // https://pepito.free.beeceptor.com
 
-            /*document.addEventListener('DOMContentLoaded', function () {
-                const miModal = new bootstrap.Modal(document.getElementById('miModal'));
-                document.getElementById('abrirModal').addEventListener('click', function () {
-                    miModal.show();
-                });
-                document.getElementById('close').addEventListener('click', function () {
-                    miModal.hide();
-                });
-            });*/
-        </script>
-        <link rel="stylesheet" href="assets/fonts/font-awsome-pro/css/pro.min.css">
-        <link rel="stylesheet" href="assets/fonts/feather.css">
-        <link rel="stylesheet" href="assets/fonts/fontawesome.css">
-        <link rel="stylesheet" href="assets/css/customizer.css">
-        <!--    <script type="text/javascript" src="assets/js/causacionescontables/causacioncontable.js"></script> -->
-        <script src="assets/js/actions.js"></script>
-        <script src="assets/js/constantes.js"></script>
-        <script src="assets/js/causacionescontables/inicio.js"></script>
-        <script src="assets/js/logout.js"></script>
+        /*document.addEventListener('DOMContentLoaded', function () {
+            const miModal = new bootstrap.Modal(document.getElementById('miModal'));
+            document.getElementById('abrirModal').addEventListener('click', function () {
+                miModal.show();
+            });
+            document.getElementById('close').addEventListener('click', function () {
+                miModal.hide();
+            });
+        });*/
+    </script>
+    <link rel="stylesheet" href="assets/fonts/font-awsome-pro/css/pro.min.css">
+    <link rel="stylesheet" href="assets/fonts/feather.css">
+    <link rel="stylesheet" href="assets/fonts/fontawesome.css">
+    <link rel="stylesheet" href="assets/css/customizer.css">
+    <!--    <script type="text/javascript" src="assets/js/causacionescontables/causacioncontable.js"></script> -->
+    <script src="assets/js/actions.js"></script>
+    <script src="assets/js/constantes.js"></script>
+    <script src="assets/js/causacionescontables/inicio.js"></script>
+    <script src="assets/js/logout.js"></script>
 
-        <script>
-            fetch('assets/js/causacionescontables/cuentas_contables.json')
-                .then(res => res.json())
-                .then(data => {
-                    const select = document.getElementById('id_cuenta');
-                    const cacheStr = localStorage.getItem('cuentas_cache');
-                    let cache = [];
+    <script>
+        fetch('assets/js/causacionescontables/cuentas_contables.json')
+            .then(res => res.json())
+            .then(data => {
+                const select = document.getElementById('id_cuenta');
+                const cacheStr = localStorage.getItem('cuentas_cache');
+                let cache = [];
 
-                    if (cacheStr) {
-                        console.log('✅ Cache encontrada en localStorage.');
-                        try {
-                            cache = JSON.parse(cacheStr);
-                        } catch (e) {
-                            console.warn('⚠️ cache JSON inválido:', e);
+                // helper: crear option
+                const crearOption = (item) => {
+                    const option = document.createElement('option');
+                    option.value = item.id != null ? String(item.id) : '';
+                    option.textContent = `${item.cuenta} - ${item.nombre}`;
+                    return option;
+                };
+
+                if (cacheStr) {
+                    console.log('✅ Cache encontrada en localStorage.');
+                    try {
+                        cache = JSON.parse(cacheStr);
+                    } catch (e) {
+                        console.warn('⚠️ cache JSON inválido:', e);
+                    }
+
+                    const idsValidos = new Set(
+                        cache
+                            .map(c => c && c.id != null ? String(c.id) : null)
+                            .filter(Boolean)
+                    );
+
+                    const idsPadreEnCache = new Set(
+                        cache
+                            .map(c => c && c.id_padre != null ? String(c.id_padre) : null)
+                            .filter(Boolean)
+                    );
+
+                    // mantenemos tus adiciones explícitas
+                    idsValidos.add("6070875");
+                    idsValidos.add("6070932");
+
+                    // Recorremos los datos en orden y construimos optgroups según opt:"true"
+                    let currentGroup = null; // { label: string, options: [item,...] } o null
+
+                    data.forEach(item => {
+                        const id = item.id != null ? String(item.id) : null;
+                        const idPadre = item.id_padre != null ? String(item.id_padre) : null;
+
+                        const condicionIncluye =
+                            (id && idsValidos.has(id)) ||
+                            (idPadre && idsValidos.has(idPadre)) ||
+                            (id && idsPadreEnCache.has(id)) ||
+                            (idPadre && idsPadreEnCache.has(idPadre));
+
+                        // Si este registro es un grupo (opt true)
+                        if (String(item.opt).toLowerCase() === "true") {
+                            // Si ya hay un grupo en construcción, lo cerramos (si tiene opciones)
+                            if (currentGroup) {
+                                if (currentGroup.options.length > 0) {
+                                    const optgroup = document.createElement('optgroup');
+                                    optgroup.label = currentGroup.label;
+                                    currentGroup.options.forEach(childItem => optgroup.appendChild(crearOption(childItem)));
+                                    select.appendChild(optgroup);
+                                }
+                            }
+                            // Empezar nuevo grupo (no lo añadimos todavía al select; solo si tiene hijos válidos)
+                            currentGroup = {
+                                label: `${item.cuenta} - ${item.nombre}`,
+                                options: []
+                            };
+                            // **NO** añadimos la fila del grupo como opción (se elimina de la selección)
+                            return;
                         }
 
-                        const idsValidos = new Set(
-                            cache
-                                .map(c => c && c.id != null ? String(c.id) : null)
-                                .filter(Boolean)
-                        );
-
-                        const idsPadreEnCache = new Set(
-                            cache
-                                .map(c => c && c.id_padre != null ? String(c.id_padre) : null)
-                                .filter(Boolean)
-                        );
-                        idsValidos.add("6070875");
-                        idsValidos.add("6070932");
-
-                        data.forEach(item => {
-                            const id = item.id != null ? String(item.id) : null;
-                            const idPadre = item.id_padre != null ? String(item.id_padre) : null;
-
-                            // Si no hay cache definido, mostramos todo
-                            if (idsValidos.size === 0 && idsPadreEnCache.size === 0) {
-                                const option = document.createElement('option');
-                                option.value = id;
-                                option.textContent = `${item.cuenta} - ${item.nombre}`;
-                                select.appendChild(option);
-                                return;
-                            }
-
-                            const condicionIncluye =
-                                (id && idsValidos.has(id)) ||
-                                (idPadre && idsValidos.has(idPadre)) ||
-                                (id && idsPadreEnCache.has(id)) ||
-                                (idPadre && idsPadreEnCache.has(idPadre));
-
+                        // Si hay un grupo activo, y el item cumple la condición de inclusión, lo añadimos al grupo
+                        if (currentGroup) {
                             if (condicionIncluye) {
-                                const option = document.createElement('option');
-                                option.value = id;
-                                option.textContent = `${item.cuenta} - ${item.nombre}`;
-                                select.appendChild(option);
+                                currentGroup.options.push(item);
                             } else {
-                                console.log(`⚠️ Omitido ${id} — no coincide con cache (ni id ni id_padre)`);
+                                console.log(`⚠️ Omitido ${id} dentro de grupo ${currentGroup.label} — no coincide con cache`);
                             }
-                        });
-                    } else {
-                        console.log('❌ Cache no encontrada en localStorage.');
-                        // 🧩 Si no hay cache, cargar desde el JSON local y guardarlo
-                        fetch('assets/js/causacionescontables/cuentas_contables.json')
-                            .then(res => res.json())
-                            .then(data => {
-                                localStorage.setItem('cuentas_cache', JSON.stringify(data));
-                                cache = data;
-                                data.forEach(item => {
-                                    const option = document.createElement('option');
-                                    option.value = item.id;
-                                    option.textContent = `${item.cuenta} - ${item.nombre}`;
-                                    select.appendChild(option);
-                                });
-                            })
-                            .catch(err => console.error('❌ Error cargando JSON:', err));
-                    }
+                            return;
+                        }
 
-                })
-                .catch(err => console.error('Error cargando JSON:', err));
-        </script>
-        <script>
-
-            const inputFecha = document.getElementById('fecha_manual');
-            const today = new Date();
-            let allExtra = [];
-
-            async function centrocostoall() {
-                try {
-                    const response = await fetch('assets/js/causacionescontables/centroCostos.json');
-                    const allExtra = await response.json();
-
-                    const select = document.getElementById("extra");
-                    select.innerHTML = '<option value="" disabled selected>SELECCIONE UN CENTRO DE COSTOS...</option>';
-
-                    allExtra.forEach(item => {
-                        const option = document.createElement("option");
-                        option.value = item.codigo;
-                        option.textContent = item.nombre;
-                        select.appendChild(option);
-                    });
-                    console.log(select);
-                } catch (e) {
-                    console.error("Error cargando centros de costos:", e);
-                }
-            }
-            centrocostoall();
-
-
-            async function cargarCausacionContable(id, view) {
-                try {
-                    const response = await fetch(`${host}/causacionContable/${id}`, {
-                        headers: {
-                            'Authorization': `Bearer ${token}`,
-                            'Content-Type': 'application/json'
+                        // Si NO hay grupo activo: comportamiento anterior (añadir opción suelta si corresponde)
+                        if (condicionIncluye) {
+                            const option = crearOption(item);
+                            select.appendChild(option);
+                        } else {
+                            console.log(`⚠️ Omitido ${id} — no coincide con cache (ni id ni id_padre)`);
                         }
                     });
-                    if (!response.ok) {
-                        throw new Error("Error al obtener la causación contable");
+
+                    // Al final, cerrar el último grupo si existe y tiene opciones
+                    if (currentGroup && currentGroup.options.length > 0) {
+                        const optgroup = document.createElement('optgroup');
+                        optgroup.label = currentGroup.label;
+                        currentGroup.options.forEach(childItem => optgroup.appendChild(crearOption(childItem)));
+                        select.appendChild(optgroup);
                     }
 
-                    const data = await response.json();
-
-                    // Asignar datos al formulario
-                    document.getElementById("id_nit").value = data.id_nit || "";
-                    document.getElementById("nit").value = data.nit || "";
-                    document.getElementById("fecha_manual").value = data.fecha_manual || "";
-                    document.getElementById("valor").value = data.valor || "";
-                    document.getElementById("concepto").value = data.concepto || "";
-                    document.getElementById("id_unico").value = data.id || "";
-                    document.getElementById("id_cuenta").value = data.id_cuenta || "";
-
-                    if (data.extra) {
-                        document.getElementById("extra").value = data.extra;
-                        const resultado = allExtra.find(item => item.codigo === data.extra);
-
-                        if (resultado) {
-                            document.getElementById("descripcionText").textContent = resultado.descripcion;
+                } else {
+                    console.log('❌ Cache no encontrada en localStorage.');
+                    // Sin cache: mostramos todo pero respetando opt:true como optgroup no seleccionable
+                    let currentGroup = null;
+                    data.forEach(item => {
+                        if (String(item.opt).toLowerCase() === "true") {
+                            // cerrar grupo anterior si existiera
+                            if (currentGroup) {
+                                if (currentGroup.options.length > 0) {
+                                    const optgroup = document.createElement('optgroup');
+                                    optgroup.label = currentGroup.label;
+                                    currentGroup.options.forEach(childItem => optgroup.appendChild(crearOption(childItem)));
+                                    select.appendChild(optgroup);
+                                }
+                            }
+                            // iniciar nuevo grupo
+                            currentGroup = {
+                                label: `${item.cuenta} - ${item.nombre}`,
+                                options: []
+                            };
+                            return; // no añadimos la fila del grupo como option
                         }
+
+                        if (currentGroup) {
+                            currentGroup.options.push(item);
+                        } else {
+                            // opciones sueltas (antes del primer opt:true)
+                            select.appendChild(crearOption(item));
+                        }
+                    });
+
+                    // cerrar último grupo si tiene elementos
+                    if (currentGroup && currentGroup.options.length > 0) {
+                        const optgroup = document.createElement('optgroup');
+                        optgroup.label = currentGroup.label;
+                        currentGroup.options.forEach(childItem => optgroup.appendChild(crearOption(childItem)));
+                        select.appendChild(optgroup);
                     }
 
-
-                    const selectCuenta = document.getElementById("id_cuenta");
-                    const idCuenta = data.id_cuenta?.toString(); // por si viene como número
-
-                    const option = [...selectCuenta.options].find(opt => opt.value === idCuenta);
-
-                    if (option) {
-                        selectCuenta.value = idCuenta;
-                    } else {
-                        const nuevaOption = new Option(`${idCuenta} - (CUENTA NO LISTADA)`, idCuenta, true, true);
-                        selectCuenta.add(nuevaOption);
+                    // además guardamos en cache para futuras veces (como en tu versión original)
+                    try {
+                        localStorage.setItem('cuentas_cache', JSON.stringify(data));
+                    } catch (e) {
+                        console.warn('⚠️ No se pudo guardar el cache en localStorage:', e);
                     }
-
-
-                    if (view == 'true') {
-                        document.querySelectorAll("input, select, textarea").forEach(el => {
-                            el.disabled = true;
-                        });
-                        document.getElementById("btn_guardar").hidden = true;
-                        document.getElementById("id_unico_top").textContent = data.id
-                    }
-
-                    if (view == "edit") {
-                        document.getElementById("id_unico_top").textContent = data.id
-                    }
-
-
-                } catch (error) {
-                    console.error("Error:", error);
                 }
+
+            })
+            .catch(err => console.error('Error cargando JSON:', err));
+    </script>
+
+    <script>
+
+        const inputFecha = document.getElementById('fecha_manual');
+        const today = new Date();
+        let allExtra = [];
+
+        async function centrocostoall() {
+            try {
+                const response = await fetch('assets/js/causacionescontables/centroCostos.json');
+                const allExtra = await response.json();
+
+                const select = document.getElementById("extra");
+                select.innerHTML = '<option value="" disabled selected>SELECCIONE UN CENTRO DE COSTOS...</option>';
+
+                allExtra.forEach(item => {
+                    const option = document.createElement("option");
+                    option.value = item.id;
+                    option.textContent = item.codigo + " - " +item.nombre;
+                    select.appendChild(option);
+                });
+                //console.log(select);
+            } catch (e) {
+                console.error("Error cargando centros de costos:", e);
             }
+        }
+        centrocostoall();
 
-            // Ejemplo de uso automático al cargar la página
-            document.addEventListener("DOMContentLoaded", function () {
-                const queryParams = new URLSearchParams(window.location.search);
-                const view = queryParams.get("view")
-                if (view == "create") {
-                    document.getElementById("btn_editar").hidden = true;
-                    document.getElementById("btn_guardar").hidden = false;
+
+        async function cargarCausacionContable(id, view) {
+            try {
+                const response = await fetch(`${host}/causacionContable/${id}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                if (!response.ok) {
+                    throw new Error("Error al obtener la causación contable");
                 }
 
-                if (view == "true") {
-                    const id = queryParams.get("id");
-                    cargarCausacionContable(id, view)
-                    if (id == null) {
-                        history.back();
+                const data = await response.json();
+
+                // Asignar datos al formulario
+                document.getElementById("id_nit").value = data.id_nit || "";
+                document.getElementById("nit").value = data.nit || "";
+                document.getElementById("fecha_manual").value = data.fecha_manual || "";
+                document.getElementById("valor").value = data.valor || "";
+                document.getElementById("concepto").value = data.concepto || "";
+                document.getElementById("id_unico").value = data.id || "";
+                document.getElementById("id_cuenta").value = data.id_cuenta || "";
+
+                if (data.extra) {
+                    document.getElementById("extra").value = data.extra;
+                    const resultado = allExtra.find(item => item.codigo === data.extra);
+
+                    if (resultado) {
+                        document.getElementById("descripcionText").textContent = resultado.descripcion;
                     }
-                    document.getElementById("btn_editar").hidden = true;
+                }
+
+
+                const selectCuenta = document.getElementById("id_cuenta");
+                const idCuenta = data.id_cuenta?.toString(); 
+
+                const option = [...selectCuenta.options].find(opt => opt.value === idCuenta);
+
+                if (option) {
+                    selectCuenta.value = idCuenta;
+                } else {
+                    const nuevaOption = new Option(`${idCuenta} - (CUENTA NO LISTADA)`, idCuenta, true, true);
+                    selectCuenta.add(nuevaOption);
+                }
+
+
+                if (view == 'true') {
+                    document.querySelectorAll("input, select, textarea").forEach(el => {
+                        el.disabled = true;
+                    });
                     document.getElementById("btn_guardar").hidden = true;
+                    document.getElementById("id_unico_top").textContent = data.id
                 }
 
                 if (view == "edit") {
-                    const id = queryParams.get("id");
-                    cargarCausacionContable(id, view)
-                    if (id == null) {
-                        history.back();
-                    }
-                    document.getElementById("btn_guardar").hidden = true;
-                    document.getElementById("btn_editar").hidden = false;
+                    document.getElementById("id_unico_top").textContent = data.id
                 }
-            });
 
 
-        </script>
+            } catch (error) {
+                console.error("Error:", error);
+            }
+        }
+
+        // Ejemplo de uso automático al cargar la página
+        document.addEventListener("DOMContentLoaded", function () {
+            const queryParams = new URLSearchParams(window.location.search);
+            const view = queryParams.get("view")
+            if (view == "create") {
+                document.getElementById("btn_editar").hidden = true;
+                document.getElementById("btn_guardar").hidden = false;
+            }
+
+            if (view == "true") {
+                const id = queryParams.get("id");
+                cargarCausacionContable(id, view)
+                if (id == null) {
+                    history.back();
+                }
+                document.getElementById("btn_editar").hidden = true;
+                document.getElementById("btn_guardar").hidden = true;
+            }
+
+            if (view == "edit") {
+                const id = queryParams.get("id");
+                cargarCausacionContable(id, view)
+                if (id == null) {
+                    history.back();
+                }
+                document.getElementById("btn_guardar").hidden = true;
+                document.getElementById("btn_editar").hidden = false;
+            }
+        });
+
+
+    </script>
 </body>
 
 </html>

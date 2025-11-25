@@ -33,63 +33,447 @@
     <link id="rol_user" rel="stylesheet" href="assets/css/change_loggin.css">
     <link id="rol_admin" rel="stylesheet" href="assets/css/typeadmin.css">
     <style>
+        /* Contenedor de filtros mejorado */
+        .filters-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: flex-end;
+            margin-bottom: 25px;
+            padding: 20px;
+            background: linear-gradient(135deg, #c73363 0%, #691a33 100%);
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            min-width: 150px;
+        }
+
+        .filter-group label {
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: #ffffff;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .filter-group input,
+        .filter-group select {
+            padding: 10px 15px;
+            border: 2px solid transparent;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            background-color: #ffffff;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .filter-group input:focus,
+        .filter-group select:focus {
+            outline: none;
+            border-color: #c73363;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .btn-search {
+            padding: 11px 30px;
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(56, 239, 125, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: auto;
+        }
+
+        .btn-search:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(56, 239, 125, 0.4);
+        }
+
+        .btn-search:active {
+            transform: translateY(0);
+        }
+
+        /* Tabla mejorada */
+        #data-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-top: 20px;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        #data-table thead {
+            background: linear-gradient(135deg, #c73363 0%, #691a33 100%);
+        }
+
+        #data-table th {
+            padding: 16px 12px;
+            text-align: left;
+            font-weight: 600;
+            color: white;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border: none;
+        }
+
+        #data-table tbody tr {
+            border-bottom: 1px solid #f0f0f0;
+            transition: all 0.2s ease;
+        }
+
+        #data-table tbody tr:nth-child(even) {
+            background-color: #f9fafb;
+        }
+
+        #data-table tbody tr:hover {
+            background-color: #f0f4ff;
+            transform: scale(1.01);
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.15);
+        }
+
+        #data-table td {
+            padding: 14px 12px;
+            border: none;
+            color: #374151;
+            font-size: 0.9rem;
+        }
+
+        #data-table td a {
+            color: #c73363;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 4px 12px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            display: inline-block;
+        }
+
+        #data-table td a:hover {
+            background-color: #c73363;
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        /* Paginación mejorada */
+        .pagination-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+            padding: 20px;
+        }
+
+        .btn-pagination {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #c73363 0%, #691a33 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-pagination:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-pagination:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        #page-info {
+            font-weight: 600;
+            color: #374151;
+            padding: 10px 20px;
+            background: #f3f4f6;
+            border-radius: 8px;
+            min-width: 100px;
+            text-align: center;
+        }
+
+        /* Month Year Picker mejorado */
         .month-year-picker {
             display: flex;
             align-items: center;
             gap: 10px;
             padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
             text-transform: uppercase;
+            background: white;
         }
 
         .nav-button {
             padding: 8px 12px;
             cursor: pointer;
             border: none;
-            background-color: #f0f0f0;
-            border-radius: 3px;
+            background-color: #c73363;
+            color: white;
+            border-radius: 6px;
+            transition: all 0.2s ease;
         }
 
         .nav-button:hover {
-            background-color: #e0e0e0;
+            background-color: #5568d3;
+            transform: scale(1.05);
         }
 
         .current-month-year {
-            font-size: 1.2em;
-            font-weight: bold;
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #374151;
         }
 
         .month-year-picker:nth-child(1) {
             display: none;
         }
 
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .filters-container {
+                flex-direction: column;
+            }
 
-        body {
-            font-family: Arial, sans-serif;
+            .filter-group {
+                width: 100%;
+            }
+
+            .btn-search {
+                width: 100%;
+            }
+
+            #data-table {
+                font-size: 0.8rem;
+            }
+
+            #data-table th,
+            #data-table td {
+                padding: 10px 8px;
+            }
+
+            .pagination-container {
+                flex-wrap: wrap;
+            }
         }
 
-        input,
-        select,
-        button {
-            margin: 5px;
+        /* Table Wrapper para scroll horizontal en móviles */
+        .table-wrapper {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            border-radius: 12px;
         }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
+        /* Estilos para estados vacíos */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #9ca3af;
         }
 
-        th,
-        td {
-            border: 1px solid #ccc;
-            padding: 8px;
-            text-align: left;
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            opacity: 0.5;
         }
 
-        th {
-            background-color: #f4f4f4;
+        /* Botón de acciones en tabla */
+        .btn-action {
+            padding: 6px 12px;
+            background: linear-gradient(135deg, #c73363 0%, #691a33 100%);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 5px rgba(102, 126, 234, 0.3);
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn-action:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-action i {
+            width: 14px;
+            height: 14px;
+        }
+
+        /* Estilos del Modal */
+        #detallesModal .modal-content {
+            border: none;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        #detallesModal .modal-header {
+            background: linear-gradient(135deg, #c73363 0%, #691a33 100%);
+            color: white;
+            border-radius: 16px 16px 0 0;
+            padding: 20px 25px;
+            border: none;
+        }
+
+        #detallesModal .modal-title {
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        #detallesModal .close {
+            color: white;
+            opacity: 1;
+            text-shadow: none;
+            font-size: 1.5rem;
+        }
+
+        #detallesModal .close:hover {
+            color: #f0f0f0;
+        }
+
+        #detallesModal .modal-body {
+            padding: 25px;
+        }
+
+        .details-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .detail-section {
+            background: #f9fafb;
+            border-radius: 10px;
+            padding: 18px;
+            border-left: 4px solid #c73363;
+        }
+
+        .section-title {
+            font-weight: 700;
+            color: #374151;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .section-title i {
+            color: #c73363;
+            width: 18px;
+            height: 18px;
+        }
+
+        .detail-item {
+            margin-bottom: 12px;
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+        }
+
+        .detail-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .detail-item.full-width {
+            flex-direction: column;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: #6b7280;
+            font-size: 0.85rem;
+            min-width: 120px;
+        }
+
+        .detail-value {
+            color: #1f2937;
+            font-size: 0.95rem;
+            word-wrap: break-word;
+        }
+
+        .detail-value.highlight {
+            color: #c73363;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .detail-value.badge-status {
+            padding: 4px 12px;
+            border-radius: 20px;
+            background: #10b981;
+            color: white;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            display: inline-block;
+        }
+
+        .concepto-text {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            line-height: 1.6;
+            border: 1px solid #e5e7eb;
+            margin: 0;
+        }
+
+        #detallesModal .modal-footer {
+            border-top: 1px solid #e5e7eb;
+            padding: 15px 25px;
+            background: #f9fafb;
+            border-radius: 0 0 16px 16px;
+        }
+
+        #detallesModal .modal-footer .btn {
+            padding: 8px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Responsive modal */
+        @media (max-width: 768px) {
+            .detail-item {
+                flex-direction: column;
+                gap: 4px;
+            }
+
+            .detail-label {
+                min-width: auto;
+            }
         }
     </style>
 </head>
@@ -259,58 +643,66 @@
                         </div>
 
 
-                        <div class="card-body text-center">
+                        <div class="card-body">
 
+                            <!-- Filtros mejorados -->
+                            <div class="filters-container">
+                                <div class="filter-group">
+                                    <label for="anio">Año</label>
+                                    <input type="number" id="anio" value="" min="1930" max="2099" placeholder="2024">
+                                </div>
 
-                            <!-- <label for="nit">NIT:</label>
-                            <input type="text" id="nit" value="123456"> -->
+                                <div class="filter-group">
+                                    <label for="mes">Mes</label>
+                                    <select id="mes">
+                                        <option disabled selected value="">Seleccione...</option>
+                                        <option value="enero">Enero</option>
+                                        <option value="febrero">Febrero</option>
+                                        <option value="marzo">Marzo</option>
+                                        <option value="abril">Abril</option>
+                                        <option value="mayo">Mayo</option>
+                                        <option value="junio">Junio</option>
+                                        <option value="julio">Julio</option>
+                                        <option value="agosto">Agosto</option>
+                                        <option value="septiembre">Septiembre</option>
+                                        <option value="octubre">Octubre</option>
+                                        <option value="noviembre">Noviembre</option>
+                                        <option value="diciembre">Diciembre</option>
+                                    </select>
+                                </div>
 
-                            <label for="anio">Año:</label>
-                            <input type="number" id="anio" value="" min="1930" max="2099">
+                                <button class="btn-search" onclick="loadData()">
+                                    <i data-feather="search"></i> Buscar
+                                </button>
+                            </div>
 
-                            <label for="mes">Mes:</label>
-                            <select id="mes">
-                                <option disabled selected value="">Seleccione...</option>
-                                <option value="enero">Enero</option>
-                                <option value="febrero">Febrero</option>
-                                <option value="marzo">Marzo</option>
-                                <option value="abril">Abril</option>
-                                <option value="mayo">Mayo</option>
-                                <option value="junio">Junio</option>
-                                <option value="julio">Julio</option>
-                                <option value="agosto">Agosto</option>
-                                <option value="septiembre">Septiembre</option>
-                                <option value="octubre">Octubre</option>
-                                <option value="noviembre">Noviembre</option>
-                                <option value="diciembre">Diciembre</option>
+                            <!-- Tabla con wrapper para scroll horizontal -->
+                            <div class="table-wrapper">
+                                <table id="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Fecha</th>
+                                            <th>Valor</th>
+                                            <th>Cuenta</th>
+                                            <th>Estado Begranda</th>
+                                            <th>Concepto</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
 
-
-                                <!-- Agrega más meses si es necesario -->
-                            </select>
-
-                            <button onclick="loadData()">Buscar</button>
-
-                            <table id="data-table">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Fecha</th>
-                                        <th>Valor</th>
-                                        <th>Cuenta</th>
-                                        <th>Estado Begranda</th>
-                                        <th>ID Cuenta</th>
-                                        <th>Tipo Cuenta</th>
-                                        <th>Documento</th>
-                                        <th>Concepto</th>
-                                    </tr>
-                                </thead>
-                                <tbody></tbody>
-                            </table>
-
-                            <div>
-                                <button onclick="previousPage()">Anterior</button>
+                            <!-- Paginación mejorada -->
+                            <div class="pagination-container">
+                                <button class="btn-pagination" onclick="previousPage()" id="btn-prev">
+                                    <i data-feather="chevron-left"></i> Anterior
+                                </button>
                                 <span id="page-info"></span>
-                                <button onclick="nextPage()">Siguiente</button>
+                                <button class="btn-pagination" onclick="nextPage()" id="btn-next">
+                                    Siguiente <i data-feather="chevron-right"></i>
+                                </button>
                             </div>
 
 
@@ -327,6 +719,271 @@
     </div>
     <!-- [ Main Content ] end -->
     </div>
+
+    <!-- Modal de Detalles -->
+    <div class="modal fade" id="detallesModal" tabindex="-1" role="dialog" aria-labelledby="detallesModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" role="document">
+            <div class="modal-content shadow-lg border-0">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title d-flex align-items-center" id="detallesModalLabel">
+                        <i data-feather="file-text" class="mr-2"></i>
+                        Detalles de la Causación Contable
+                    </h5>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="details-container">
+                        <!-- Sección: Información General -->
+                        <div class="detail-section">
+                            <h6 class="section-title">
+                                <i data-feather="info"></i> Información General
+                            </h6>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="detail-item">
+                                        <span class="detail-label">ID:</span>
+                                        <span class="detail-value" id="modal-id">-</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="detail-item">
+                                        <span class="detail-label">Fecha:</span>
+                                        <span class="detail-value" id="modal-fecha">-</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="detail-item">
+                                        <span class="detail-label">NIT:</span>
+                                        <span class="detail-value" id="modal-nit">-</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="detail-item">
+                                        <span class="detail-label">Valor:</span>
+                                        <span class="detail-value highlight" id="modal-valor">-</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Sección: Información Contable -->
+                        <div class="detail-section">
+                            <h6 class="section-title">
+                                <i data-feather="book"></i> Información Contable
+                            </h6>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="detail-item">
+                                        <span class="detail-label">Cuenta:</span>
+                                        <span class="detail-value" id="modal-cuenta">-</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="detail-item">
+                                        <span class="detail-label">ID Cuenta:</span>
+                                        <span class="detail-value" id="modal-id-cuenta">-</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="detail-item">
+                                        <span class="detail-label">Tipo Cuenta:</span>
+                                        <span class="detail-value" id="modal-tipo-cuenta">-</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="detail-item">
+                                        <span class="detail-label">Estado:</span>
+                                        <span class="detail-value badge-status" id="modal-estado">-</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Sección: Estado Begranda -->
+                        <div class="detail-section">
+                            <h6 class="section-title">
+                                <i data-feather="check-circle"></i> Estado Begranda
+                            </h6>
+                            <div class="detail-item full-width">
+                                <span class="detail-value" id="modal-estado-begranda">-</span>
+                            </div>
+                        </div>
+
+                        <!-- Sección: Concepto -->
+                        <div class="detail-section">
+                            <h6 class="section-title">
+                                <i data-feather="align-left"></i> Concepto
+                            </h6>
+                            <div class="detail-item full-width">
+                                <p class="detail-value concepto-text" id="modal-concepto">-</p>
+                            </div>
+                        </div>
+
+                        <!-- Sección: Información Extra -->
+                        <div class="detail-section" id="section-extra" style="display: none;">
+                            <h6 class="section-title">
+                                <i data-feather="layers"></i> Información Adicional
+                            </h6>
+                            <div class="detail-item full-width">
+                                <p class="detail-value" id="modal-extra">-</p>
+                            </div>
+                        </div>
+
+                        <!-- Sección: Documento -->
+                        <div class="detail-section">
+                            <h6 class="section-title">
+                                <i data-feather="paperclip"></i> Documento de Referencia
+                            </h6>
+                            <div class="detail-item full-width">
+                                <a href="#" id="modal-documento" class="btn btn-outline-primary btn-sm" target="_blank">
+                                    <i data-feather="download"></i> Ver/Descargar PDF
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer bg-light">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                        <i data-feather="x" style="width: 16px; height: 16px;"></i>
+                        Cerrar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        /* Estilos mejorados para el modal de detalles */
+        #detallesModal .modal-content {
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        #detallesModal .modal-header {
+            border-bottom: none;
+            padding: 1.5rem;
+        }
+
+        #detallesModal .modal-footer {
+            border-top: none;
+            padding: 1.5rem;
+        }
+
+        #detallesModal .detail-section {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #4099ff;
+            transition: all 0.3s ease;
+        }
+
+        #detallesModal .detail-section:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transform: translateX(5px);
+        }
+
+        #detallesModal .section-title {
+            color: #4099ff;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            font-size: 1.1rem;
+        }
+
+        #detallesModal .section-title i {
+            margin-right: 0.5rem;
+        }
+
+        #detallesModal .detail-item {
+            margin-bottom: 0.75rem;
+            padding: 0.5rem 0;
+        }
+
+        #detallesModal .detail-label {
+            font-weight: 600;
+            color: #6c757d;
+            display: inline-block;
+            min-width: 120px;
+            font-size: 0.9rem;
+        }
+
+        #detallesModal .detail-value {
+            color: #212529;
+            font-size: 1rem;
+        }
+
+        #detallesModal .detail-value.highlight {
+            color: #10b981;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        #detallesModal .badge-status {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        #detallesModal .concepto-text {
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+            line-height: 1.6;
+            color: #495057;
+        }
+
+        #detallesModal .btn-outline-primary {
+            transition: all 0.3s ease;
+        }
+
+        #detallesModal .btn-outline-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(64, 153, 255, 0.3);
+        }
+
+        #detallesModal .modal-footer .btn {
+            padding: 0.6rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        #detallesModal .modal-footer .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        #detallesModal .modal-body {
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        #detallesModal .modal-body::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        #detallesModal .modal-body::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        #detallesModal .modal-body::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+
+        #detallesModal .modal-body::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    </style>
+
     <!-- Warning Section start -->
 
     <script src="assets/js/vendor-all.min.js"></script>
@@ -347,6 +1004,7 @@
     <script>
         let skip = 0;
         const limit = 100;
+        let totalRecords = 0;
 
         function loadData() {
             const anio = document.getElementById("anio").value;
@@ -378,60 +1036,198 @@
                 .then(data => {
                     const tbody = document.querySelector("#data-table tbody");
                     tbody.innerHTML = "";
-                    data.data.forEach(item => {
-                        //console.log(item)
-                        const fecha = new Date(item.begranda);
-                        const formato = String(fecha.getDate()).padStart(2, '0') + "/" +
-                            String(fecha.getMonth() + 1).padStart(2, '0') + "/" +
-                            fecha.getFullYear() + " " +
-                            String(fecha.getHours()).padStart(2, '0') + ":" +
-                            String(fecha.getMinutes()).padStart(2, '0');
-                        const reporte = JSON.parse(item.report_begranda);
 
-                        const finextra = item.extra;
-                        // 1. Eliminar los prefijos de forma segura
-                        const sinPrefijos = finextra
-                            // Elimina "Id de la cuenta: "
-                            .replace("Id de la cuenta: ", "")
-                            // Elimina " Tipo de la cuenta: " (nota el espacio inicial para no afectar el punto y coma)
-                            .replace(" Tipo de la cuenta: ", "");
+                    if (data.data && data.data.length > 0) {
+                        data.data.forEach(item => {
+                            const fecha = new Date(item.begranda);
+                            const formato = String(fecha.getDate()).padStart(2, '0') + "/" +
+                                String(fecha.getMonth() + 1).padStart(2, '0') + "/" +
+                                fecha.getFullYear() + " " +
+                                String(fecha.getHours()).padStart(2, '0') + ":" +
+                                String(fecha.getMinutes()).padStart(2, '0');
+                            const reporte = JSON.parse(item.report_begranda);
 
-                        console.log();
-                        const row = `
+                            const finextra = item.extra;
+                            // Eliminar los prefijos de forma segura
+                            const sinPrefijos = finextra
+                                .replace("Id de la cuenta: ", "")
+                                .replace(" Tipo de la cuenta: ", "");
+
+                            // Formatear valor como moneda colombiana
+                            const valorFormateado = new Intl.NumberFormat('es-CO', {
+                                style: 'currency',
+                                currency: 'COP',
+                                minimumFractionDigits: 0
+                            }).format(item.valor);
+
+                            const row = `
+                                <tr>
+                                <td>${item.id}</td>
+                                <td>${new Date(item.fecha).toLocaleDateString('es-CO')}</td>
+                                <td>${valorFormateado}</td>
+                                <td>${item.id_cuenta}</td>
+                                <td>${formato} - ${reporte ? reporte.message : ""} </td>
+                                <td>${typeof item.concepto === 'string' && item.concepto.length > 100
+                                    ? item.concepto.substring(0, 100) + "..."
+                                    : item.concepto}</td>
+                                <td>
+                                    <button class="btn-action" onclick='mostrarDetalles(${JSON.stringify(item).replace(/'/g, "&apos;")})'>
+                                        <i data-feather="eye"></i> Ver detalles
+                                    </button>
+                                </td>
+                                </tr>`;
+                            tbody.insertAdjacentHTML("beforeend", row);
+                        });
+
+                        totalRecords = data.data.length;
+                    } else {
+                        tbody.innerHTML = `
                             <tr>
-                            <td>${item.id}</td>
-                            <td>${new Date(item.fecha).toLocaleDateString()}</td>
-                            <td>${item.valor}</td>
-                            <td>${item.id_cuenta}</td>
-                            <td>${formato} - ${reporte ? reporte.message : ""} </td>
-                            <td>${sinPrefijos.split(";")[0]}</td>
-                            <td>${sinPrefijos.split(";")[1]}</td>
-                            <td><a href="${item.documento_referencia}" target="_blank">PDF</a></td>
-                            <td>${typeof item.concepto === 'string' && item.concepto.length > 100
-                                ? item.concepto.substring(0, 100) + "..."
-                                : item.concepto}</td>
+                                <td colspan="7" class="empty-state">
+                                    <i data-feather="inbox"></i>
+                                    <p>No se encontraron resultados para los filtros seleccionados</p>
+                                </td>
                             </tr>`;
-                        tbody.insertAdjacentHTML("beforeend", row);
-                    });
+                    }
 
-                    document.getElementById("page-info").textContent = `Página ${Math.floor(skip / limit) + 1}`;
+                    // Actualizar estado de paginación
+                    updatePaginationState();
+
+                    // Re-inicializar iconos de Feather
+                    feather.replace();
                 })
-                .catch(error => console.error("Error al obtener datos:", error));
+                .catch(error => {
+                    console.error("Error al obtener datos:", error);
+                    const tbody = document.querySelector("#data-table tbody");
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="7" class="empty-state">
+                                <i data-feather="alert-circle"></i>
+                                <p>Error al cargar los datos. Por favor, intenta nuevamente.</p>
+                            </td>
+                        </tr>`;
+                    feather.replace();
+                });
+        }
+
+        function updatePaginationState() {
+            const currentPage = Math.floor(skip / limit) + 1;
+            document.getElementById("page-info").textContent = `Página ${currentPage}`;
+
+            // Deshabilitar botón "Anterior" en la primera página
+            const btnPrev = document.getElementById("btn-prev");
+            btnPrev.disabled = skip === 0;
+
+            // Deshabilitar botón "Siguiente" si hay menos resultados que el límite
+            const btnNext = document.getElementById("btn-next");
+            btnNext.disabled = totalRecords < limit;
         }
 
         function nextPage() {
             skip += limit;
             loadData();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function previousPage() {
             if (skip >= limit) {
                 skip -= limit;
                 loadData();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             }
         }
 
-        window.onload = loadData;
+        // Función para mostrar detalles en el modal
+        function mostrarDetalles(item) {
+            // Información General
+            document.getElementById('modal-id').textContent = item.id || '-';
+            document.getElementById('modal-fecha').textContent = new Date(item.fecha).toLocaleDateString('es-CO', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+            document.getElementById('modal-nit').textContent = item.nit || '-';
+
+            // Formatear valor
+            const valorFormateado = new Intl.NumberFormat('es-CO', {
+                style: 'currency',
+                currency: 'COP',
+                minimumFractionDigits: 0
+            }).format(item.valor);
+            document.getElementById('modal-valor').textContent = valorFormateado;
+
+            // Información Contable
+            document.getElementById('modal-cuenta').textContent = item.id_cuenta || '-';
+
+            // Procesar extra para obtener ID Cuenta y Tipo Cuenta
+            if (item.extra) {
+                const sinPrefijos = item.extra
+                    .replace("Id de la cuenta: ", "")
+                    .replace(" Tipo de la cuenta: ", "");
+                const partes = sinPrefijos.split(";");
+                document.getElementById('modal-id-cuenta').textContent = partes[0] || '-';
+                document.getElementById('modal-tipo-cuenta').textContent = partes[1] || '-';
+            } else {
+                document.getElementById('modal-id-cuenta').textContent = '-';
+                document.getElementById('modal-tipo-cuenta').textContent = '-';
+            }
+
+            // Estado
+            const estadoElement = document.getElementById('modal-estado');
+            estadoElement.textContent = item.estado || 'FINALIZADO';
+            estadoElement.className = 'detail-value badge-status';
+
+            // Estado Begranda
+            if (item.begranda && item.report_begranda) {
+                const fecha = new Date(item.begranda);
+                const formato = String(fecha.getDate()).padStart(2, '0') + "/" +
+                    String(fecha.getMonth() + 1).padStart(2, '0') + "/" +
+                    fecha.getFullYear() + " " +
+                    String(fecha.getHours()).padStart(2, '0') + ":" +
+                    String(fecha.getMinutes()).padStart(2, '0');
+
+                const reporte = JSON.parse(item.report_begranda);
+                document.getElementById('modal-estado-begranda').textContent =
+                    `${formato} - ${reporte ? reporte.message : "Sin mensaje"}`;
+            } else {
+                document.getElementById('modal-estado-begranda').textContent = 'No disponible';
+            }
+
+            // Concepto
+            document.getElementById('modal-concepto').textContent = item.concepto || 'Sin concepto';
+
+            // Información Extra (si hay más detalles)
+            const sectionExtra = document.getElementById('section-extra');
+            if (item.extra && item.extra !== '') {
+                document.getElementById('modal-extra').textContent = item.extra;
+                sectionExtra.style.display = 'block';
+            } else {
+                sectionExtra.style.display = 'none';
+            }
+
+            // Documento
+            const documentoLink = document.getElementById('modal-documento');
+            if (item.documento_referencia) {
+                documentoLink.href = item.documento_referencia;
+                documentoLink.style.display = 'inline-flex';
+            } else {
+                documentoLink.style.display = 'none';
+            }
+
+            // Re-inicializar iconos de Feather en el modal
+            setTimeout(() => {
+                feather.replace();
+            }, 100);
+
+            // Mostrar el modal
+            $('#detallesModal').modal('show');
+        }
+
+        window.onload = () => {
+            loadData();
+            // Inicializar iconos de Feather
+            feather.replace();
+        };
     </script>
 
 

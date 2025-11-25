@@ -339,33 +339,168 @@
                         <!-- Modal de adjuntar archivo -->
                         <div class="modal fade" id="adjuntarArchivoModal" tabindex="-1" role="dialog"
                             aria-labelledby="adjuntarArchivoLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-sm" role="document">
-                                <div class="modal-content p-3">
-                                    <h5 class="modal-title mb-3" id="adjuntarArchivoLabel">Adjuntar archivo</h5>
-                                    <p>Seleccione un archivo PDF como documento de referencia para adjuntar al
-                                        sistema contable.</p>
+                            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                                <div class="modal-content border-0 shadow-lg">
+                                    <div class="modal-header bg-primary text-white">
+                                        <h5 class="modal-title d-flex align-items-center" id="adjuntarArchivoLabel">
+                                            <i data-feather="upload-cloud" class="mr-2"></i>
+                                            Adjuntar Documento
+                                        </h5>
+                                        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body p-4">
+                                        <p class="text-muted mb-4">
+                                            <i data-feather="file-text" class="mr-1" style="width: 16px; height: 16px;"></i>
+                                            Seleccione un archivo PDF como documento de referencia para adjuntar al sistema contable.
+                                        </p>
 
-                                    <input type="file" class="custom-file-input" id="archivoInput"
-                                        onchange="mostrarVistaPrevia()" hidden>
-                                    <button type="button" class="btn btn-outline-primary btn-sm"
-                                        onclick="document.getElementById('archivoInput').click()">
-                                        <i class="fas fa-paperclip"></i> Seleccionar archivo
-                                    </button>
-                                    <h1 id="nombreArchivo" class="ml-2 text-muted small"></h1>
+                                        <input type="file" class="custom-file-input" id="archivoInput"
+                                            onchange="mostrarVistaPrevia()" hidden accept="application/pdf">
 
-                                    <!-- Vista previa -->
-                                    <div id="vistaPreviaArchivo" class="border p-2 small text-muted"
-                                        style="display: none;"></div>
+                                        <div class="upload-area text-center p-4 mb-3" onclick="document.getElementById('archivoInput').click()">
+                                            <i data-feather="upload" class="upload-icon mb-3"></i>
+                                            <p class="mb-2"><strong>Haga clic para seleccionar un archivo</strong></p>
+                                            <p class="text-muted small">o arrastre y suelte aquí</p>
+                                            <p class="text-muted small">Solo archivos PDF</p>
+                                        </div>
 
-                                    <div class="text-right mt-3">
-                                        <button type="button" class="btn btn-secondary btn-sm"
-                                            data-dismiss="modal">Cancelar</button>
-                                        <button id="activate" type="button" class="btn btn-success btn-sm"
-                                            data-dismiss="modal">Enviar</button>
+                                        <div id="fileInfoContainer" class="file-info-container" style="display: none;">
+                                            <div class="d-flex align-items-center p-3 bg-light rounded">
+                                                <i data-feather="file" class="text-primary mr-3"></i>
+                                                <div class="flex-grow-1">
+                                                    <p id="nombreArchivo" class="mb-0 font-weight-bold"></p>
+                                                    <p id="tamañoArchivo" class="mb-0 text-muted small"></p>
+                                                </div>
+                                                <button type="button" class="btn btn-sm btn-outline-danger" onclick="clearFile()">
+                                                    <i data-feather="x" style="width: 16px; height: 16px;"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <!-- Vista previa -->
+                                        <div id="vistaPreviaArchivo" class="preview-container mt-3" style="display: none;">
+                                            <p class="text-muted small mb-2">Vista previa:</p>
+                                            <div class="border rounded p-2 bg-light"></div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer bg-light">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                                            <i data-feather="x" style="width: 16px; height: 16px;"></i>
+                                            Cancelar
+                                        </button>
+                                        <button id="activate" type="button" class="btn btn-success" data-dismiss="modal">
+                                            <i data-feather="send" style="width: 16px; height: 16px;"></i>
+                                            Enviar Documento
+                                        </button>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
+                        <style>
+                            /* Estilos mejorados para el modal de adjuntar archivo */
+                            #adjuntarArchivoModal .modal-content {
+                                zoom: 0.8;
+                                border-radius: 15px;
+                                overflow: hidden;
+                            }
+
+                            #adjuntarArchivoModal .modal-header {
+                                border-bottom: none;
+                                padding: 1.5rem;
+                            }
+
+                            #adjuntarArchivoModal .modal-footer {
+                                border-top: none;
+                                padding: 1.5rem;
+                            }
+
+                            #adjuntarArchivoModal .upload-area {
+                                border: 3px dashed #d1d5db;
+                                border-radius: 12px;
+                                cursor: pointer;
+                                transition: all 0.3s ease;
+                                background-color: #f9fafb;
+                            }
+
+                            #adjuntarArchivoModal .upload-area:hover {
+                                border-color: #4099ff;
+                                background-color: #eff6ff;
+                                transform: translateY(-2px);
+                            }
+
+                            #adjuntarArchivoModal .upload-icon {
+                                width: 48px;
+                                height: 48px;
+                                color: #4099ff;
+                            }
+
+                            #adjuntarArchivoModal .file-info-container {
+                                animation: slideDown 0.3s ease;
+                            }
+
+                            @keyframes slideDown {
+                                from {
+                                    opacity: 0;
+                                    transform: translateY(-10px);
+                                }
+                                to {
+                                    opacity: 1;
+                                    transform: translateY(0);
+                                }
+                            }
+
+                            #adjuntarArchivoModal .preview-container {
+                                animation: fadeIn 0.3s ease;
+                            }
+
+                            @keyframes fadeIn {
+                                from {
+                                    opacity: 0;
+                                }
+                                to {
+                                    opacity: 1;
+                                }
+                            }
+
+                            #adjuntarArchivoModal #vistaPreviaArchivo canvas {
+                                max-width: 100%;
+                                height: auto;
+                                border-radius: 8px;
+                                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+                            }
+
+                            #adjuntarArchivoModal .modal-footer .btn {
+                                padding: 0.6rem 1.5rem;
+                                border-radius: 8px;
+                                font-weight: 500;
+                                transition: all 0.3s ease;
+                            }
+
+                            #adjuntarArchivoModal .modal-footer .btn:hover {
+                                transform: translateY(-2px);
+                                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                            }
+
+                            #adjuntarArchivoModal .btn-success {
+                                background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+                                border: none;
+                            }
+
+                            #adjuntarArchivoModal .btn-success:hover {
+                                background: linear-gradient(135deg, #059669 0%, #047857 100%);
+                            }
+                        </style>
+
+                        <script>
+                            function clearFile() {
+                                document.getElementById('archivoInput').value = '';
+                                document.getElementById('fileInfoContainer').style.display = 'none';
+                                document.getElementById('vistaPreviaArchivo').style.display = 'none';
+                            }
+                        </script>
                     </div>
                 </div>
             </div>
@@ -399,210 +534,7 @@
 
     <!-- PDF.js desde CDN -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
-    <script>
-        // Indicar al visor dónde está el worker
-        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.worker.min.js';
-    </script>
-
-    <script>
-        const n = 50; // Define el número de repeticiones
-        fetch(`${host}/causacionContable`, {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json' // Opcional, pero recomendable indicar el tipo de contenido
-            }
-        })
-            .then(response => response.json())
-            .then(data => {
-                // console.log(data);
-                if (data.status_code == 204) {
-                    document.getElementById('enviarArchivoModal').hidden = true;
-                    document.getElementById('primera').hidden = false;
-                }
-
-                if (data.length > 0) {
-                    document.getElementById('total').textContent = data.length
-                    document.getElementById('total2').textContent = data.length
-                    document.getElementById('primera').hidden = true;
-                    const contenedorCards = document.getElementById('contenedor-cards');
-                    contenedorCards.innerHTML = ''; // Limpiar el contenedor si ya tiene contenido
-
-                    data.forEach(item => {
-                        const card = document.createElement('div');
-                        card.classList.add('col-sm-4');
-
-                        const cardBody = document.createElement('div');
-                        cardBody.classList.add('card', 'rcontale', 'clean');
-                        cardBody.innerHTML = `
-                        <div class="card-body">
-                            <h5 class="card-title">Registro contable <strong style="text-transform: uppercase;">${item.estado} </strong></h5>
-                            <div class="buttons_menu">
-                                <a href="causacioncontable_form.html?id=${item.id}&view=true" class="btn btn-success clearbadge" title="Ver">👁‍🗨</a>
-                                <a href="causacioncontable_form.html?id=${item.id}&view=edit" class="btn btn-info clearbadge" title="Editar">✍🏻</a>
-                                <button data-id="${item.id}" class="btn btn-danger clear clearbadge" title="Eliminar">❌</button>
-                            </div>
-			    <ul>
-                                <li>NIT: ${item.nit}</li>
-                                <li>Fecha: ${mejorarFormatoFecha(item.fecha)}</li>
-                                <li>Valor: ${item.valor}</li>
-                                <li class="ellipsis">Concepto: ${item.concepto}</li>
-                            </ul>
-                        </div>
-                        `;
-
-                        card.appendChild(cardBody);
-                        contenedorCards.appendChild(card);
-                    });
-                }
-
-            })
-            .catch(error => console.error('Error al obtener los datos:', error));
-
-        document.addEventListener('click', function (event) {
-            if (event.target.classList.contains('btn-danger') && event.target.classList.contains('clear')) {
-                const botonBorrar = event.target;
-                const idParaBorrar = botonBorrar.getAttribute('data-id');
-
-                if (confirm(`¿Estás seguro de que quieres borrar el registro con ID: ${idParaBorrar}?`)) {
-                    // El usuario confirmó, entonces procedemos a enviar la solicitud DELETE
-                    const urlBorrar = `${host}/causacionContable/${idParaBorrar}`;
-
-                    fetch(urlBorrar, {
-                        method: 'DELETE',
-                        headers: {
-                            'Authorization': `Bearer ${token}`,
-                            'Content-Type': 'application/json' // Opcional, pero recomendable
-                        }
-                    })
-                        .then(response => {
-                            if (response.ok) {
-                                mostrarAlerta(`Registro con ID: ${idParaBorrar} borrado exitosamente.`, "success");
-                                window.location.reload();
-                                botonBorrar.closest('.col-sm-4').remove(); // Elimina la tarjeta del DOM
-                            } else {
-                                console.error('Error al borrar el registro:', response);
-                                mostrarAlerta(`Error al intentar borrar el registro con ID: ${idParaBorrar}.`, "success");
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Error de red al borrar el registro:', error);
-                            alert(`Error de red al intentar borrar el registro con ID: ${idParaBorrar}.`);
-                        });
-                }
-            }
-        });
-
-        function mostrarVistaPrevia() {
-            const input = document.getElementById("archivoInput");
-            const span = document.getElementById("nombreArchivo");
-            const vistaPrevia = document.getElementById("vistaPreviaArchivo");
-
-            if (input.files && input.files[0]) {
-                const archivo = input.files[0];
-                const nombre = archivo.name;
-                const tipo = archivo.type; // Obtener el tipo MIME del archivo
-                const tamañoBytes = archivo.size;
-                const tamañoTexto = tamañoBytes > 1024 * 1024
-                    ? (tamañoBytes / (1024 * 1024)).toFixed(2) + " MB"
-                    : (tamañoBytes / 1024).toFixed(2) + " KB";
-
-                span.textContent = `${nombre} (${tamañoTexto})`;
-
-                // Validar si el archivo es un PDF
-                if (tipo === "application/pdf") {
-                    vistaPrevia.style.display = "block"; // Mostrar el contenedor de vista previa
-                    const reader = new FileReader();
-
-                    reader.onload = function (e) {
-                        const arrayBuffer = e.target.result;
-                        const loadingTask = pdfjsLib.getDocument(arrayBuffer);
-
-                        loadingTask.promise.then(function (pdf) {
-                            pdf.getPage(1).then(function (page) {
-                                const scale = 0.5;
-                                const viewport = page.getViewport({ scale: scale });
-
-                                const canvas = document.createElement("canvas");
-                                const context = canvas.getContext("2d");
-                                canvas.height = viewport.height;
-                                canvas.width = viewport.width;
-
-                                const renderContext = {
-                                    canvasContext: context,
-                                    viewport: viewport
-                                };
-                                page.render(renderContext);
-
-                                vistaPrevia.innerHTML = ''; // Limpiar vista previa anterior
-                                vistaPrevia.appendChild(canvas);
-                            });
-                        });
-                    };
-
-                    reader.readAsArrayBuffer(archivo);
-                } else {
-                    // Si el archivo no es PDF, ocultar la vista previa
-                    vistaPrevia.style.display = "none";
-                    alert("Por favor, selecciona un archivo PDF.");
-                }
-            } else {
-                span.textContent = "Ningún archivo seleccionado";
-                vistaPrevia.style.display = "none"; // Ocultar vista previa si no se selecciona archivo
-            }
-        }
-
-
-        // Función para enviar el archivo al servidor
-        function enviarArchivo() {
-            const sendFile = document.getElementById("archivoInput");
-            const formData = new FormData();
-            const file = sendFile.files[0];
-            if (file) {
-                formData.append("file", file);
-            } else {
-                console.error("No file selected.");
-
-            }
-
-            for (let pair of formData.entries()) {
-                console.warn(pair[0], pair[1].name, pair[1].type, pair[1].size);
-            }
-            fetch(`${host}/activarCausacion`, {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                }
-            })
-                .then(response => response.json())
-                .then(data => {
-                    // console.log(data)
-                    // Manejar la respuesta del servidor
-                    if (data.ms == 'ok') {
-                        mostrarAlerta("Archivo enviado exitosamente.", "success");
-                        var modal = document.getElementById('adjuntarArchivoModal');
-                        var modalInstance = new bootstrap.Modal(modal);
-                        modalInstance.hide();
-                        setTimeout(() => {
-                            window.location.href = "causacioncontable_final.html"
-                        }, 5000)
-                    } else {
-                        mostrarAlerta("Error al enviar el archivo.", "danger");
-                    }
-                })
-                .catch(error => {
-                    console.error('Error al enviar el archivo:', error);
-                    mostrarAlerta("Hubo un error al enviar el archivo.", 'danger');
-                });
-        }
-
-
-        document.getElementById('activate').addEventListener('click', (ev) => {
-            ev.preventDefault();
-            enviarArchivo();
-        });
-
-    </script>
+    <script src="assets/js/causacion-new.js"></script>
 </body>
 
 </html>

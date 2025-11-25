@@ -27,6 +27,7 @@ class CausacionRepository:
             documentos_ordenados = {
                 "id_documento": documentos["id_documento"],
                 "id_comprobante": documentos["id_comprobante"],
+                "id_centro_costo": documentos["extra"],
                 "id_nit": documentos["id_nit"],
                 "fecha": documentos["fecha"],
                 "fecha_manual": fecha_manual,
@@ -36,7 +37,7 @@ class CausacionRepository:
                 "concepto": documentos["concepto"],
                 "documento_referencia": documentos["documento_referencia"],
                 "token": "",
-                "extra": documentos["extra"]
+                "extra": ""
             }
             print(documentos_ordenados)
             return documentos_ordenados
@@ -68,13 +69,11 @@ class CausacionRepository:
                 response.raise_for_status()
                 
                 print(response.json())
-                
-                
+                                
                 causasids = [doc.model_dump() for doc in causaciones]
                 mensaje = json.dumps({"documents": causasids}, ensure_ascii=False)
                 logger.info(f"Datos Enviados Begranda: {mensaje}")
-                            
-                            
+                                     
                 for doct in causasids:
                     causacion = db.query(CausacionContableModel).filter(
                         CausacionContableModel.id == doct["id"],
