@@ -287,48 +287,145 @@
 
     <!-- Modal -->
     <div class="modal fade" id="miModal" tabindex="-1" aria-labelledby="miModalLabel" aria-hidden="true">
-        <div class="modal-dialog  modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalBuscarCuenta">Buscar Cuenta Contable</h5>
-                    <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button> -->
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content shadow-lg border-0">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title d-flex align-items-center" id="modalBuscarCuenta">
+                        <i data-feather="search" class="mr-2"></i>
+                        Buscar Cuenta Contable
+                    </h5>
+                    <button type="button" class="close text-white" data-bs-dismiss="modal" aria-label="Cerrar">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
-                <style>
-                    #resultadosCuenta {
-                        position: relative;
-                        overflow: scroll;
-                        max-height: 400px;
-                        max-width: 100%;
-                    }
-                </style>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <div class="row">
-                            <!--<div class="col-6">
-                                <label for="f_cuenta" class="form-label">Cuenta:</label>
-                                <input type="text" id="f_cuenta" class="form-control" placeholder="Número de cuenta">
-                            </div>
-                            <div class="col-6" style="margin-top: -10px;">
-                                <label for="f_nombre" class="form-label mt-2">Nombre:</label>
-                                <input type="text" id="f_nombre" class="form-control" placeholder="Nombre de la cuenta">
-                            </div>-->
-                            <div class="col-12 mt-3">
-                                <div class="col-12 text-right d-flex justify-content-end">
-
+                <div class="modal-body p-4">
+                    <div class="mb-4">
+                        <p class="text-muted">
+                            <i data-feather="info" class="mr-1" style="width: 16px; height: 16px;"></i>
+                            Busque y seleccione la cuenta contable que desea utilizar
+                        </p>
+                        <div class="search-box mb-3">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text bg-light">
+                                        <i data-feather="filter" style="width: 18px; height: 18px;"></i>
+                                    </span>
                                 </div>
+                                <input type="text" id="searchInput" class="form-control" placeholder="Filtrar por nombre o número de cuenta...">
                             </div>
                         </div>
+                    </div>
 
-                        <div id="resultadosCuenta" class="mt-4"></div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" id="close"
-                            data-bs-dismiss="modal">Cerrar</button>
-                        <button class="btn btn-primary" onclick="buscarCuenta()">Buscar</button>
-                    </div>
+                    <div id="resultadosCuenta" class="results-container"></div>
+                </div>
+                <div class="modal-footer bg-light">
+                    <button type="button" class="btn btn-secondary" id="close" data-bs-dismiss="modal">
+                        <i data-feather="x" style="width: 16px; height: 16px;"></i>
+                        Cerrar
+                    </button>
+                    <button class="btn btn-primary" onclick="buscarCuenta()">
+                        <i data-feather="search" style="width: 16px; height: 16px;"></i>
+                        Buscar
+                    </button>
                 </div>
             </div>
         </div>
+    </div>
+
+    <style>
+        /* Estilos mejorados para el modal de búsqueda de cuenta contable */
+        #miModal .modal-content {
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        #miModal .modal-header {
+            border-bottom: none;
+            padding: 1.5rem;
+        }
+
+        #miModal .modal-footer {
+            border-top: none;
+            padding: 1.5rem;
+        }
+
+        #miModal #resultadosCuenta {
+            position: relative;
+            overflow-y: auto;
+            max-height: 450px;
+            max-width: 100%;
+            padding-right: 10px;
+        }
+
+        #miModal #resultadosCuenta::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        #miModal #resultadosCuenta::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        #miModal #resultadosCuenta::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+
+        #miModal #resultadosCuenta::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        #miModal .search-box .input-group-text {
+            border: 1px solid #ced4da;
+            border-right: none;
+        }
+
+        #miModal #searchInput {
+            border-left: none;
+        }
+
+        #miModal #searchInput:focus {
+            box-shadow: none;
+            border-color: #4099ff;
+        }
+
+        #miModal .search-box .input-group:focus-within .input-group-text {
+            border-color: #4099ff;
+        }
+
+        #miModal .modal-footer .btn {
+            padding: 0.6rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        #miModal .modal-footer .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Estilos para las filas de resultados */
+        #miModal .cuenta-item {
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        #miModal .cuenta-item:hover {
+            border-color: #4099ff;
+            background-color: #f8f9fa;
+            transform: translateX(5px);
+        }
+
+        #miModal .cuenta-item.selected {
+            border-color: #4099ff;
+            background-color: #eff6ff;
+        }
+    </style>
 
 
 

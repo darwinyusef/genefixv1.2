@@ -301,23 +301,114 @@
     <!-- Modal -->
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Cambiar el password</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content shadow-lg border-0">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title d-flex align-items-center" id="exampleModalLabel">
+                        <i data-feather="lock" class="mr-2"></i>
+                        Cambiar Password
+                    </h5>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">
-                    <input id="new-password" type="text" class="form-control" placeholder="Agrega el nuevo password" >
+                <div class="modal-body p-4">
+                    <p class="text-muted mb-3">
+                        <i data-feather="shield" class="mr-1" style="width: 16px; height: 16px;"></i>
+                        Ingrese la nueva contraseña para el usuario
+                    </p>
+                    <div class="form-group">
+                        <label for="new-password" class="font-weight-bold">Nueva Contraseña</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text bg-light">
+                                    <i data-feather="key" style="width: 18px; height: 18px;"></i>
+                                </span>
+                            </div>
+                            <input id="new-password" type="password" class="form-control" placeholder="Ingrese la nueva contraseña">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary" type="button" onclick="togglePassword()">
+                                    <i data-feather="eye" id="toggleIcon" style="width: 18px; height: 18px;"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <small class="form-text text-muted mt-2">
+                            <i data-feather="info" style="width: 14px; height: 14px;"></i>
+                            La contraseña debe tener al menos 8 caracteres
+                        </small>
+                    </div>
                 </div>
-                <div class="modal-footer">
-                    <button style="background-color: #bb214b;" onclick="recoverPass()" type="button" class="btn btn-primary">Cambiar el password</button>
+                <div class="modal-footer bg-light">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                        <i data-feather="x" style="width: 16px; height: 16px;"></i>
+                        Cancelar
+                    </button>
+                    <button onclick="recoverPass()" type="button" class="btn btn-primary">
+                        <i data-feather="check-circle" style="width: 16px; height: 16px;"></i>
+                        Cambiar Password
+                    </button>
                 </div>
             </div>
         </div>
     </div>
+
+    <style>
+        /* Estilos mejorados para el modal de cambio de password */
+        #exampleModal .modal-content {
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        #exampleModal .modal-header {
+            border-bottom: none;
+            padding: 1.5rem;
+        }
+
+        #exampleModal .modal-footer {
+            border-top: none;
+            padding: 1.5rem;
+        }
+
+        #exampleModal .input-group-text {
+            border: 1px solid #ced4da;
+            border-right: none;
+        }
+
+        #exampleModal #new-password {
+            border-left: none;
+        }
+
+        #exampleModal #new-password:focus {
+            box-shadow: none;
+            border-color: #4099ff;
+        }
+
+        #exampleModal .input-group:focus-within .input-group-text {
+            border-color: #4099ff;
+        }
+
+        #exampleModal .modal-footer .btn {
+            padding: 0.6rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        #exampleModal .modal-footer .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        #exampleModal .btn-primary {
+            background-color: #bb214b;
+            border-color: #bb214b;
+        }
+
+        #exampleModal .btn-primary:hover {
+            background-color: #9a1b3d;
+            border-color: #9a1b3d;
+        }
+    </style>
 
     <script src="assets/js/vendor-all.min.js"></script>
     <script src="assets/js/plugins/bootstrap.min.js"></script>
@@ -331,6 +422,7 @@
     <script src="assets/js/constantes.js"></script>
     <script src="assets/js/actions.js"></script>
     <script src="assets/js/logout.js"></script>
+    <script src="assets/js/password-toggle.js"></script>
 
 
 
