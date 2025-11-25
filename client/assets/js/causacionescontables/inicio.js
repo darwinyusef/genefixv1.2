@@ -14,7 +14,7 @@ inputNit.addEventListener('input', async function () {
             if (result.status == "success") {
                 if (result.data.length > 0) {
                     const data = result.data[0]
-                   // console.log(data);
+                    // console.log(data);
                     this.classList.remove('is-invalid');
                     this.classList.add('is-valid');
                     document.getElementById('nit_text').textContent = `Valido: ${data?.nit_1} ${data?.nombres || ''} ${data?.apellido_1 || ''}  ${data?.razon_social ? "-" + data?.razon_social : ''}`;
@@ -146,6 +146,7 @@ async function listadoCentroCostos() {
         }
     });
 
+
     select.innerHTML = ''; // limpia antes de llenar
 
     // Crear un listado plano de opciones
@@ -153,14 +154,17 @@ async function listadoCentroCostos() {
         const hijos = agrupadas[principal.nombre] || [];
         hijos.forEach(hijo => {
             const option = document.createElement('option');
-            option.value = hijo.codigo;
-            option.textContent = `${hijo.codigo} - ${principal.nombre} / ${hijo.nombre}`;
+            option.value = hijo.id;
+            option.textContent = `${hijo.id} - ${principal.nombre} / ${hijo.nombre}`;
             select.appendChild(option);
         });
     }
     // Mostrar descripción al cambiar selección
     select.addEventListener('change', function (e) {
-        const seleccionado = data.find(item => item.codigo === e.target.value);
+        // limitamos los datos a id ya que cambia la estructura
+        const seleccionado = data.find(item => {
+            return item.id == e.target.value;
+        });
         descripcion.textContent = seleccionado
             ? seleccionado.descripcion || 'Descripción no disponible.'
             : 'Descripción no disponible.';
@@ -181,7 +185,7 @@ document.getElementById("btn_guardar").addEventListener("click", async (e) => {
         validarCampo('valor', 'El valor es obligatorio', 'num') &
         validarCampo('concepto', 'El concepto es obligatorio') &
         validarCampo('extra', 'El extra es obligatorio');
-        validarCampo('id_cuenta', 'La cuenta es obligatoria')
+    validarCampo('id_cuenta', 'La cuenta es obligatoria')
 
     if (!camposValidos) {
         console.warn("Hay errores en el formulario.");
@@ -205,7 +209,7 @@ document.getElementById("btn_editar").addEventListener("click", async (e) => {
         validarCampo('valor', 'El valor es obligatorio', 'num') &
         validarCampo('concepto', 'El concepto es obligatorio') &
         validarCampo('extra', 'El extra es obligatorio');
-        validarCampo('id_cuenta', 'La cuenta es obligatoria')
+    validarCampo('id_cuenta', 'La cuenta es obligatoria')
 
     if (!camposValidos) {
         console.errors("Hay errores en el formulario.");

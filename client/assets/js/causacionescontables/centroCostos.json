@@ -3,7 +3,8 @@
     "id": 1,
     "codigo": "1",
     "nombre": "PRINCIPAL",
-    "descripcion": ""
+    "descripcion": "GASTOS ASOCIADOS A LA ADMINISTRACIÓN GENERAL O DE LA SEDE PRINCIPAL.",
+    "tipo": null
   },
   {
     "id": 2,
@@ -23,7 +24,8 @@
     "id": 3,
     "codigo": "1002",
     "nombre": "VALLEDUPAR",
-    "descripcion": ""
+    "descripcion": "GASTOS GENERALES Y DE FUNCIONAMIENTO DE LA SEDE DE VALLEDUPAR.",
+    "tipo": null
   },
   {
     "id": 29,
@@ -50,7 +52,8 @@
     "id": 4,
     "codigo": "1003",
     "nombre": "TUNJA - BOYACA",
-    "descripcion": ""
+    "descripcion": "GASTOS GENERALES Y DE FUNCIONAMIENTO DE LA SEDE DE TUNJA - BOYACA.",
+    "tipo": null
   },
   {
     "id": 30,
@@ -77,7 +80,8 @@
     "id": 5,
     "codigo": "1004",
     "nombre": "YOPAL",
-    "descripcion": ""
+    "descripcion": "GASTOS GENERALES Y DE FUNCIONAMIENTO DE LA SEDE DE YOPAL.",
+    "tipo": null
   },
   {
     "id": 18,
@@ -97,7 +101,8 @@
     "id": 6,
     "codigo": "1005",
     "nombre": "BUCARAMANGA",
-    "descripcion": ""
+    "descripcion": "GASTOS GENERALES Y DE FUNCIONAMIENTO DE LA SEDE DE BUCARAMANGA.",
+    "tipo": null
   },
   {
     "id": 31,
@@ -124,7 +129,8 @@
     "id": 7,
     "codigo": "1006",
     "nombre": "VILLAVICENCIO",
-    "descripcion": ""
+    "descripcion": "GASTOS GENERALES Y DE FUNCIONAMIENTO DE LA SEDE DE VILLAVICENCIO.",
+    "tipo": null
   },
   {
     "id": 32,
@@ -151,7 +157,8 @@
     "id": 8,
     "codigo": "1007",
     "nombre": "SINCELEJO",
-    "descripcion": ""
+    "descripcion": "GASTOS GENERALES Y DE FUNCIONAMIENTO DE LA SEDE DE SINCELEJO.",
+    "tipo": null
   },
   {
     "id": 33,
@@ -178,7 +185,8 @@
     "id": 13,
     "codigo": "1008",
     "nombre": "LETICIA",
-    "descripcion": ""
+    "descripcion": "GASTOS GENERALES Y DE FUNCIONAMIENTO DE LA SEDE DE LETICIA.",
+    "tipo": null
   },
   {
     "id": 34,
@@ -205,7 +213,8 @@
     "id": 35,
     "codigo": "1009",
     "nombre": "BOGOTA",
-    "descripcion": ""
+    "descripcion": "GASTOS GENERALES Y DE FUNCIONAMIENTO DE LA SEDE DE BOGOTÁ.",
+    "tipo": null
   },
   {
     "id": 36,

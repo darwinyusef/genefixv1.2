@@ -44,10 +44,10 @@ function loadCausacionesActivadas() {
     .then(data => {
         // console.log(data);
         if (data.content == 0) {
-            mostrarAlerta(`Actualmente no cuenta con causaciones a finalizar. Se volverá al inicio en 7 segundos.`, "danger", 7000);
+            mostrarAlerta(`Actualmente no cuenta con causaciones a finalizar. Se volverá al inicio en 4 segundos.`, "danger", 7000);
             setTimeout(() => {
                 window.location.href = "causacioncontable_new.html"
-            }, 7000);
+            }, 4000);
             return;
         }
         if (data.status_code == 204) {

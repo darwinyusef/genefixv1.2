@@ -126,7 +126,7 @@ function showErrorMessage(message) {
         // Ocultar después de 7 segundos
         setTimeout(() => {
             hideErrorMessage();
-        }, 7000);
+        }, 4000);
     }
 
     // Habilitar botón

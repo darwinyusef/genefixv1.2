@@ -43,9 +43,12 @@
         }
 
         .buttons_menu {
-            position: absolute;
-            top: 20px;
-            right: 20px;
+            display: flex;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            gap: 10px;
+            margin-bottom: 20px;
         }
 
         .card-body ul .ellipsis {
@@ -331,7 +334,8 @@
                                         <i data-feather="briefcase" class="mr-2"></i>
                                         Selecciona una Caja Menor
                                     </h5>
-                                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Cerrar">
+                                    <button type="button" class="close text-white" data-dismiss="modal"
+                                        aria-label="Cerrar">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
@@ -366,6 +370,7 @@
                         #exampleModal .modal-content {
                             border-radius: 15px;
                             overflow: hidden;
+                            zoom:0.8;
                         }
 
                         #exampleModal .modal-header {
@@ -418,17 +423,17 @@
                             transform: translateX(5px);
                         }
 
-                        #exampleModal .form-check-input:checked ~ .form-check-label {
+                        #exampleModal .form-check-input:checked~.form-check-label {
                             color: #4099ff;
                             font-weight: 600;
                         }
 
-                        #exampleModal .form-check-input:checked + .form-check-label::before {
+                        #exampleModal .form-check-input:checked+.form-check-label::before {
                             border-color: #4099ff;
                             background-color: #4099ff;
                         }
 
-                        #exampleModal .form-check input[type="radio"]:checked ~ label {
+                        #exampleModal .form-check input[type="radio"]:checked~label {
                             background: linear-gradient(90deg, #4099ff 0%, #73b4ff 100%);
                             -webkit-background-clip: text;
                             -webkit-text-fill-color: transparent;
