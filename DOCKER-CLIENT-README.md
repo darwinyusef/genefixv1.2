@@ -38,7 +38,7 @@ Edita el archivo `.env` y configura las siguientes variables:
 
 ```env
 # URL del Backend API (IMPORTANTE: debe ser accesible desde el navegador del cliente)
-API_URL=http://localhost:8000/api/v1
+API_URL=http://190.90.5.243/api/v1
 
 # Puerto en el que se ejecutará el cliente (por defecto: 80)
 FRONTEND_PORT=80
@@ -47,9 +47,11 @@ FRONTEND_PORT=80
 **Importante:** La variable `API_URL` debe apuntar a la URL real de tu servidor backend. Esta URL debe ser accesible desde el navegador del usuario final, **NO** desde el contenedor Docker.
 
 Ejemplos:
-- Desarrollo local: `http://localhost:8000/api/v1`
-- Servidor en red local: `http://192.168.1.100:8000/api/v1`
-- Producción: `https://api.genefix.com/api/v1`
+- **Producción (actual):** `http://190.90.5.243/api/v1`
+- **Red local:** `http://10.201.31.4/api/v1`
+- **Desarrollo local:** `http://localhost:8000/api/v1`
+
+El archivo `.env.example` ya está configurado con la URL de producción por defecto.
 
 ## Despliegue
 
