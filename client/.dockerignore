@@ -1,0 +1,28 @@
+# Archivos de desarrollo
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db
+
+# Archivos de control de versiones
+.git/
+.gitignore
+
+# Archivos de configuración local
+.env
+.env.local
+.env.*.local
+
+# Archivos de IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Archivos temporales
+*.tmp
+*.log
