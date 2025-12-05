@@ -11,8 +11,8 @@ COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 RUN chmod +x /docker-entrypoint.sh
 
-# Exponer puerto 80
-EXPOSE 80
+# Exponer puerto 8001
+EXPOSE 8001
 
 # Ejecutar script de entrada y luego nginx
 ENTRYPOINT ["/docker-entrypoint.sh"]
