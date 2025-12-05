@@ -43,9 +43,12 @@
         }
 
         .buttons_menu {
-            position: absolute;
-            top: 20px;
-            right: 20px;
+            display: flex;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            gap: 10px;
+            margin-bottom: 20px;
         }
 
         .card-body ul .ellipsis {
@@ -324,31 +327,145 @@
                     <!-- Modal -->
                     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
                         aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Selecciona una Caja Menor</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                        <div class="modal-dialog modal-dialog-centered modal-lg">
+                            <div class="modal-content shadow-lg border-0">
+                                <div class="modal-header bg-primary text-white">
+                                    <h5 class="modal-title d-flex align-items-center" id="exampleModalLabel">
+                                        <i data-feather="briefcase" class="mr-2"></i>
+                                        Selecciona una Caja Menor
+                                    </h5>
+                                    <button type="button" class="close text-white" data-dismiss="modal"
+                                        aria-label="Cerrar">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
-                                <div class="modal-body">
+                                <div class="modal-body p-4">
+                                    <p class="text-muted mb-3">
+                                        <i data-feather="info" class="mr-1" style="width: 16px; height: 16px;"></i>
+                                        Seleccione la caja menor donde desea registrar las causaciones contables
+                                    </p>
                                     <!-- Aquí se cargan las opciones -->
                                     <form id="formCajas">
-                                        <div id="listaCajas"></div>
+                                        <div id="listaCajas" class="cajas-container"></div>
                                     </form>
                                 </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                <div class="modal-footer bg-light">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                                        <i data-feather="x" style="width: 16px; height: 16px;"></i>
+                                        Cancelar
+                                    </button>
                                     <button id="finalizarTodo" type="button" class="btn btn-primary text-center"
                                         data-dismiss="modal">
-                                        Cerrar causaciones disponibles<span id="total2"
-                                            class="badge badge-light">0</span>
+                                        <i data-feather="check-circle" style="width: 16px; height: 16px;"></i>
+                                        Cerrar causaciones disponibles
+                                        <span id="total2" class="badge badge-light ml-2">0</span>
                                     </button>
                                 </div>
                             </div>
                         </div>
                     </div>
+
+                    <style>
+                        /* Estilos mejorados para el modal de Caja Menor */
+                        #exampleModal .modal-content {
+                            border-radius: 15px;
+                            overflow: hidden;
+                            zoom:0.8;
+                        }
+
+                        #exampleModal .modal-header {
+                            border-bottom: none;
+                            padding: 1.5rem;
+                        }
+
+                        #exampleModal .modal-footer {
+                            border-top: none;
+                            padding: 1.5rem;
+                        }
+
+                        #exampleModal .cajas-container {
+                            max-height: 400px;
+                            overflow-y: auto;
+                            padding-right: 10px;
+                        }
+
+                        #exampleModal .cajas-container::-webkit-scrollbar {
+                            width: 8px;
+                        }
+
+                        #exampleModal .cajas-container::-webkit-scrollbar-track {
+                            background: #f1f1f1;
+                            border-radius: 10px;
+                        }
+
+                        #exampleModal .cajas-container::-webkit-scrollbar-thumb {
+                            background: #888;
+                            border-radius: 10px;
+                        }
+
+                        #exampleModal .cajas-container::-webkit-scrollbar-thumb:hover {
+                            background: #555;
+                        }
+
+                        #exampleModal .form-check {
+                            padding: 1rem;
+                            margin-bottom: 0.75rem;
+                            border: 2px solid #e9ecef;
+                            border-radius: 10px;
+                            transition: all 0.3s ease;
+                            cursor: pointer;
+                            padding-left: 40px;
+                        }
+
+                        #exampleModal .form-check:hover {
+                            border-color: #4099ff;
+                            background-color: #f8f9fa;
+                            transform: translateX(5px);
+                        }
+
+                        #exampleModal .form-check-input:checked~.form-check-label {
+                            color: #4099ff;
+                            font-weight: 600;
+                        }
+
+                        #exampleModal .form-check-input:checked+.form-check-label::before {
+                            border-color: #4099ff;
+                            background-color: #4099ff;
+                        }
+
+                        #exampleModal .form-check input[type="radio"]:checked~label {
+                            background: linear-gradient(90deg, #4099ff 0%, #73b4ff 100%);
+                            -webkit-background-clip: text;
+                            -webkit-text-fill-color: transparent;
+                            background-clip: text;
+                        }
+
+                        #exampleModal .form-check-label {
+                            cursor: pointer;
+                            user-select: none;
+                            padding-left: 0.5rem;
+                            font-size: 1rem;
+                        }
+
+                        #exampleModal .form-check-input {
+                            width: 1.25rem;
+                            height: 1.25rem;
+                            margin-top: 0.15rem;
+                            cursor: pointer;
+                        }
+
+                        #exampleModal .modal-footer .btn {
+                            padding: 0.6rem 1.5rem;
+                            border-radius: 8px;
+                            font-weight: 500;
+                            transition: all 0.3s ease;
+                        }
+
+                        #exampleModal .modal-footer .btn:hover {
+                            transform: translateY(-2px);
+                            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                        }
+                    </style>
 
 
                 </div>
@@ -374,199 +491,8 @@
     <script src="assets/js/constantes.js"></script>
     <script src="assets/js/actions.js"></script>
     <script src="assets/js/datoscausacion.js"></script>
-
     <script src="assets/js/logout.js"></script>
-    <script>
-        const n = 50; // Define el número de repeticiones
-        let valor = 0;
-        fetch(`${host}/causacionContable?type=activado`, {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json' // Opcional, pero recomendable indicar el tipo de contenido
-            }
-        })
-            .then(response => response.json())
-            .then(data => {
-                // console.log(data);
-                if (data.content == 0) {
-                    mostrarAlerta(`Actualmente no cuenta con causaciones a finalizar se volvera al inicio`, "danger");
-                    setTimeout(() => {
-                        window.location.href = "causacioncontable_new.html"
-                    }, 4000);
-                }
-                if (data.status_code == 204) {
-                    document.getElementById('enviarArchivoModal').hidden = true;
-                    document.getElementById('primera').hidden = false;
-                }
-
-                if (data.length > 0) {
-                    document.getElementById('total').textContent = data.length
-                    document.getElementById('total2').textContent = data.length
-                    document.getElementById('primera').hidden = true;
-                }
-                const contenedorCards = document.getElementById('contenedor-cards');
-                contenedorCards.innerHTML = ''; // Limpiar el contenedor si ya tiene contenido
-
-                data.forEach(item => {
-                    const card = document.createElement('div');
-                    card.classList.add('col-sm-4');
-
-                    const cardBody = document.createElement('div');
-                    cardBody.classList.add('card', 'rcontale', 'clean');
-                    cardBody.innerHTML = `
-                        <div class="card-body">
-                            <h5 class="card-title">Registro para finalizar: <br> <strong style="text-transform: uppercase;">${item.estado} </strong></h5>
-                            <ul>
-                                <li>NIT: ${item.nit}</li>
-                                <li>Fecha: ${mejorarFormatoFecha(item.fecha)}</li>
-                                <li>Valor: ${item.valor}</li>
-                                <li class="ellipsis">Concepto: ${item.concepto}</li>
-                            </ul>
-                            <div class="buttons_menu">
-                                <a class="clearbadge btn btn-primary " href="${item.documento_referencia}" target="_blank" title="Descargar">📄</a>   
-                                <a href="causacioncontable_form.html?id=${item.id}&view=true" class="btn btn-success clearbadge" title="Ver">👁‍🗨</a>
-                                <a href="causacioncontable_form.html?id=${item.id}&view=edit" class="btn btn-info clearbadge" title="Editar">✍🏻</a>
-                                <button data-id="${item.id}" class="btn btn-danger clear clearbadge" title="Eliminar">❌</button>
-                            </div>
-                        </div>
-                        `;
-
-                    card.appendChild(cardBody);
-                    contenedorCards.appendChild(card);
-                });
-            })
-            .catch(error => console.error('Error al obtener los datos:', error));
-
-        document.addEventListener('click', function (event) {
-            if (event.target.classList.contains('btn-danger') && event.target.classList.contains('clear')) {
-                const botonBorrar = event.target;
-                const idParaBorrar = botonBorrar.getAttribute('data-id');
-
-                if (confirm(`¿Estás seguro de que quieres borrar el registro con ID: ${idParaBorrar}?`)) {
-                    // El usuario confirmó, entonces procedemos a enviar la solicitud DELETE
-                    const urlBorrar = `${host}/causacionContable/${idParaBorrar}`;
-
-                    fetch(urlBorrar, {
-                        method: 'DELETE',
-                        headers: {
-                            'Authorization': `Bearer ${token}`,
-                            'Content-Type': 'application/json' // Opcional, pero recomendable
-                        }
-                    })
-                        .then(response => {
-                            if (response.ok) {
-                                mostrarAlerta(`Registro con ID: ${idParaBorrar} borrado exitosamente.`, "success");
-                                window.location.reload();
-                                botonBorrar.closest('.col-sm-4').remove(); // Elimina la tarjeta del DOM
-                            } else {
-                                console.error('Error al borrar el registro:', response);
-                                mostrarAlerta(`Error al intentar borrar el registro con ID: ${idParaBorrar}.`, "success");
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Error de red al borrar el registro:', error);
-                            alert(`Error de red al intentar borrar el registro con ID: ${idParaBorrar}.`);
-                        });
-                }
-            }
-        });
-
-        async function finalizar(valorSeleccionado) {
-            const codigoSeleccionado = valorSeleccionado;
-
-            let cuentas = [];
-            const cache = localStorage.getItem("cuentas_cache");
-            if (cache) {
-                try {
-                    cuentas = JSON.parse(cache);
-                } catch (e) {
-                    console.warn("Cache corrupto, recargando...");
-                    localStorage.removeItem("cuentas_cache");
-                    cuentas = await cargarCuentasCache();
-                }
-            } else {
-                cuentas = await cargarCuentasCache();
-            }
-            console.log(codigoSeleccionado);
-            const existe = cuentas.find(c =>
-                String(c.id) === codigoSeleccionado || String(c.cuenta) === codigoSeleccionado
-            );
-
-            // if (!existe) {
-            //     mostrarAlerta(`⚠️ El id de cuenta disponible en el sistema ${codigoSeleccionado} no existe.`, "danger");
-            //     throw new Error(`La caja ${codigoSeleccionado} no existe — proceso detenido.`);
-            // }
-
-            const payload = { id_cuenta: codigoSeleccionado };
-
-            fetch(`${host}/finalizarCausacion`, {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(payload)
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.ms == 'ok') {
-                        mostrarAlerta("Archivo enviado exitosamente.", "success");
-                        setTimeout(() => {
-                            window.location.href = "causacioncontable_new.html";
-                        }, 3000);
-                    } else {
-                        mostrarAlerta("Archivo enviado exitosamente.", "success");
-                        // mostrarAlerta("Error al finalizar el proceso.", "danger");
-                    }
-                })
-                .catch(error => {
-                    console.error('Error al finalizar el proceso:', error);
-                    mostrarAlerta("Hubo un error al finalizar el proceso.", 'danger');
-                });
-        }
-
-
-        document.getElementById('finalizarTodo').addEventListener('click', (ev) => {
-            ev.preventDefault();
-            const seleccion = document.querySelector('input[name="caja"]:checked');
-
-            if (seleccion) {
-                const idLista = listaCajas.id;
-                const valorSeleccionado = seleccion.value;
-                finalizar(valorSeleccionado);
-            } else {
-                alert("Por favor selecciona una caja antes de continuar.");
-            }
-
-        });
-
-        const listaCajas = document.getElementById("listaCajas");
-
-        // Renderizamos como radio buttons
-        cajas.forEach((caja, index) => {
-            const div = document.createElement("div");
-            div.classList.add("form-check");
-            div.innerHTML = `
-      <input class="form-check-input" type="radio" name="caja" id="caja${index}" value="${caja.id}">
-      <label class="form-check-label" for="caja${index}">
-       (${caja.codigo}) - ${caja.nombre} 
-      </label>
-    `;
-            listaCajas.appendChild(div);
-        });
-
-
-        /* document.getElementById("btnFinalizar").addEventListener("click", () => {
-            const seleccion = document.querySelector('input[name="caja"]:checked');
-            if (seleccion) {
-                valor = seleccion.value; // aquí tienes el código seleccionado
-                console.log("Seleccionaste:", valor);
-                $('#exampleModal').modal('hide'); // cerrar modal
-            } else {
-                alert("Por favor selecciona una caja menor");
-            }
-        });*/
-    </script>
+    <script src="assets/js/causacion-final.js"></script>
 </body>
 
 </html>
