@@ -1,6 +1,12 @@
-// const host = "http://10.201.31.4/api/v1";
-const host = "http://localhost:8000/api/v1"
-// const host = "http://190.90.5.243/api/v1"
+// Configuración de la URL del API
+// En Docker, usa la variable de entorno. Si no está en Docker, usa localhost por defecto
+const host = (window.ENV && window.ENV.API_URL !== "${API_URL}")
+    ? window.ENV.API_URL
+    : "http://localhost:8000/api/v1";
+
+// URLs alternativas (para referencia):
+// const host = "http://10.201.31.4/api/v1";        // Red local
+// const host = "http://190.90.5.243/api/v1";       // Producción
 const token = localStorage.getItem("access_token");
 const user = JSON.parse(localStorage.getItem("user"));
 
